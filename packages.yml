@@ -1,7 +1,7 @@
 packages:
-- package: fivetran/fivetran_utils
-  version: [">=0.4.0", "<0.5.0"]
-- package: dbt-labs/spark_utils
-  version: [">=0.3.0", "<0.4.0"]
-- package: calogica/dbt_date
-  version: [">=0.7.0", "<0.8.0"]
+  # - package: fivetran/dbt_recharge_source
+  #   version: [">=0.1.0", "<0.2.0"]
+
+- git: https://github.com/fivetran/dbt_recharge_source.git
+  revision: main
+  warn-unpinned: false
