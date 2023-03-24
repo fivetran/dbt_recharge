@@ -18,6 +18,7 @@ with base as (
         charge_id,
         sum(prices) as total_shipping
     from {{ var('charge_shipping_line') }}
+    group by 1
 
 ), joined as (
     select 
