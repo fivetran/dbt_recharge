@@ -1,4 +1,4 @@
-with base as (
+with orders as (
     select *
     from {{ var('order') }}
 
@@ -9,7 +9,7 @@ with base as (
     from {{ var('order_line_item') }}
     group by 1
 
-), charges as (
+), charges as ( --each charge can have multiple orders associated with it
     select *
     from {{ var('charge') }}
 
@@ -22,7 +22,7 @@ with base as (
 
 ), joined as (
     select 
-        base.*,
+        orders.*,
         charges.processor_name,
         charges.shipments_count,
         charges.sub_total,
@@ -37,13 +37,13 @@ with base as (
         charge_shipping_lines.total_shipping,
         order_line_items.order_item_quantity
 
-    from base
+    from orders
     left join order_line_items
-        on order_line_items.order_id = base.order_id
+        on order_line_items.order_id = orders.order_id
     left join charges
-        on charges.charge_id = base.charge_id
+        on charges.charge_id = orders.charge_id
     left join charge_shipping_lines
-        on charge_shipping_lines.charge_id = base.charge_id
+        on charge_shipping_lines.charge_id = orders.charge_id
 )
 
 select * from joined
