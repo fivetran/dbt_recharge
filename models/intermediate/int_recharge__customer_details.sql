@@ -41,6 +41,7 @@ with base as (
     left join order_line_item_aggs
         on order_line_item_aggs.order_id = orders.order_id
     where upper(orders.order_status) not in ('ERROR', 'SKIPPED')
+    --possible values can be; success, error, queued, skipped, refunded or partially_refunded
     group by 1
 
 ), charge_aggs as (
@@ -85,7 +86,9 @@ with base as (
         charge_aggs.total_amount_discounted,
         charge_aggs.total_refunds,
         
-        one_time_purchases.total_one_time_purchases
+        one_time_purchases.total_one_time_purchases,
+
+        order_aggs.total_amount_ordered - charge_aggs.total_refunds as total_net_spend
 
     from customers
     left join charge_aggs 

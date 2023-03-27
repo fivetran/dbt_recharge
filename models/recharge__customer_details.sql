@@ -29,6 +29,8 @@ select
     total_amount_discounted,
     {{ dbt_utils.safe_divide('total_amount_discounted', 'active_months') }} as avg_amount_discounted_per_month,
     total_amount_taxed,
-    {{ dbt_utils.safe_divide('total_amount_taxed', 'active_months') }} as avg_amount_taxed_per_month
+    {{ dbt_utils.safe_divide('total_amount_taxed', 'active_months') }} as avg_amount_taxed_per_month,
+    total_net_spend,
+    {{ dbt_utils.safe_divide('total_net_spend', 'active_months') }} as avg_net_spend_per_month
 
 from customers

@@ -16,34 +16,42 @@ with orders as (
 ), charge_shipping_lines as (
     select 
         charge_id,
-        sum(prices) as total_shipping
+        sum(price) as total_shipping
     from {{ var('charge_shipping_line') }}
     group by 1
+
+), charges_enriched as (
+    select
+        charges.*,
+        charge_shipping_lines.total_shipping
+
+    from charges
+    left join charge_shipping_lines
+        on charge_shipping_lines.charge_id = charges.charge_id
 
 ), joined as (
     select 
         orders.*,
-        charges.processor_name,
-        charges.shipments_count,
-        charges.sub_total,
-        charges.subtotal_price,
-        charges.tags,
-        charges.tax_lines,
-        charges.total_discounts,
-        charges.total_line_items_price,
-        charges.total_refunds,
-        charges.total_tax,
-        charges.total_weight,
-        charge_shipping_lines.total_shipping,
+        -- recognized_total (calculated total based on prepaid subscriptions)
+        charges_enriched.processor_name,
+        charges_enriched.shipments_count,
+        charges_enriched.tags,
+
+        -- case when prepaid, don't count stuff like this several times
+        {% set charge_agg_cols = ['subtotal_price', 'tax_lines', 'total_discounts', 'total_refunds', 'total_tax', 'total_weight', 'total_shipping'] %}
+        {% for col in charge_agg_cols %}
+            case when orders.order_type = 'RECURRING' and orders.is_prepaid = true 
+                then 0 else coalesce(charges_enriched.{{ col }}, 0)
+                end as {{ col }} ,
+        {% endfor %}
+
         order_line_items.order_item_quantity
 
     from orders
     left join order_line_items
         on order_line_items.order_id = orders.order_id
-    left join charges
-        on charges.charge_id = orders.charge_id
-    left join charge_shipping_lines
-        on charge_shipping_lines.charge_id = orders.charge_id
+    left join charges_enriched
+        on charges_enriched.charge_id = orders.charge_id
 )
 
 select * from joined
