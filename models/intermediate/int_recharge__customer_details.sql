@@ -13,35 +13,19 @@ with base as (
             as active_months
     from base
 
-), orders as (
-    select *
-    from {{ var('order') }}
-
--- Agg'd on order_id
-), order_line_item_aggs as (
-    select  
-        order_id,
-        sum(quantity) as order_item_quantity,
-        sum(price) as order_value
-    from {{ var('order_line_item') }}
-    group by 1
-
 -- Agg'd on customer_id
 ), order_aggs as ( 
     select 
         customer_id,
-        count(orders.order_id) as total_orders,
-        sum(orders.total_price) as total_amount_ordered,
-        avg(orders.total_price) as avg_order_amount,
-        avg(order_line_item_aggs.order_item_quantity) as avg_item_quantity_per_order,
-        sum(order_line_item_aggs.order_value) as total_order_value,
-        avg(order_line_item_aggs.order_value) as avg_order_value
+        count(order_id) as total_orders,
+        sum(total_price) as total_amount_ordered,
+        avg(total_price) as avg_order_amount,
+        avg(order_item_quantity) as avg_item_quantity_per_order,
+        sum(order_value) as total_order_value,
+        avg(order_value) as avg_order_value
 
-    from orders
-    left join order_line_item_aggs
-        on order_line_item_aggs.order_id = orders.order_id
-    where upper(orders.order_status) not in ('ERROR', 'SKIPPED')
-    --possible values can be; success, error, queued, skipped, refunded or partially_refunded
+    from {{ ref('recharge__balance_transactions') }}
+    where upper(order_status) not in ('ERROR', 'SKIPPED', 'QUEUED') --possible values: success, error, queued, skipped, refunded or partially_refunded
     group by 1
 
 ), charge_aggs as (
@@ -53,7 +37,7 @@ with base as (
         sum(total_discounts) as total_amount_discounted,
         sum(total_refunds) as total_refunds
     from {{ var('charge') }}
-    where upper(charge_status) not in ('ERROR', 'SKIPPED')
+    where upper(charge_status) not in ('ERROR', 'SKIPPED', 'QUEUED')
     group by 1
 
 ), one_time_purchases as (

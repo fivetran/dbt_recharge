@@ -8,12 +8,18 @@ with spine as (
             cast(max(created_at) as {{ dbt.type_timestamp() }}) as max_date 
         from {{ var('charge') }}
         {% endset %}
-    {% set first_date = run_query(date_query).columns[0][0]|string %}
-    {% set last_date = run_query(date_query).columns[1][0]|string %}
+    {% set calc_first_date = run_query(date_query).columns[0][0]|string %}
+    {% set calc_last_date = run_query(date_query).columns[1][0]|string %}
     
+    {% set first_date = var('recharge_first_date', calc_first_date)|string %}
+    {% set last_date = var('recharge_last_date', calc_last_date)|string %}
+
     {% else %} 
-    {% set first_date = dbt.dateadd("year", "-2", "current_date") %}
-    {% set last_date = dbt.current_timestamp_backcompat() %}
+    {% set default_first_date = dbt.dateadd("year", "-2", "current_date") %}
+    {% set default_last_date = dbt.current_timestamp_backcompat() %}
+
+    {% set first_date = var('recharge_first_date', default_first_date)|string %}
+    {% set last_date = var('recharge_last_date', default_last_date)|string %}
     {% endif %}
 
 {{ dbt_utils.date_spine(

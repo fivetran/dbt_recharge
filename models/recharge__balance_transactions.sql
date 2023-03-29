@@ -5,7 +5,8 @@ with orders as (
 ), order_line_items as (
     select 
         order_id,
-        sum(quantity) as order_item_quantity
+        sum(quantity) as order_item_quantity,
+        sum(price) as order_value
     from {{ var('order_line_item') }}
     group by 1
 
@@ -37,7 +38,7 @@ with orders as (
         charges_enriched.shipments_count,
         charges_enriched.tags,
 
-        -- case when prepaid, don't count stuff like this several times
+        -- when several prepaid orders are generated from a single charge, we only want to add charge aggregates on the first instance.
         {% set charge_agg_cols = ['subtotal_price', 'tax_lines', 'total_discounts', 'total_refunds', 'total_tax', 'total_weight', 'total_shipping'] %}
         {% for col in charge_agg_cols %}
             case when orders.order_type = 'RECURRING' and orders.is_prepaid = true 
@@ -45,7 +46,8 @@ with orders as (
                 end as {{ col }} ,
         {% endfor %}
 
-        order_line_items.order_item_quantity
+        order_line_items.order_item_quantity,
+        order_line_items.order_value
 
     from orders
     left join order_line_items

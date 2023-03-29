@@ -13,3 +13,7 @@
 
 # Recharge dbt package ([Docs](https://fivetran.github.io/dbt_recharge/))
 # 📣 What does this dbt package do?
+
+For setting datespine range:
+recharge_first_date
+recharge_last_date
