@@ -23,6 +23,15 @@ vars:
     product: "{{ ref('stg_recharge__product') }}"
     subscription: "{{ ref('stg_recharge__subscription') }}"
     subscription_history: "{{ ref('stg_recharge__subscription_history') }}"
+    
+    recharge__address_passthrough_columns: [] 
+    recharge__charge_passthrough_columns: [] 
+    recharge__charge_line_item_passthrough_columns: [] 
+    recharge__order_passthrough_columns: [] 
+    recharge__order_line_passthrough_columns: [] 
+    recharge__plan_passthrough_columns: [] 
+    recharge__subscription_passthrough_columns: [] 
+    recharge__subscription_history_passthrough_columns: []
 
 models:
   recharge:

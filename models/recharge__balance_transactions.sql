@@ -25,7 +25,6 @@ with orders as (
     select
         charges.*,
         charge_shipping_lines.total_shipping
-
     from charges
     left join charge_shipping_lines
         on charge_shipping_lines.charge_id = charges.charge_id
@@ -48,6 +47,9 @@ with orders as (
 
         order_line_items.order_item_quantity,
         order_line_items.order_value
+
+        {{ fivetran_utils.persist_pass_through_columns('recharge__charge_passthrough_columns') }}
+        {{ fivetran_utils.persist_pass_through_columns('recharge__order_passthrough_columns') }}
 
     from orders
     left join order_line_items
