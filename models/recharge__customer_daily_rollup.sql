@@ -6,11 +6,15 @@ with transactions as (
     select *
     from {{ ref('int_recharge__calendar_spine') }}
 
+), customers as (
+    select distinct customer_id
+    from transactions
+
 ), customers_dates as (
     select 
-        transactions.customer_id,
+        customers.customer_id,
         calendar.date_day
-    from calendar, transactions
+    from calendar, customers
 
 ), aggs as (
     select
