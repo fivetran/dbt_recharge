@@ -6,7 +6,7 @@ with transactions as (
     select *
     from {{ ref('int_recharge__calendar_spine') }}
 
-), customers as (
+{# ), customers as (
     select distinct customer_id
     from transactions
 
@@ -14,16 +14,16 @@ with transactions as (
     select 
         customers.customer_id,
         calendar.date_day
-    from calendar, customers
+    from calendar, customers #}
 
 ), aggs as (
     select
-        transactions.customer_id,
-        customers_dates.date_day,
+        {# transactions.customer_id, #}
+        calendar.date_day,
 
-        {{ dbt.date_trunc('week', 'transactions.created_at') }} as date_week,
-        {{ dbt.date_trunc('month', 'transactions.created_at') }} as date_month,
-        {{ dbt.date_trunc('year', 'transactions.created_at') }} as date_year,
+        cast({{ dbt.date_trunc('week', 'calendar.date_day') }} as date) as date_week,
+        cast({{ dbt.date_trunc('month', 'calendar.date_day') }} as date) as date_month,
+        cast({{ dbt.date_trunc('year', 'calendar.date_day') }} as date) as date_year,
         
         count(transactions.order_id) as no_of_orders,
         count(case when transactions.order_type = 'RECURRING' then 1 else null end) as subscription_orders,
@@ -38,11 +38,11 @@ with transactions as (
             {{ ',' if not loop.last -}}
         {% endfor %}
 
-    from customers_dates
+    from calendar
     left join transactions
-        on cast({{ dbt.date_trunc('day','transactions.created_at') }} as date) = customers_dates.date_day
+        on cast({{ dbt.date_trunc('day','transactions.created_at') }} as date) = calendar.date_day
 
-    {{ dbt_utils.group_by(5) }}
+    {{ dbt_utils.group_by(4) }}
 )
 
 select * from aggs

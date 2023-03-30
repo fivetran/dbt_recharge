@@ -2,6 +2,10 @@ with base as (
     select *
     from {{ var('customer') }}
 
+), transactions as (
+    select * 
+    from {{ ref('recharge__balance_transactions') }}
+
 ), customers as (
     select
         base.*,
@@ -22,9 +26,13 @@ with base as (
         avg(total_price) as avg_order_amount,
         avg(order_item_quantity) as avg_item_quantity_per_order,
         sum(order_value) as total_order_value,
-        avg(order_value) as avg_order_value
+        avg(order_value) as avg_order_value,
+        sum(total_tax) as total_amount_taxed,
+        sum(total_discounts) as total_amount_discounted,
+        sum(total_refunds) as total_refunds,
+        count(case when transactions.order_type = 'CHECKOUT' then 1 else null end) as total_one_time_purchases
 
-    from {{ ref('recharge__balance_transactions') }}
+    from transactions
     where upper(order_status) not in ('ERROR', 'SKIPPED', 'QUEUED') --possible values: success, error, queued, skipped, refunded or partially_refunded
     group by 1
 
@@ -32,27 +40,11 @@ with base as (
     select 
         customer_id,
         count(charge_id) as charges_count,
-        sum(total_price) as total_amount_charged, 
-        sum(total_tax) as total_amount_taxed,
-        sum(total_discounts) as total_amount_discounted,
-        sum(total_refunds) as total_refunds
+        sum(total_price) as total_amount_charged 
+        
     from {{ var('charge') }}
-    where upper(charge_status) not in ('ERROR', 'SKIPPED', 'QUEUED')
+    where upper(charge_status) not in ('ERROR', 'SKIPPED')
     group by 1
-
-), one_time_purchases as (
-    select
-    {% if var('recharge__one_time_product_enabled', true) %}
-        customer_id,
-        count(one_time_product_id) as total_one_time_purchases
-
-    from {{ var('one_time_product') }}
-    group by 1
-
-    {% else %} --cast nulls if not using one_time_product
-        cast(null as {{ dbt.type_string() }}) as customer_id,
-        cast(null as {{ dbt.type_int() }}) as total_one_time_purchases
-    {% endif %}
 
 ), joined as (
     select 
@@ -64,21 +56,19 @@ with base as (
         order_aggs.total_order_value,
         order_aggs.avg_order_value,
         order_aggs.avg_item_quantity_per_order, --units_per_transaction
+        order_aggs.total_amount_taxed,
+        order_aggs.total_amount_discounted,
+        order_aggs.total_refunds,
+        order_aggs.total_one_time_purchases,
 
         charge_aggs.total_amount_charged,
-        charge_aggs.total_amount_taxed,
-        charge_aggs.total_amount_discounted,
-        charge_aggs.total_refunds,
-        
-        one_time_purchases.total_one_time_purchases,
+        charge_aggs.charges_count,
 
-        order_aggs.total_amount_ordered - charge_aggs.total_refunds as total_net_spend
+        order_aggs.total_amount_ordered - order_aggs.total_refunds as total_net_spend
 
     from customers
     left join charge_aggs 
         on charge_aggs.customer_id = customers.customer_id
-    left join one_time_purchases
-        on one_time_purchases.customer_id = customers.customer_id
     left join order_aggs
         on order_aggs.customer_id = customers.customer_id
 )
