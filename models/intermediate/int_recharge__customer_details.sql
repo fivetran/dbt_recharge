@@ -39,11 +39,11 @@ with base as (
 ), charge_aggs as (
     select 
         customer_id,
-        count(charge_id) as charges_count,
-        sum(total_price) as total_amount_charged 
+        count(distinct charge_id) as charges_count,
+        cast(sum(total_price) as {{ dbt.type_float() }}) as total_amount_charged 
         
-    from {{ var('charge') }}
-    where upper(charge_status) not in ('ERROR', 'SKIPPED')
+    from transactions
+    where upper(charge_status) not in ('ERROR', 'SKIPPED', 'QUEUED')
     group by 1
 
 ), joined as (
