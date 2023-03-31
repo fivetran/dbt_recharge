@@ -54,7 +54,7 @@ with orders as (
     from orders
     left join order_line_items
         on order_line_items.order_id = orders.order_id
-    left join charges_enriched
+    full outer join charges_enriched
         on charges_enriched.charge_id = orders.charge_id
 )
 

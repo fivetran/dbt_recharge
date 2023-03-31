@@ -23,6 +23,7 @@ with transactions as (
     from month_spine
     left join transactions
         on cast({{ dbt.date_trunc('month','transactions.created_at') }} as date) = month_spine.date_month
+    where transactions.order_status not in ('ERROR', 'SKIPPED')
     group by 1,2
 
 ), joined as (

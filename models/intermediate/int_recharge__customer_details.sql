@@ -1,21 +1,10 @@
-with base as (
+with customers as (
     select *
     from {{ var('customer') }}
 
 ), transactions as (
     select * 
     from {{ ref('recharge__balance_transactions') }}
-
-), customers as (
-    select
-        base.*,
-        case when active_subscriptions > 0 
-            then true else false end as is_currently_subscribed,
-        case when {{ dbt.datediff("created_at", dbt.current_timestamp_backcompat(), "day") }} <= 30
-            then true else false end as is_new_customer,
-        {{ dbt_utils.safe_divide( dbt.datediff("created_at", dbt.current_timestamp_backcompat(), "day") , 30) }}
-            as active_months
-    from base
 
 -- Agg'd on customer_id
 ), order_aggs as ( 
