@@ -3,7 +3,7 @@ with calendar as (
     from {{ ref('int_recharge__calendar_spine') }}
 
 ), customers as (
-    select distinct customer_id, created_at
+    select customer_id, created_at
     from {{ ref('recharge__customer_details') }}
 
 ), customers_dates as (

@@ -11,28 +11,28 @@ with customers as (
     select 
         customer_id,
         count(order_id) as total_orders,
-        sum(total_price) as total_amount_ordered,
-        avg(total_price) as avg_order_amount,
-        avg(order_item_quantity) as avg_item_quantity_per_order,
-        sum(order_value) as total_order_value,
-        avg(order_value) as avg_order_value,
-        sum(total_tax) as total_amount_taxed,
-        sum(total_discounts) as total_amount_discounted,
-        sum(total_refunds) as total_refunds,
-        count(case when transactions.order_type = 'CHECKOUT' then 1 else null end) as total_one_time_purchases
+        round(sum(total_price), 2) as total_amount_ordered,
+        round(avg(total_price), 2) as avg_order_amount,
+        round(avg(order_item_quantity), 2) as avg_item_quantity_per_order,
+        round(sum(order_value), 2) as total_order_value,
+        round(avg(order_value), 2) as avg_order_value,
+        round(sum(total_tax), 2) as total_amount_taxed,
+        round(sum(total_discounts), 2) as total_amount_discounted,
+        round(sum(total_refunds), 2) as total_refunds,
+        count(case when lower(transactions.order_type) = 'checkout' then 1 else null end) as total_one_time_purchases
 
     from transactions
-    where upper(order_status) not in ('ERROR', 'SKIPPED', 'QUEUED') --possible values: success, error, queued, skipped, refunded or partially_refunded
+    where lower(order_status) not in ('error', 'skipped', 'queued') --possible values: success, error, queued, skipped, refunded or partially_refunded
     group by 1
 
 ), charge_aggs as (
     select 
         customer_id,
         count(distinct charge_id) as charges_count,
-        cast(sum(total_price) as {{ dbt.type_float() }}) as total_amount_charged 
+        round(cast(sum(total_price) as {{ dbt.type_float() }}), 2) as total_amount_charged 
         
     from transactions
-    where upper(charge_status) not in ('ERROR', 'SKIPPED', 'QUEUED')
+    where lower(charge_status) not in ('error', 'skipped', 'queued')
     group by 1
 
 ), joined as (
