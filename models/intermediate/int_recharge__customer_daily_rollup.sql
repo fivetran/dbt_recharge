@@ -3,8 +3,8 @@ with calendar as (
     from {{ ref('int_recharge__calendar_spine') }}
 
 ), customers as (
-    select distinct customer_id
-    from {{ ref('recharge__balance_transactions') }}
+    select distinct customer_id, created_at
+    from {{ ref('recharge__customer_details') }}
 
 ), customers_dates as (
     select 
@@ -14,6 +14,7 @@ with calendar as (
         cast({{ dbt.date_trunc('month', 'calendar.date_day') }} as date) as date_month,
         cast({{ dbt.date_trunc('year', 'calendar.date_day') }} as date) as date_year
     from calendar, customers
+    where cast({{ dbt.date_trunc('day', 'customers.created_at') }} as date) >= calendar.date_day
 )
 
 select *

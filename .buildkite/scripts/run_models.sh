@@ -17,6 +17,7 @@ echo `pwd`
 cd integration_tests
 dbt deps
 dbt seed --target "$db" --full-refresh
+dbt compile --target "$db"
 dbt run --target "$db" --full-refresh
 dbt test --target "$db"
 dbt run --vars '{recharge__payment_source_enabled: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_refersion_id]}' --target "$db" --full-refresh
