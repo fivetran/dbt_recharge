@@ -16,7 +16,7 @@ select
 
     {% set agged_cols = ['orders', 'amount_ordered', 'one_time_purchases', 'amount_charged', 'amount_discounted', 'amount_taxed', 'net_spend'] %}
     {% for col in agged_cols %}
-        round({{- dbt_utils.safe_divide('total_' ~ col, 'active_months') }}, 2) as avg_{{col}}_per_month -- calculates average over no. active mos
+        round({{- dbt_utils.safe_divide('total_' ~ col, 'active_months') }}, 2) as {{col}}_monthly_average -- calculates average over no. active mos
         {{ ',' if not loop.last -}}
     {% endfor %}
 
