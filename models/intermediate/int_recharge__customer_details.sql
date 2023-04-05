@@ -38,7 +38,7 @@ with customers as (
 ), subscriptions as (
     select 
         customer_id,
-        count(subscription_id) as calculated_active_subscriptions
+        count(subscription_id) as calculated_active_subscriptions -- this value will differ from the recharge-provided number_active_subscriptions until we get confirmation from recharge how this is calculated on their end
     from {{ var('subscription') }} sh
     where lower(status) = 'active'
     group by 1
@@ -61,7 +61,7 @@ with customers as (
         charge_aggs.total_amount_charged,
         charge_aggs.charges_count,
 
-        order_aggs.total_amount_ordered - order_aggs.total_refunds as total_net_spend,
+        round(order_aggs.total_amount_ordered - order_aggs.total_refunds, 2) as total_net_spend,
 
         subscriptions.calculated_active_subscriptions
 
