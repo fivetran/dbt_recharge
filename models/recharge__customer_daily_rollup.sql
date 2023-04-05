@@ -29,7 +29,9 @@ with base as (
         {% for col_name in cols %}
             round(sum(case when lower(billing.order_status) not in ('error', 'skipped', 'queued') 
                 then billing.{{col_name}} else 0 end), 2)
-                as {{col_name}}_realized
+                as {{col_name}}_realized,
+            round(sum({{col_name}}_realized) over(partition by base.customer_id order by base.date_day asc), 2)
+                as {{col_name}}_running_total
             {{ ',' if not loop.last -}}
         {% endfor %}
 

@@ -63,7 +63,7 @@ with orders as (
 ), joined_enriched as (
     select 
         joined.*,
-        total_price - total_refunds as total_net_order_value
+        total_price - total_refunds as total_net_order_value -- total_price includes taxes and discounts, so only need to subtract total_refunds to get net. 
     from joined
 )
 
