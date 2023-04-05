@@ -2,9 +2,9 @@ with customers as (
     select *
     from {{ var('customer') }}
 
-), transactions as (
+), billing as (
     select * 
-    from {{ ref('recharge__balance_transactions') }}
+    from {{ ref('recharge__billing_history') }}
 
 -- Agg'd on customer_id
 ), order_aggs as ( 
@@ -19,9 +19,9 @@ with customers as (
         round(sum(total_tax), 2) as total_amount_taxed,
         round(sum(total_discounts), 2) as total_amount_discounted,
         round(sum(total_refunds), 2) as total_refunds,
-        count(case when lower(transactions.order_type) = 'checkout' then 1 else null end) as total_one_time_purchases
+        count(case when lower(billing.order_type) = 'checkout' then 1 else null end) as total_one_time_purchases
 
-    from transactions
+    from billing
     where lower(order_status) not in ('error', 'skipped', 'queued') --possible values: success, error, queued, skipped, refunded or partially_refunded
     group by 1
 
@@ -31,8 +31,16 @@ with customers as (
         count(distinct charge_id) as charges_count,
         round(cast(sum(total_price) as {{ dbt.type_float() }}), 2) as total_amount_charged 
         
-    from transactions
+    from billing
     where lower(charge_status) not in ('error', 'skipped', 'queued')
+    group by 1
+
+), subscriptions as (
+    select 
+        customer_id,
+        count(subscription_id) as calculated_active_subscriptions
+    from {{ var('subscription') }} sh
+    where lower(status) = 'active'
     group by 1
 
 ), joined as (
@@ -53,13 +61,17 @@ with customers as (
         charge_aggs.total_amount_charged,
         charge_aggs.charges_count,
 
-        order_aggs.total_amount_ordered - order_aggs.total_refunds as total_net_spend
+        order_aggs.total_amount_ordered - order_aggs.total_refunds as total_net_spend,
+
+        subscriptions.calculated_active_subscriptions
 
     from customers
     left join charge_aggs 
         on charge_aggs.customer_id = customers.customer_id
     left join order_aggs
         on order_aggs.customer_id = customers.customer_id
+    left join subscriptions
+        on subscriptions.customer_id = customers.customer_id
 )
 
 select * 

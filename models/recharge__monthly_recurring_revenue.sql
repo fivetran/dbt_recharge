@@ -1,42 +1,32 @@
-with transactions as (
-    select *
-    from {{ ref('recharge__balance_transactions') }}
-
-), customers as (
-    select *
-    from {{ ref('recharge__customer_details') }}
-
-), month_spine as (
+with customers as (
     select 
-        distinct cast({{ dbt.date_trunc('month','date_day') }} as date) as date_month
-    from {{ ref('int_recharge__calendar_spine') }}
+        distinct date_month,
+        customer_id
+    from {{ ref('recharge__customer_daily_rollup') }}
+
+), billing as (
+    select *
+    from {{ ref('recharge__billing_history') }}
 
 ), aggs as (
     select 
-        month_spine.date_month,
-        transactions.customer_id,
-        round(sum(case when lower(transactions.order_type) = 'recurring' then transactions.total_price else 0 end), 2) as current_mrr,
-        lag(current_mrr, 1) over(order by month_spine.date_month asc) as previous_mrr,
-        round(sum(case when lower(transactions.order_type) = 'checkout' then transactions.total_price else 0 end), 2) as current_non_mrr,
-        lag(current_non_mrr, 1) over(order by month_spine.date_month asc) as previous_non_mrr
+        customers.date_month,
+        customers.customer_id,
+        round(sum(case when lower(billing.order_type) = 'recurring' then billing.total_price else 0 end), 2) as current_mrr,
+        lag(current_mrr, 1) over(partition by customers.customer_id order by customers.date_month asc) as previous_mrr,
+        round(sum(current_mrr) over( partition by customers.customer_id order by customers.date_month asc), 2) as current_mrr_running_total,
+        round(sum(case when lower(billing.order_type) = 'checkout' then billing.total_price else 0 end), 2) as current_non_mrr,
+        lag(current_non_mrr, 1) over(partition by customers.customer_id order by customers.date_month asc) as previous_non_mrr,
+        round(sum(current_non_mrr) over( partition by  customers.customer_id order by customers.date_month asc), 2) as current_non_mrr_running_total
 
-    from month_spine
-    left join transactions
-        on cast({{ dbt.date_trunc('month','transactions.created_at') }} as date) = month_spine.date_month
-    where lower(transactions.order_status) not in ('error', 'skipped')
+    from customers
+    left join billing
+        on cast({{ dbt.date_trunc('month','billing.created_at') }} as date) = customers.date_month
+        and billing.customer_id = customers.customer_id
+    where lower(billing.order_status) not in ('error', 'skipped')
     group by 1,2
 
-), joined as (
-    select 
-        aggs.*,
-        customers.active_months,
-        customers.created_at,
-        customers.updated_at
-
-    from aggs
-    left join customers
-        using(customer_id)
 )
 
 select *
-from joined
+from aggs

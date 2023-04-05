@@ -14,7 +14,7 @@ with calendar as (
         cast({{ dbt.date_trunc('month', 'calendar.date_day') }} as date) as date_month,
         cast({{ dbt.date_trunc('year', 'calendar.date_day') }} as date) as date_year
     from calendar, customers
-    where cast({{ dbt.date_trunc('day', 'customers.created_at') }} as date) >= calendar.date_day
+    where cast({{ dbt.date_trunc('day', 'customers.created_at') }} as date) <= calendar.date_day
 )
 
 select *

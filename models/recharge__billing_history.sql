@@ -13,7 +13,7 @@ with orders as (
 ), charges as ( --each charge can have multiple orders associated with it
     select *
     from {{ var('charge') }}
-
+ 
 ), charge_shipping_lines as (
     select 
         charge_id,
@@ -34,7 +34,7 @@ with orders as (
         orders.*,
         -- recognized_total (calculated total based on prepaid subscriptions)
         charges_enriched.processor_name,
-        charges_enriched.shipments_count,
+        coalesce(charges_enriched.shipments_count, 0) as shipments_count,
         charges_enriched.tags,
 
         -- when several prepaid orders are generated from a single charge, we only want to add charge aggregates on the first instance.
@@ -45,8 +45,8 @@ with orders as (
                 end as {{ col }} ,
         {% endfor %}
 
-        order_line_items.order_item_quantity,
-        order_line_items.order_value
+        coalesce(order_line_items.order_item_quantity, 0) as order_item_quantity,
+        coalesce(order_line_items.order_value, 0) as order_value
 
         {{ fivetran_utils.persist_pass_through_columns('recharge__charge_passthrough_columns') }}
         {{ fivetran_utils.persist_pass_through_columns('recharge__order_passthrough_columns') }}
@@ -54,7 +54,7 @@ with orders as (
     from orders
     left join order_line_items
         on order_line_items.order_id = orders.order_id
-    full outer join charges_enriched -- still want to capture charges that don't have an order yet
+    left join charges_enriched -- still want to capture charges that don't have an order yet
         on charges_enriched.charge_id = orders.charge_id
 )
 
