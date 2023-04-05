@@ -25,7 +25,7 @@ with base as (
         count(case when lower(billing.order_type) = 'checkout' then 1 else null end) as one_time_orders,
         coalesce(sum(billing.total_price), 0) as total_charges,
 
-        {% set cols = ['total_discounts', 'total_tax', 'total_price', 'total_refunds', 'order_value', 'order_item_quantity'] %}
+        {% set cols = ['total_discounts', 'total_tax', 'total_price', 'total_refunds', 'order_line_item_total', 'order_item_quantity'] %}
         {% for col_name in cols %}
             round(sum(case when lower(billing.order_status) not in ('error', 'skipped', 'queued') 
                 then billing.{{col_name}} else 0 end), 2)
