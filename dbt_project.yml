@@ -13,6 +13,7 @@ vars:
     charge_discount_code: "{{ ref('stg_recharge__charge_discount_code') }}"
     charge_line_item: "{{ ref('stg_recharge__charge_line_item') }}"
     charge_note_attribute: "{{ ref('stg_recharge__charge_note_attribute') }}"
+    charge_tax_line: "{{ ref('stg_recharge__charge_tax_line') }}"
     charge_shipping_line: "{{ ref('stg_recharge__charge_shipping_line') }}"
     customer: "{{ ref('stg_recharge__customer') }}"
     discount: "{{ ref('stg_recharge__discount') }}"
