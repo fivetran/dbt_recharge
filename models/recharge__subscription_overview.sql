@@ -20,6 +20,7 @@ with subscriptions as (
         charge_line_items.shopify_variant_id,
         charges.customer_id,
         charges.address_id,
+        charges.created_at as charged_at,
         charges.charge_status
     from charge_line_items
     left join charges
@@ -39,6 +40,8 @@ with subscriptions as (
         on customers_charge_lines.customer_id = subscriptions.customer_id
         and customers_charge_lines.address_id = subscriptions.address_id
         and customers_charge_lines.shopify_product_id = subscriptions.shopify_product_id
+    where subscriptions.created_at <= customers_charge_lines.charged_at
+        and subscriptions.cancelled_at >= customers_charge_lines.charged_at
     group by 1
 
 ), subscriptions_enriched as (
