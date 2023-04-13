@@ -20,7 +20,6 @@ with subscriptions as (
         charge_line_items.shopify_variant_id,
         charges.customer_id,
         charges.address_id,
-        charges.created_at as charged_at,
         charges.charge_status
     from charge_line_items
     left join charges
@@ -42,7 +41,7 @@ with subscriptions as (
         and customers_charge_lines.shopify_product_id = subscriptions.shopify_product_id
     group by 1
 
-), charges_expiration as (
+), subscriptions_enriched as (
     select
         subscriptions.*,
         subscriptions_charges.count_successful_charges,
@@ -51,29 +50,14 @@ with subscriptions as (
             when expire_after_specific_number_of_charges - count_successful_charges < 0 then null
             else expire_after_specific_number_of_charges - count_successful_charges
             end as charges_until_expiration,
-        case when charges_until_expiration is null then null
-            else charge_interval_frequency * (charges_until_expiration - 1)
-            end as interval_length,
-        case when lower(order_interval_unit) = 'month' then interval_length * 30
-            when lower(order_interval_unit) = 'week' then interval_length * 7
-            else interval_length 
-            end as interval_days
+        case when lower(order_interval_unit) = 'month' then charge_interval_frequency * 30
+            when lower(order_interval_unit) = 'week' then charge_interval_frequency * 7
+            else charge_interval_frequency 
+            end as charge_interval_frequency_days
     from subscriptions
     left join subscriptions_charges
         using(subscription_id)
-
-), subscription_expiration as (
-    select 
-        charges_expiration.*,
-        case when order_interval_unit is null then null
-            when next_charge_scheduled_at is null then null
-            else {{ dbt.dateadd("day", 
-                                "interval_days", 
-                                "next_charge_scheduled_at") }}
-            end as calculated_expiration_date
-    from charges_expiration
-
 )
 
 select * 
-from subscription_expiration
+from subscriptions_enriched
