@@ -153,7 +153,7 @@ This dbt package is dependent on the following dbt packages. Please be aware tha
 ```yml
 packages:
     - package: fivetran/recharge_source
-    version: [">=0.1.0", "<0.2.0"]
+      version: [">=0.1.0", "<0.2.0"]
 
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
