@@ -1,0 +1,104 @@
+version: 2
+
+models:
+  - name: int_recharge__calendar_spine
+    description: >
+      A table of calendar dates for the date range of the user's data in Recharge API.
+      This model calculates the spine of the calendar, based on the `date_day` column.
+    columns:
+      - name: date_day
+        description: The date in YYYY-MM-DD format for the calendar day.
+
+  - name: int_recharge__customer_daily_rollup
+    description: >
+      A daily rollup of Recharge customer data, calculated based on the `int_recharge__calendar_spine` model.
+    columns:
+      - name: customer_id
+        description: The unique identifier for the Recharge customer.
+      - name: date_day
+        description: The date in YYYY-MM-DD format for the daily rollup.
+      - name: date_week
+        description: The week of the year (1-52) for the daily rollup.
+      - name: date_month
+        description: The month of the year (1-12) for the daily rollup.
+      - name: date_year
+        description: The year (YYYY) for the daily rollup.
+
+
+  - name: int_recharge__customer_details
+    description: >
+      A table of customer details from Recharge API.
+      Includes information on customer, subscriptions, orders, and more.
+    columns:
+      - name: customer_id
+        description: The unique identifier for the customer in Recharge.
+      - name: customer_hash
+        description: The customer's unique hash.
+      - name: shopify_customer_id
+        description: The unique identifier for the customer in Shopify.
+      - name: email
+        description: The email address of the customer.
+      - name: customer_full_name
+        description: The full name of the customer.
+      - name: created_at
+        description: The date and time the customer was created.
+      - name: updated_at
+        description: The date and time the customer was last updated.
+      - name: first_charge_processed_at
+        description: The date and time of the customer's first processed charge.
+      - name: active_subscriptions
+        description: The number of active subscriptions associated with the customer.
+      - name: total_subscriptions
+        description: The total number of subscriptions associated with the customer.
+      - name: customer_billing_full_name
+        description: The full name of the customer for billing purposes.
+      - name: billing_company
+        description: The name of the company associated with the customer's billing address.
+      - name: billing_address_line_1
+        description: The first line of the customer's billing address.
+      - name: billing_address_line_2
+        description: The second line of the customer's billing address.
+      - name: billing_zip
+        description: The postal code of the customer's billing address.
+      - name: billing_city
+        description: The city of the customer's billing address.
+      - name: billing_province
+        description: The province of the customer's billing address.
+      - name: billing_country
+        description: The country of the customer's billing address.
+      - name: billing_phone
+        description: The phone number associated with the customer's billing address.
+      - name: has_valid_payment_method
+        description: Indicates whether the customer has a valid payment method on file.
+      - name: reason_payment_method_not_valid
+        description: The reason why the customer's payment method is not valid.
+      - name: has_card_error_in_dunning
+        description: Indicates whether the customer has a card error in dunning.
+      - name: total_orders
+        description: The total number of orders associated with the customer.
+      - name: total_amount_ordered
+        description: The total amount of all orders associated with the customer.
+      - name: avg_order_amount
+        description: The average order amount for the customer.
+      - name: total_order_line_item_total
+        description: The total price of all line items in the customer's orders.
+      - name: avg_order_line_item_total
+        description: The average price of line items in the customer's orders.
+      - name: avg_item_quantity_per_order
+        description: The average quantity of items per order for the customer.
+      - name: total_amount_taxed
+        description: The total amount of tax applied to the customer's orders.
+      - name: total_amount_discounted
+        description: The total amount of discounts applied to the customer's orders.
+      - name: total_refunds
+        description: The total refunds issued for the customer.
+      - name: total_one_time_purchases
+        description: The total number of one-time purchases made by the customer.
+      - name: total_amount_charged
+        description: The total amount charged to the customer.
+      - name: charges_count
+        description: The total number of charges made to the customer.
+      - name: total_net_spend
+        description: The total net spend of the customer, calculated as the total amount charged minus total refunds.
+      - name: calculated_active_subscriptions
+        description: The number of active subscriptions for the customer, calculated as the sum of subscriptions with status `ACTIVE`.

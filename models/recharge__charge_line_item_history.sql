@@ -8,7 +8,7 @@ with charges as (
         index,
         price as amount,
         title,
-        'charge_line' as line_item_type
+        'charge line' as line_item_type
     from {{ var('charge_line_item') }}
 
 ), discounts as (
@@ -60,14 +60,14 @@ with charges as (
 
     {% endif %}
 
-), refunds as ( -- have to extract this line item from charges table since refund line item not provided
+), refunds as (
     select
         charge_id,
         0 as index,
         total_refunds as amount,
         'total refunds' as title,
         'refund' as line_item_type
-    from charges
+    from charges -- have to extract refunds from charges table since a refund line item table is not available
     where total_refunds > 0
 
 ), unioned as (

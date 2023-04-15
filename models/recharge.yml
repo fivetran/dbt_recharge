@@ -1,4 +1,360 @@
 version: 2
 
 models:
+  - name: recharge__billing_history
+    description: A table of billing history records from Recharge API. Includes information on orders, customers, charges, and more.
+    tests:     
+    columns:
+      - name: order_id
+        description: The unique identifier for the order in Recharge.
+        tests: 
+          - not_null
+          - unique
+      - name: shopify_order_id
+        description: The unique identifier for the order in Shopify.
+      - name: shopify_order_number
+        description: The order number in Shopify.
+      - name: customer_id
+        description: The unique identifier for the customer in Recharge.
+      - name: customer_full_name
+        description: The full name of the customer.
+      - name: email
+        description: The email address of the customer.
+      - name: created_at
+        description: The date and time the order was created.
+      - name: order_status
+        description: The status of the order.
+      - name: updated_at
+        description: The date and time the order was last updated.
+      - name: charge_id
+        description: The unique identifier for the charge in Recharge.
+      - name: transaction_id
+        description: The unique identifier for the transaction in Recharge.
+      - name: charge_status
+        description: The status of the charge.
+      - name: is_prepaid
+        description: Indicates whether the charge is prepaid or not.
+      - name: payment_processor
+        description: The payment processor used for the charge.
+      - name: total_price
+        description: The total price of the charge.
+      - name: order_type
+        description: The type of the order.
+      - name: processed_at
+        description: The date and time the charge was processed.
+      - name: scheduled_at
+        description: The date and time the charge is scheduled to be processed.
+      - name: shipped_date
+        description: The date and time the order was shipped.
+      - name: address_id
+        description: The unique identifier for the address in Recharge.
+      - name: address_is_active
+        description: Indicates whether the address is active or not.
+      - name: is_deleted
+        description: Indicates whether the order has been deleted.
+      - name: processor_name
+        description: The name of the payment processor.
+      - name: shipments_count
+        description: The number of shipments associated with the order.
+      - name: tags
+        description: The tags associated with the order.
+      - name: subtotal_price
+        description: The subtotal price of the order.
+      - name: tax_lines
+        description: The tax lines associated with the order.
+      - name: total_discounts
+        description: The total discounts applied to the order.
+      - name: total_refunds
+        description: The total refunds issued for the order.
+      - name: total_tax
+        description: The total tax applied to the order.
+      - name: total_weight
+        description: The total weight of the order.
+      - name: total_shipping
+        description: The total shipping cost of the order.
+      - name: order_item_quantity
+        description: The total number of items in the order.
+      - name: order_line_item_total
+        description: The total price of all line items in the order.
+      - name: total_net_order_value
+        description: The total net value of the order, calculated as the total price minus total discounts
+
+  - name: recharge__charge_line_item_history
+    description: >
+      A table of charge line item history records from Recharge API.
+      Includes information on charges, customers, addresses, and more.
+    tests:     
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - charge_id
+            - index
+    columns:
+      - name: charge_id
+        description: The unique identifier for the charge in Recharge.
+        tests:
+          - not_null
+      - name: index
+        description: The index of the line item in the charge.
+      - name: charge_created_at
+        description: The date and time the charge was created.
+      - name: customer_id
+        description: The unique identifier for the customer in Recharge.
+      - name: address_id
+        description: The unique identifier for the address in Recharge.
+      - name: amount
+        description: The amount charged for the line item.
+      - name: title
+        description: The title of the line item.
+      - name: line_item_type
+        description: The type of the line item. Possible values are (charge line, discount, shipping, tax, or refund).
+
+  - name: recharge__customer_daily_rollup
+    description: >
+      A table of daily rollup records for Recharge customers.
+      Includes information on orders, charges, and more.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_id
+            - date_day
+    columns:
+      - name: customer_id
+        description: The unique identifier for the customer in Recharge.
+      - name: date_day
+        description: The day the rollup was generated.
+      - name: date_week
+        description: The week the rollup was generated.
+      - name: date_month
+        description: The month the rollup was generated.
+      - name: date_year
+        description: The year the rollup was generated.
+      - name: no_of_orders
+        description: The number of orders for the customer on the given day.
+      - name: subscription_orders
+        description: The number of subscription orders for the customer on the given day.
+      - name: one_time_orders
+        description: The number of one-time orders for the customer on the given day.
+      - name: total_charges
+        description: The total amount charged to the customer on the given day.
+      - name: total_discounts_realized
+        description: The total amount of discounts realized by the customer on the given day.
+      - name: total_discounts_running_total
+        description: The running total of discounts realized by the customer.
+      - name: total_tax_realized
+        description: The total amount of tax realized by the customer on the given day.
+      - name: total_tax_running_total
+        description: The running total of tax realized by the customer.
+      - name: total_price_realized
+        description: The total amount of price realized by the customer on the given day.
+      - name: total_price_running_total
+        description: The running total of price realized by the customer.
+      - name: total_refunds_realized
+        description: The total amount of refunds realized by the customer on the given day.
+      - name: total_refunds_running_total
+        description: The running total of refunds realized by the customer.
+      - name: order_line_item_total_realized
+        description: The total amount of line item price realized by the customer on the given day.
+      - name: order_line_item_total_running_total
+        description: The running total of line item price realized by the customer.
+      - name: order_item_quantity_realized
+        description: The total number of items ordered by the customer on the given day.
+      - name: order_item_quantity_running_total
+        description: The running total of items ordered by the customer.
+      - name: active_months_to_date
+        description: The number of months the customer has been active up to and including the given day.
+
   - name: recharge__customer_details
+    description: >
+      A table of customer details from Recharge API.
+      Includes information on customer, subscriptions, orders, and more.
+    columns:
+      - name: customer_id
+        description: The unique identifier for the customer in Recharge.
+        tests: 
+          - not_null
+          - unique
+      - name: customer_hash
+        description: The customer's unique hash.
+      - name: shopify_customer_id
+        description: The unique identifier for the customer in Shopify.
+      - name: email
+        description: The email address of the customer.
+      - name: customer_full_name
+        description: The full name of the customer.
+      - name: created_at
+        description: The date and time the customer was created.
+      - name: updated_at
+        description: The date and time the customer was last updated.
+      - name: first_charge_processed_at
+        description: The date and time of the customer's first processed charge.
+      - name: active_subscriptions
+        description: The number of active subscriptions associated with the customer.
+      - name: total_subscriptions
+        description: The total number of subscriptions associated with the customer.
+      - name: customer_billing_full_name
+        description: The full name of the customer for billing purposes.
+      - name: billing_company
+        description: The name of the company associated with the customer's billing address.
+      - name: billing_address_line_1
+        description: The first line of the customer's billing address.
+      - name: billing_address_line_2
+        description: The second line of the customer's billing address.
+      - name: billing_zip
+        description: The postal code of the customer's billing address.
+      - name: billing_city
+        description: The city of the customer's billing address.
+      - name: billing_province
+        description: The province of the customer's billing address.
+      - name: billing_country
+        description: The country of the customer's billing address.
+      - name: billing_phone
+        description: The phone number associated with the customer's billing address.
+      - name: has_valid_payment_method
+        description: Indicates whether the customer has a valid payment method on file.
+      - name: reason_payment_method_not_valid
+        description: The reason why the customer's payment method is not valid.
+      - name: has_card_error_in_dunning
+        description: Indicates whether the customer has a card error in dunning.
+      - name: total_orders
+        description: The total number of orders associated with the customer.
+      - name: total_amount_ordered
+        description: The total amount of all orders associated with the customer.
+      - name: avg_order_amount
+        description: The average order amount for the customer.
+      - name: total_order_line_item_total
+        description: The total price of all line items in the customer's orders.
+      - name: avg_order_line_item_total
+        description: The average price of line items in the customer's orders.
+      - name: avg_item_quantity_per_order
+        description: The average quantity of items per order for the customer.
+      - name: total_amount_taxed
+        description: The total amount of tax applied to the customer's orders.
+      - name: total_amount_discounted
+        description: The total amount of discounts applied to the customer's orders.
+      - name: total_refunds
+        description: The total refunds issued for the customer.
+      - name: total_one_time_purchases
+        description: The total number of one-time purchases made by the customer.
+      - name: total_amount_charged
+        description: The total amount charged to the customer.
+      - name: charges_count
+        description: The total number of charges made to the customer.
+      - name: total_net_spend
+        description: The total net spend of the customer, calculated as the total amount charged minus total refunds.
+      - name: calculated_active_subscriptions
+        description: The number of active subscriptions for the customer, calculated as the sum of subscriptions with status `ACTIVE`.
+      - name: is_currently_subscribed
+        description: Indicates whether the customer currently has an active subscription.
+      - name: is_new_customer
+        description: Indicates whether the customer is a new customer (i.e., has no previous orders).
+      - name: active_months
+        description: The number of months in which the customer had at least one active subscription.
+      - name: orders_monthly_average
+        description: The monthly average number of orders placed by the customer.
+      - name: amount_ordered_monthly_average
+        description: The monthly average amount ordered by the customer.
+      - name: one_time_purchases_monthly_average
+        description: The monthly average number of one-time purchases made by the customer.
+      - name: amount_charged_monthly_average
+        description: The monthly average amount charged to the customer.
+      - name: amount_discounted_monthly_average
+        description: The monthly average amount discounted for the customer.
+      - name: amount_taxed_monthly_average
+        description: The monthly average amount taxed for the customer.
+      - name: net_spend_monthly_average
+        description: The monthly average net spend of the customer, calculated as the total amount charged minus total refunds, divided by the number of months since the first order.
+
+  - name: recharge__monthly_recurring_revenue
+    description: >
+      This table contains monthly recurring revenue data for Recharge customers, including current and previous MRR,
+      running totals of MRR and non-MRR, and the month of the data.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_id
+            - date_month
+    columns:
+      - name: date_month
+        description: The month of the data.
+      - name: customer_id
+        description: The ID of the Recharge customer.
+      - name: current_mrr
+        description: The current monthly recurring revenue for the customer.
+      - name: previous_mrr
+        description: The previous month's monthly recurring revenue for the customer.
+      - name: current_mrr_running_total
+        description: The running total of monthly recurring revenue for the customer up to the current month.
+      - name: current_non_mrr
+        description: The current non-monthly recurring revenue for the customer.
+      - name: previous_non_mrr
+        description: The previous month's non-monthly recurring revenue for the customer.
+      - name: current_non_mrr_running_total
+        description: The running total of non-monthly recurring revenue for the customer up to the current month.
+
+  - name: recharge__subscription_overview
+    description: >
+      This table provides an overview of Recharge subscriptions.
+    columns:
+      - name: subscription_id
+        description: The ID of the Recharge subscription.
+        tests: 
+          - not_null
+          - unique
+      - name: customer_id
+        description: The ID of the Recharge customer.
+      - name: address_id
+        description: The ID of the address associated with the subscription.
+      - name: created_at
+        description: The date and time the subscription was created.
+      - name: shopify_product_id
+        description: The ID of the Shopify product associated with the subscription.
+      - name: product_title
+        description: The title of the product associated with the subscription.
+      - name: shopify_variant_id
+        description: The ID of the Shopify variant associated with the subscription.
+      - name: variant_title
+        description: The title of the variant associated with the subscription.
+      - name: sku
+        description: The SKU of the variant associated with the subscription.
+      - name: price
+        description: The price of the subscription.
+      - name: quantity
+        description: The quantity of the subscription.
+      - name: status
+        description: The status of the subscription.
+      - name: charge_interval_frequency
+        description: The frequency of charges for the subscription.
+      - name: order_interval_unit
+        description: The unit of the order interval for the subscription.
+      - name: order_interval_frequency
+        description: The frequency of the order interval for the subscription.
+      - name: order_day_of_month
+        description: The day of the month that orders are processed for the subscription.
+      - name: order_day_of_week
+        description: The day of the week that orders are processed for the subscription.
+      - name: expire_after_specific_number_of_charges
+        description: The number of charges until the subscription expires.
+      - name: number_charges_until_expiration
+        description: The number of charges until the subscription expires.
+      - name: updated_at
+        description: The date and time the subscription was last updated.
+      - name: next_charge_scheduled_at
+        description: The date and time of the next scheduled charge for the subscription.
+      - name: cancelled_at
+        description: The date and time the subscription was cancelled.
+      - name: cancellation_reason
+        description: The reason for the cancellation of the subscription.
+      - name: cancellation_reason_comments
+        description: Additional comments related to the cancellation of the subscription.
+      - name: _fivetran_synced
+        description: A flag indicating if the record has been synced by Fivetran.
+      - name: is_most_recent_record
+        description: A flag indicating if the record is the most recent for the subscription.
+      - name: count_successful_charges
+        description: The count of successful charges for the subscription.
+      - name: count_queued_charges
+        description: The count of queued charges for the subscription.
+      - name: charges_until_expiration
+        description: The number of charges until the subscription expires.
+      - name: charge_interval_frequency_days
+        description: The number of days between charges for the subscription.

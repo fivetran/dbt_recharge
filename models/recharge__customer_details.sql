@@ -8,9 +8,9 @@ with customers as (
 
         case when active_subscriptions > 0 
             then true else false end as is_currently_subscribed,
-        case when {{ dbt.datediff("created_at", dbt.current_timestamp_backcompat(), "day") }} <= 30
+        case when {{ dbt.datediff("first_charge_processed_at", dbt.current_timestamp_backcompat(), "day") }} <= 30
             then true else false end as is_new_customer,
-        round({{ dbt.datediff("created_at", dbt.current_timestamp_backcompat(), "day") }} / 30, 2)
+        round({{ dbt.datediff("first_charge_processed_at", dbt.current_timestamp_backcompat(), "day") }} / 30, 2)
             as active_months
 
     from customers
