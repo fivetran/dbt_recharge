@@ -75,19 +75,19 @@ with charges as (
     select *
     from charge_line_items
 
-    union
+    union all
     select *
     from discounts_enriched
 
-    union
+    union all
     select *
     from charge_shipping_lines
 
-    union
+    union all
     select *
     from charge_tax_lines
     
-    union
+    union all
     select *
     from refunds
 

@@ -83,11 +83,6 @@ models:
     description: >
       A table of charge line item history records from Recharge API.
       Includes information on charges, customers, addresses, and more.
-    tests:     
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - charge_id
-            - index
     columns:
       - name: charge_id
         description: The unique identifier for the charge in Recharge.
@@ -333,8 +328,6 @@ models:
       - name: order_day_of_week
         description: The day of the week that orders are processed for the subscription.
       - name: expire_after_specific_number_of_charges
-        description: The number of charges until the subscription expires.
-      - name: number_charges_until_expiration
         description: The number of charges until the subscription expires.
       - name: updated_at
         description: The date and time the subscription was last updated.

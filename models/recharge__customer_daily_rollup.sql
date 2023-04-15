@@ -29,9 +29,7 @@ with base as (
         {% for col_name in cols %}
             round(sum(case when lower(billing.order_status) not in ('error', 'skipped', 'queued') 
                 then billing.{{col_name}} else 0 end), 2)
-                as {{col_name}}_realized,
-            round(sum({{col_name}}_realized) over(partition by base.customer_id order by base.date_day asc), 2)
-                as {{col_name}}_running_total
+                as {{col_name}}_realized
             {{ ',' if not loop.last -}}
         {% endfor %}
 
@@ -42,15 +40,25 @@ with base as (
 
     {{ dbt_utils.group_by(5) }}
 
+), aggs_running as (
+    select
+        *,
+        {% for col_name in cols %}
+            round(sum({{col_name}}_realized) over(partition by customer_id order by date_day asc), 2)
+                as {{col_name}}_running_total
+            {{ ',' if not loop.last -}}
+        {% endfor %}
+    from aggs
+
 ), active_months as (
     select
-        aggs.*,
-        round({{ dbt.datediff("customers.created_at", "aggs.date_day", "day") }} / 30, 2)
+        aggs_running.*,
+        round({{ dbt.datediff("customers.created_at", "aggs_running.date_day", "day") }} / 30, 2)
             as active_months_to_date
 
-    from aggs
+    from aggs_running
     left join customers
-        on customers.customer_id = aggs.customer_id
+        on customers.customer_id = aggs_running.customer_id
 
 )
 
