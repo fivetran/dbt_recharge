@@ -22,7 +22,7 @@ with customers as (
         count(case when lower(billing.order_type) = 'checkout' then 1 else null end) as total_one_time_purchases
 
     from billing
-    where lower(order_status) not in ('error', 'skipped', 'queued') --possible values: success, error, queued, skipped, refunded or partially_refunded
+    where lower(order_status) not in ('error', 'cancelled', 'queued') --possible values: success, error, queued, skipped, refunded or partially_refunded
     group by 1
 
 ), charge_aggs as (

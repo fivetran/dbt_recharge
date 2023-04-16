@@ -27,7 +27,7 @@ with base as (
 
         {% set cols = ['total_discounts', 'total_tax', 'total_price', 'total_refunds', 'order_line_item_total', 'order_item_quantity'] %}
         {% for col_name in cols %}
-            round(sum(case when lower(billing.order_status) not in ('error', 'skipped', 'queued') 
+            round(sum(case when lower(billing.order_status) = 'success'
                 then billing.{{col_name}} else 0 end), 2)
                 as {{col_name}}_realized
             {{ ',' if not loop.last -}}

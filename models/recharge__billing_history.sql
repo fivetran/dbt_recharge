@@ -1,8 +1,5 @@
 with orders as (
     select *
-    
-    {{ fivetran_utils.persist_pass_through_columns('recharge__order_passthrough_columns') }}
-
     from {{ var('order') }}
 
 ), order_line_items as (
@@ -15,9 +12,6 @@ with orders as (
 
 ), charges as ( --each charge can have multiple orders associated with it
     select *
-
-    {{ fivetran_utils.persist_pass_through_columns('recharge__charge_passthrough_columns') }}
-
     from {{ var('charge') }}
 
 ), charge_shipping_lines as (
