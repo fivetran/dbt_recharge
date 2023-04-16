@@ -27,7 +27,7 @@ The following table provides a detailed list of all models materialized within t
 | [recharge__customer_daily_rollup](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_daily_rollup) | Each record provides totals and running totals for a customer's associated transaction for the specified day. |
 | [recharge__customer_details](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_details) | Each record represents a customer, enriched with metrics about their associated transactions. |
 | [recharge__monthly_recurring_revenue](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__monthly_recurring_revenue) | Each record represents a customer, MRR, and non-MRR generated on a monthly basis. |
-| [recharge__subscription_overview](https://fivetran.github.io/dbt_recharge/#!/model/7+model.recharge.recharge__subscription_overview) | Each record represents a subscription, enriched with metrics about time, revenue, state, and period. |
+| [recharge__subscription_overview](https://fivetran.github.io/dbt_recharge/#!/model/7+model.recharge.recharge__subscription_overview) | Each record represents a subscription, enriched with customer and charge information. |
 
 # 🎯 How do I use the dbt package?
 ## Step 1: Prerequisites

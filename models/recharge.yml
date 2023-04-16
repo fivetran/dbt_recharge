@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: recharge__billing_history
-    description: A table of billing history records from Recharge API. Includes information on orders, customers, charges, and more.
+    description: Each record represents an order, enriched with metrics about related charges and line items.
     tests:     
     columns:
       - name: order_id
@@ -80,9 +80,7 @@ models:
         description: The total net value of the order, calculated as the total price minus total discounts.
 
   - name: recharge__charge_line_item_history
-    description: >
-      A table of charge line item history records from Recharge API.
-      Includes information on charges, customers, addresses, and more.
+    description: Each record represents a specific line item charge, refund, or other line item that accumulates into final charges.
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -104,9 +102,7 @@ models:
         description: The type of the line item. Possible values are (charge line, discount, shipping, tax, or refund).
 
   - name: recharge__customer_daily_rollup
-    description: >
-      A table of daily rollup records for Recharge customers.
-      Includes information on orders, charges, and more.
+    description: Each record provides totals and running totals for a customer's associated transaction for the specified day.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -159,9 +155,7 @@ models:
         description: The number of months the customer has been active up to the given day.
 
   - name: recharge__customer_details
-    description: >
-      A table of customer details from Recharge API.
-      Includes information on customer, subscriptions, orders, and more.
+    description: Each record represents a customer, enriched with metrics about their associated transactions.
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -260,9 +254,7 @@ models:
         description: The monthly average net spend of the customer, calculated as the total amount charged minus total refunds, divided by the number of months since the first charge.
 
   - name: recharge__monthly_recurring_revenue
-    description: >
-      This table contains monthly recurring revenue data for Recharge customers, including current and previous MRR,
-      Running total ofs of MRR and non-MRR, and the month of the data.
+    description: Each record represents a customer, MRR, and non-MRR generated on a monthly basis.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -287,8 +279,7 @@ models:
         description: The running total of one time product revenue for the customer up to the current month.
 
   - name: recharge__subscription_overview
-    description: >
-      This table provides an overview of Recharge subscriptions.
+    description: Each record represents a subscription, enriched with customer and charge information.
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
