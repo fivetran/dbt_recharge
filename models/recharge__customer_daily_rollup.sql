@@ -45,7 +45,7 @@ with base as (
         *,
         {% for col_name in cols %}
             round(cast(sum({{col_name}}_realized) over (partition by customer_id order by date_day asc 
-                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as {{ dbt.type_numeric() }}), 2)
+                rows between unbounded preceding and current row) as {{ dbt.type_numeric() }}), 2)
                 as {{col_name}}_running_total
             {{ ',' if not loop.last -}}
         {% endfor %}
