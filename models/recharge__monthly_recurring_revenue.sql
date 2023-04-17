@@ -1,12 +1,12 @@
-with customers as (
-    select 
-        distinct date_month,
-        customer_id
-    from {{ ref('recharge__customer_daily_rollup') }}
-
-), billing as (
-    select *
-    from {{ ref('recharge__billing_history') }}
+with customers as ( 
+    select distinct  
+        date_month, 
+        customer_id 
+    from {{ ref('recharge__customer_daily_rollup') }} 
+ 
+), billing as ( 
+    select * 
+    from {{ ref('recharge__billing_history') }} 
 
 ), aggs as (
     select 

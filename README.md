@@ -22,13 +22,13 @@ The following table provides a detailed list of all models materialized within t
  
 | **model** | **description** |
 |-----------|-----------------|
-| [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Each record represents an order, enriched with metrics about related charges and line items. |
+| [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Each record represents an order, enriched with metrics about related charges and line items. | 
 | [recharge__charge_line_item_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__charge_line_item_history) | Each record represents a specific line item charge, refund, or other line item that accumulates into final charges. |
 | [recharge__customer_daily_rollup](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_daily_rollup) | Each record provides totals and running totals for a customer's associated transaction for the specified day. |
 | [recharge__customer_details](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_details) | Each record represents a customer, enriched with metrics about their associated transactions. |
 | [recharge__monthly_recurring_revenue](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__monthly_recurring_revenue) | Each record represents a customer, MRR, and non-MRR generated on a monthly basis. |
 | [recharge__subscription_overview](https://fivetran.github.io/dbt_recharge/#!/model/7+model.recharge.recharge__subscription_overview) | Each record represents a subscription, enriched with customer and charge information. |
-
+ 
 # 🎯 How do I use the dbt package?
 ## Step 1: Prerequisites
 To use this dbt package, you must have the following:
@@ -57,24 +57,24 @@ By default, this package runs using your destination and the `recharge` schema. 
 
 ```yml
 vars:
-    recharge_database: your_destination_name
-    recharge_schema: your_schema_name 
+  recharge_database: your_destination_name
+  recharge_schema: your_schema_name 
 ```
 
-## Step 4: Disable models for non-existent sources
-Your Recharge connector may not sync every table that this package expects. If you do not have the `PAYMENT_METHOD` and/or `ONE_TIME_PRODUCT` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
-
-```yml
-vars:
-  recharge__payment_method_enabled: false # Disables if you do not have the PAYMENT_METHOD table. Default is True.
-  recharge__one_time_product_enabled: false # Disables if you do not have the ONE_TIME_PRODUCT table. Default is True.
+## Step 4: Disable models for non-existent sources 
+Your Recharge connector may not sync every table that this package expects. If you do not have the `PAYMENT_METHOD` and/or `ONE_TIME_PRODUCT` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources: 
+ 
+```yml 
+vars: 
+  recharge__payment_method_enabled: false # Disables if you do not have the PAYMENT_METHOD table. Default is True. 
+  recharge__one_time_product_enabled: false # Disables if you do not have the ONE_TIME_PRODUCT table. Default is True. 
 ``` 
 
 ## (Optional) Step 5: Additional configurations
 <details><summary>Expand for configurations</summary>
 
 ### Setting the date range
-By default, the models `customer_daily_rollup` and `monthly_recurring_revenue` will aggregate data for the entire date range of your data set. You can limit this date range by defining the following variables. You do not need to set both if you only want to limit one. 
+By default, the models `customer_daily_rollup` and `monthly_recurring_revenue` will aggregate data for the entire date range of your data set. You can limit this date range by defining the following variables. You do not need to set both if you only want to limit one.  
 ```yml
 vars:
     recharge_first_date: "YYYY-MM-DD"
@@ -101,12 +101,12 @@ vars:
 ```
 
 ### Changing the Build Schema
-By default, this package will build the Recharge transformation models within a schema titled (<target_schema> + `recharge`) in your destination. If this is not where you would like your Recharge data written, add the following configuration to your root `dbt_project.yml` file:
+By default, this package will build the Recharge transformation models within a schema titled (<target_schema> + `recharge`) in your destination. If this is not where you would like your Recharge data written, add the following configuration to your root `dbt_project.yml` file: 
 
 ```yml
-models:
-    recharge:
-      +schema: my_new_schema_name # leave blank for just the target_schema
+models: 
+    recharge: 
+      +schema: my_new_schema_name # leave blank for just the target_schema 
 ```
 
 ### Change the source table references
@@ -119,7 +119,7 @@ vars:
     recharge_<default_source_table_name>_identifier: your_table_name 
 ```
 
-#### 🚨 Snowflake Users 🚨
+#### 🚨 Snowflake Users 🚨 
 You may need to provide the case-sensitive spelling of your source tables that are also Snowflake reserved words.
 
 In this package, this would apply to the `ORDER` source. If you are receiving errors for this source, include the following in your `dbt_project.yml` file:
@@ -162,7 +162,7 @@ packages:
       version: [">=1.0.0", "<2.0.0"]
 ```
 
-# 🙌 How is this package maintained and can I contribute?
+# 🙌 How is this package maintained and can I contribute? 
 ## Package Maintenance
 The Fivetran team maintaining this package maintains _only_ the latest version of the package. We highly recommend that you consistently use the [latest version](https://hub.getdbt.com/fivetran/recharge/latest/) of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_recharge/blob/main/CHANGELOG.md) and release notes for more information about changes.
 

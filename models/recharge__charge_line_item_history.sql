@@ -70,26 +70,26 @@ with charges as (
     from charges -- have to extract refunds from charges table since a refund line item table is not available
     where total_refunds > 0
 
-), unioned as (
-
-    select *
-    from charge_line_items
-
-    union all
-    select *
-    from discounts_enriched
-
-    union all
-    select *
-    from charge_shipping_lines
-
-    union all
-    select *
-    from charge_tax_lines
-    
-    union all
-    select *
-    from refunds
+), unioned as ( 
+ 
+    select * 
+    from charge_line_items 
+ 
+    union all 
+    select * 
+    from discounts_enriched 
+ 
+    union all 
+    select * 
+    from charge_shipping_lines 
+ 
+    union all 
+    select * 
+    from charge_tax_lines 
+     
+    union all 
+    select * 
+    from refunds 
 
 ), joined as (
     select

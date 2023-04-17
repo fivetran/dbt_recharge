@@ -1,9 +1,9 @@
 packages:
-  # - package: fivetran/dbt_recharge_source
-  #   version: [">=0.1.0", "<0.2.0"]
-
-- git: https://github.com/fivetran/dbt_recharge_source.git
-  revision: main
-  warn-unpinned: false
-
-# - local: ../dbt_recharge_source
+  # - package: fivetran/dbt_recharge_source 
+  #   version: [">=0.1.0", "<0.2.0"] 
+ 
+- git: https://github.com/fivetran/dbt_recharge_source.git 
+  revision: main 
+  warn-unpinned: false 
+ 
+# - local: ../dbt_recharge_source 

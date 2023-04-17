@@ -28,4 +28,5 @@ with customers as (
     from enriched
 )
 
-select * from aggs
+select * 
+from aggs
