@@ -44,23 +44,23 @@ with base as (
     select
         *,
         {% for col_name in cols %}
-            round(cast(sum({{col_name}}_realized) over(partition by customer_id order by date_day asc) as {{ dbt.type_numeric() }}), 2)
+            round(cast(sum({{col_name}}_realized) over (partition by customer_id order by date_day asc 
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as {{ dbt.type_numeric() }}), 2)
                 as {{col_name}}_running_total
             {{ ',' if not loop.last -}}
         {% endfor %}
     from aggs
-    {{ dbt_utils.group_by(15) }}
 
 ), active_months as (
     select
         aggs_running.*,
-        round(cast({{ dbt.datediff("customers.created_at", "aggs_running.date_day", "day") }} / 30 as {{ dbt.type_numeric() }}), 2)
+        round(cast({{ dbt.datediff("customers.created_at", "aggs_running.date_day", "day") }} / 30 
+            as {{ dbt.type_numeric() }}), 2)
             as active_months_to_date
 
     from aggs_running
     left join customers
         on customers.customer_id = aggs_running.customer_id
-
 )
 
 select * 
