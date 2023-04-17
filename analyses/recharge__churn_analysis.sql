@@ -16,3 +16,6 @@ with customers as (
 
     from customers
 )
+
+select *
+from why_churned
