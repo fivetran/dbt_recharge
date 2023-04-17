@@ -11,14 +11,14 @@ with customers as (
     select 
         customer_id,
         count(order_id) as total_orders,
-        round(sum(total_price), 2) as total_amount_ordered,
-        round(avg(total_price), 2) as avg_order_amount,
-        round(avg(order_item_quantity), 2) as avg_item_quantity_per_order,
-        round(sum(order_line_item_total), 2) as total_order_line_item_total,
-        round(avg(order_line_item_total), 2) as avg_order_line_item_total,
-        round(sum(total_tax), 2) as total_amount_taxed,
-        round(sum(total_discounts), 2) as total_amount_discounted,
-        round(sum(total_refunds), 2) as total_refunds,
+        cast(round(sum(total_price) as {{ dbt.type_numeric() }}), 2) as total_amount_ordered,
+        cast(round(avg(total_price) as {{ dbt.type_numeric() }}), 2) as avg_order_amount,
+        cast(round(avg(order_item_quantity) as {{ dbt.type_numeric() }}), 2) as avg_item_quantity_per_order,
+        cast(round(sum(order_line_item_total) as {{ dbt.type_numeric() }}), 2) as total_order_line_item_total,
+        cast(round(avg(order_line_item_total) as {{ dbt.type_numeric() }}), 2) as avg_order_line_item_total,
+        cast(round(sum(total_tax) as {{ dbt.type_numeric() }}), 2) as total_amount_taxed,
+        cast(round(sum(total_discounts) as {{ dbt.type_numeric() }}), 2) as total_amount_discounted,
+        cast(round(sum(total_refunds) as {{ dbt.type_numeric() }}), 2) as total_refunds,
         count(case when lower(billing.order_type) = 'checkout' then 1 else null end) as total_one_time_purchases
 
     from billing
@@ -29,7 +29,7 @@ with customers as (
     select 
         customer_id,
         count(distinct charge_id) as charges_count,
-        round(cast(sum(total_price) as {{ dbt.type_float() }}), 2) as total_amount_charged 
+        cast(round(cast(sum(total_price) as {{ dbt.type_float() }}) as {{ dbt.type_numeric() }}), 2) as total_amount_charged 
         
     from billing
     where lower(charge_status) not in ('error', 'skipped', 'queued')
@@ -61,7 +61,7 @@ with customers as (
         charge_aggs.total_amount_charged,
         charge_aggs.charges_count,
 
-        round(order_aggs.total_amount_ordered - order_aggs.total_refunds, 2) as total_net_spend,
+        cast(round(order_aggs.total_amount_ordered - order_aggs.total_refunds as {{ dbt.type_numeric() }}), 2) as total_net_spend,
 
         subscriptions.calculated_active_subscriptions
 

@@ -7,7 +7,7 @@ profile: 'integration_tests'
 
 vars:
   recharge_source:
-    recharge_schema: recharge_integration_tests
+    recharge_schema: recharge_integration_tests_02
     recharge_address_identifier: "address_data"
     recharge_address_shipping_line_identifier: "address_shipping_line_data"
     recharge_charge_identifier: "charge_data"
