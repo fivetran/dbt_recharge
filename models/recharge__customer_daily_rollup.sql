@@ -27,7 +27,7 @@ with base as (
 
         {% set cols = ['total_discounts', 'total_tax', 'total_price', 'total_refunds', 'order_line_item_total', 'order_item_quantity'] %}
         {% for col_name in cols %}
-            cast(round(sum(case when lower(billing.order_status) = 'success'
+            round(cast(sum(case when lower(billing.order_status) = 'success'
                 then billing.{{col_name}} else 0 end) as {{ dbt.type_numeric() }}), 2)
                 as {{col_name}}_realized
             {{ ',' if not loop.last -}}
@@ -44,7 +44,7 @@ with base as (
     select
         *,
         {% for col_name in cols %}
-            cast(round(sum({{col_name}}_realized) over(partition by customer_id order by date_day asc) as {{ dbt.type_numeric() }}), 2)
+            round(cast(sum({{col_name}}_realized) over(partition by customer_id order by date_day asc) as {{ dbt.type_numeric() }}), 2)
                 as {{col_name}}_running_total
             {{ ',' if not loop.last -}}
         {% endfor %}
@@ -53,7 +53,7 @@ with base as (
 ), active_months as (
     select
         aggs_running.*,
-        cast(round({{ dbt.datediff("customers.created_at", "aggs_running.date_day", "day") }} / 30 as {{ dbt.type_numeric() }}), 2)
+        round(cast({{ dbt.datediff("customers.created_at", "aggs_running.date_day", "day") }} / 30 as {{ dbt.type_numeric() }}), 2)
             as active_months_to_date
 
     from aggs_running

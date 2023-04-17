@@ -11,14 +11,14 @@ with customers as (
     select 
         customer_id,
         count(order_id) as total_orders,
-        cast(round(sum(total_price) as {{ dbt.type_numeric() }}), 2) as total_amount_ordered,
-        cast(round(avg(total_price) as {{ dbt.type_numeric() }}), 2) as avg_order_amount,
-        cast(round(avg(order_item_quantity) as {{ dbt.type_numeric() }}), 2) as avg_item_quantity_per_order,
-        cast(round(sum(order_line_item_total) as {{ dbt.type_numeric() }}), 2) as total_order_line_item_total,
-        cast(round(avg(order_line_item_total) as {{ dbt.type_numeric() }}), 2) as avg_order_line_item_total,
-        cast(round(sum(total_tax) as {{ dbt.type_numeric() }}), 2) as total_amount_taxed,
-        cast(round(sum(total_discounts) as {{ dbt.type_numeric() }}), 2) as total_amount_discounted,
-        cast(round(sum(total_refunds) as {{ dbt.type_numeric() }}), 2) as total_refunds,
+        round(cast(sum(total_price) as {{ dbt.type_numeric() }}), 2) as total_amount_ordered,
+        round(cast(avg(total_price) as {{ dbt.type_numeric() }}), 2) as avg_order_amount,
+        round(cast(avg(order_item_quantity) as {{ dbt.type_numeric() }}), 2) as avg_item_quantity_per_order,
+        round(cast(sum(order_line_item_total) as {{ dbt.type_numeric() }}), 2) as total_order_line_item_total,
+        round(cast(avg(order_line_item_total) as {{ dbt.type_numeric() }}), 2) as avg_order_line_item_total,
+        round(cast(sum(total_tax) as {{ dbt.type_numeric() }}), 2) as total_amount_taxed,
+        round(cast(sum(total_discounts) as {{ dbt.type_numeric() }}), 2) as total_amount_discounted,
+        round(cast(sum(total_refunds) as {{ dbt.type_numeric() }}), 2) as total_refunds,
         count(case when lower(billing.order_type) = 'checkout' then 1 else null end) as total_one_time_purchases
 
     from billing
@@ -29,7 +29,7 @@ with customers as (
     select 
         customer_id,
         count(distinct charge_id) as charges_count,
-        cast(round(cast(sum(total_price) as {{ dbt.type_float() }}) as {{ dbt.type_numeric() }}), 2) as total_amount_charged 
+        round(cast(cast(sum(total_price) as {{ dbt.type_float() }}) as {{ dbt.type_numeric() }}), 2) as total_amount_charged 
         
     from billing
     where lower(charge_status) not in ('error', 'skipped', 'queued')
@@ -61,7 +61,7 @@ with customers as (
         charge_aggs.total_amount_charged,
         charge_aggs.charges_count,
 
-        cast(round(order_aggs.total_amount_ordered - order_aggs.total_refunds as {{ dbt.type_numeric() }}), 2) as total_net_spend,
+        round(cast(order_aggs.total_amount_ordered - order_aggs.total_refunds as {{ dbt.type_numeric() }}), 2) as total_net_spend,
 
         subscriptions.calculated_active_subscriptions
 
