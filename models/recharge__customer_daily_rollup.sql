@@ -49,6 +49,7 @@ with base as (
             {{ ',' if not loop.last -}}
         {% endfor %}
     from aggs
+    {{ dbt_utils.group_by(15) }}
 
 ), active_months as (
     select
