@@ -14,7 +14,6 @@ with customers as (
         customers.customer_id,
         round(cast(sum(case when lower(billing.order_type) = 'recurring' then billing.total_price else 0 end) as {{ dbt.type_numeric() }}), 2) as current_mrr,
         round(cast(sum(case when lower(billing.order_type) = 'checkout' then billing.total_price else 0 end) as {{ dbt.type_numeric() }}), 2) as current_non_mrr
-        
     from customers
     left join billing
         on cast({{ dbt.date_trunc('month','billing.created_at') }} as date) = customers.date_month
@@ -32,7 +31,6 @@ with customers as (
         round(cast(sum(current_non_mrr) over( partition by  customer_id order by date_month asc
             rows unbounded preceding) as {{ dbt.type_numeric() }}), 2) as current_non_mrr_running_total
     from aggs
-
 )
 
 select *

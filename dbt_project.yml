@@ -39,4 +39,4 @@ models:
     +schema: recharge
     +materialized: table
     intermediate:
-      +materialized: table
+      +materialized: ephemeral

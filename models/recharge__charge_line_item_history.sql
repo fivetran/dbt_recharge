@@ -28,7 +28,7 @@ with charges as (
         'discount' as line_item_type
     from charge_discount_codes
     left join discounts
-        using(discount_id)
+        on discounts.discount_id = charge_discount_codes.discount_id
 
 ), charge_shipping_lines as (
     select 
@@ -47,7 +47,7 @@ with charges as (
             price as amount,
             title,
             'tax' as line_item_type
-        from {{ source('recharge','charge_tax_line') }}
+        from {{ var('charge_tax_line') }}
     {% else %} 
         select
             charge_id,
@@ -57,7 +57,6 @@ with charges as (
             'tax' as line_item_type
         from charges
         where total_tax > 0
-
     {% endif %}
 
 ), refunds as (
@@ -100,12 +99,12 @@ with charges as (
         charges.address_id,
         unioned.amount,
         unioned.title,
-        unioned.line_item_type
-
+        unioned.line_item_type,
+        row_number() over(partition by unioned.charge_id order by unioned.line_item_type, unioned.index) 
+            as charge_row_num
     from unioned
     left join charges
-        using(charge_id)
-
+        on charges.charge_id = unioned.charge_id
 )
 
 select *

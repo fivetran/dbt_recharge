@@ -22,9 +22,9 @@ The following table provides a detailed list of all models materialized within t
  
 | **model** | **description** |
 |-----------|-----------------|
-| [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Each record represents an order, enriched with metrics about related charges and line items. |
+| [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Each record represents an order, enriched with metrics about related charges and line items. Line items are aggregated at the billing (order) level. |
 | [recharge__charge_line_item_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__charge_line_item_history) | Each record represents a specific line item charge, refund, or other line item that accumulates into final charges. |
-| [recharge__customer_daily_rollup](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_daily_rollup) | Each record provides totals and running totals for a customer's associated transaction for the specified day. |
+| [recharge__customer_daily_rollup](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_daily_rollup) | Each record provides totals and running totals for a customer's associated transactions for the specified day. |
 | [recharge__customer_details](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_details) | Each record represents a customer, enriched with metrics about their associated transactions. |
 | [recharge__monthly_recurring_revenue](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__monthly_recurring_revenue) | Each record represents a customer, MRR, and non-MRR generated on a monthly basis. |
 | [recharge__subscription_overview](https://fivetran.github.io/dbt_recharge/#!/model/7+model.recharge.recharge__subscription_overview) | Each record represents a subscription, enriched with customer and charge information. |
@@ -57,28 +57,29 @@ By default, this package runs using your destination and the `recharge` schema. 
 
 ```yml
 vars:
-    recharge_database: your_destination_name
-    recharge_schema: your_schema_name 
+  recharge_database: your_destination_name
+  recharge_schema: your_schema_name 
 ```
 
 ## Step 4: Disable models for non-existent sources
-Your Recharge connector may not sync every table that this package expects. If you do not have the `PAYMENT_METHOD` and/or `ONE_TIME_PRODUCT` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
+Your Recharge connector may not sync every table that this package expects. If you do not have the `PAYMENT_METHOD`, `ONE_TIME_PRODUCT`, and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
 
 ```yml
 vars:
   recharge__payment_method_enabled: false # Disables if you do not have the PAYMENT_METHOD table. Default is True.
   recharge__one_time_product_enabled: false # Disables if you do not have the ONE_TIME_PRODUCT table. Default is True.
+  recharge__charge_tax_line_enabled: false # Disables if you do not have the CHARGE_TAX_LINE table. Default is True.
 ``` 
 
 ## (Optional) Step 5: Additional configurations
 <details><summary>Expand for configurations</summary>
 
 ### Setting the date range
-By default, the models `customer_daily_rollup` and `monthly_recurring_revenue` will aggregate data for the entire date range of your data set. You can limit this date range by defining the following variables. You do not need to set both if you only want to limit one. 
+By default, the models `customer_daily_rollup` and `monthly_recurring_revenue` will aggregate data for the entire date range of your data set. However, you may limit this date range if desired by defining the following variables. You do not need to set both if you only want to limit one. 
 ```yml
 vars:
-    recharge_first_date: "YYYY-MM-DD"
-    recharge_last_date: "YYYY-MM-DD"
+    recharge_first_date: "yyyy-mm-dd"
+    recharge_last_date: "yyyy-mm-dd"
 ```
 ### Passing Through Additional Columns
 This package includes all source columns defined in the macros folder. If you would like to pass through additional columns to the staging models, add the following configurations to your `dbt_project.yml` file. These variables allow for the pass-through fields to be aliased (`alias`) and casted (`transform_sql`) if desired, but not required. Datatype casting is configured via a sql snippet within the `transform_sql` key. You may add the desired sql while omitting the `as field_name` at the end and your custom pass-though fields will be casted accordingly. Use the below format for declaring the respective pass-through variables in your root `dbt_project.yml`.
@@ -101,11 +102,13 @@ vars:
 ```
 
 ### Changing the Build Schema
-By default, this package will build the Recharge transformation models within a schema titled (<target_schema> + `recharge`) in your destination. If this is not where you would like your Recharge data written, add the following configuration to your root `dbt_project.yml` file:
+By default, this package builds the Recharge staging models within a schema titled (<target_schema> + `_recharge_source`) and the Recharge transformation models within a schema titled (<target_schema> + `_recharge`) in your destination. If this is not where you would like your Recharge data written, add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 models:
     recharge:
+      +schema: my_new_schema_name # leave blank for just the target_schema
+    recharge_source:
       +schema: my_new_schema_name # leave blank for just the target_schema
 ```
 
@@ -119,7 +122,7 @@ vars:
     recharge_<default_source_table_name>_identifier: your_table_name 
 ```
 
-#### 🚨 Snowflake Users 🚨
+### 🚨 Snowflake Users 🚨
 You may need to provide the case-sensitive spelling of your source tables that are also Snowflake reserved words.
 
 In this package, this would apply to the `ORDER` source. If you are receiving errors for this source, include the following in your `dbt_project.yml` file:
@@ -170,6 +173,9 @@ The Fivetran team maintaining this package maintains _only_ the latest version o
 A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions! 
 
 We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) to learn how to contribute to a dbt package!
+
+## Opinionated Modelling Decisions
+This dbt package takes an opinionated stance on revenue is calculated, using charges in some cases and orders in others. If you would like a deeper explanation of the logic used by default in the dbt package you may reference the [DECISIONLOG](https://github.com/fivetran/dbt_recharge/blob/main/DECISIONLOG.md).
 
 # 🏪 Are there any resources available?
 - If you have questions or want to reach out for help, please refer to the [GitHub Issue](https://github.com/fivetran/dbt_microsoft_ads/issues/new/choose) section to find the right avenue of support for you.

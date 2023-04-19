@@ -24,7 +24,7 @@ with subscriptions as (
         charges.charge_status
     from charge_line_items
     left join charges
-        using(charge_id)
+        on charges.charge_id = charge_line_items.charge_id
 
 ), subscriptions_charges as (
     select 
@@ -59,7 +59,7 @@ with subscriptions as (
             end as charge_interval_frequency_days
     from subscriptions
     left join subscriptions_charges
-        using(subscription_id)
+        on subscriptions_charges.subscription_id = subscriptions.subscription_id
 )
 
 select * 

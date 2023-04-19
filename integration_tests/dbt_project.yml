@@ -72,7 +72,3 @@ seeds:
       +column_types:
         SHIPPED_DATE: "timestamp"
         SHIPPING_DATE: "timestamp"
-
-dispatch:
-  - macro_namespace: dbt_utils
-    search_order: ['spark_utils', 'dbt_utils']

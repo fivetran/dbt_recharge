@@ -49,5 +49,3 @@ The status of the subscription. Possible values are ACTIVE, CANCELLED, EXPIRED.
 {% docs type %}
 Possible values are CHECKOUT, RECURRING.
 {% enddocs %}
-
- "{{ doc('address_id') }}"
