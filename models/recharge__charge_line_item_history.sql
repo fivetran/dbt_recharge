@@ -93,15 +93,16 @@ with charges as (
 ), joined as (
     select
         unioned.charge_id,
-        unioned.index,
+        {# unioned.index, #} --
+        row_number() over(partition by unioned.charge_id 
+            order by unioned.line_item_type, unioned.index) 
+            as charge_row_num, --thinking of this to replace index.
         charges.created_at as charge_created_at,
         charges.customer_id,
         charges.address_id,
         unioned.amount,
         unioned.title,
-        unioned.line_item_type,
-        row_number() over(partition by unioned.charge_id order by unioned.line_item_type, unioned.index) 
-            as charge_row_num
+        unioned.line_item_type
     from unioned
     left join charges
         on charges.charge_id = unioned.charge_id

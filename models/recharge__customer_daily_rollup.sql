@@ -3,7 +3,12 @@ with base as (
     from {{ ref('int_recharge__customer_daily_rollup') }}
 
 ), billing as (
-    select *
+    select 
+        *,
+        case when lower(order_type) = 'recurring' and lower(order_status) = 'success' 
+            then total_price else 0 end as subscription_amount,
+        case when lower(order_type) = 'checkout' and lower(order_status) = 'success'
+            then total_price else 0 end as one_time_amount
     from {{ ref('recharge__billing_history') }}
 
 ), customers as (
@@ -23,7 +28,8 @@ with base as (
         count(case when lower(billing.order_type) = 'recurring' then 1 else null end) as subscription_orders,
         count(case when lower(billing.order_type) = 'checkout' then 1 else null end) as one_time_orders,
         coalesce(sum(billing.total_price), 0) as total_charges,
-        {% set cols = ['total_discounts', 'total_tax', 'total_price', 'total_refunds', 'order_line_item_total', 'order_item_quantity'] %}
+        {% set cols = ['total_discounts', 'total_tax', 'total_price', 'total_refunds', 'order_line_item_total', 
+            'order_item_quantity', 'subscription_amount', 'one_time_amount'] %}
         {% for col_name in cols %}
             round(cast(sum(case when lower(billing.order_status) = 'success'
                 then billing.{{col_name}} else 0 end) as {{ dbt.type_numeric() }}), 2)
