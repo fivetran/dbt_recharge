@@ -93,10 +93,10 @@ with charges as (
 ), joined as (
     select
         unioned.charge_id,
-        {# unioned.index, #} --
         row_number() over(partition by unioned.charge_id 
             order by unioned.line_item_type, unioned.index) 
-            as charge_row_num, --thinking of this to replace index.
+            as charge_row_num, -- CLARIFY IN DOCS
+        unioned.index as source_index,
         charges.created_at as charge_created_at,
         charges.customer_id,
         charges.address_id,

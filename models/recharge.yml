@@ -59,7 +59,7 @@ models:
       - name: tags
         description: A comma-separated list of tags on the charge.
       - name: subtotal_price
-        description: The combined price of all line_items without taxes and shipping.
+        description: The combined price of all order line_items minus any discounts. Does not include taxes and shipping.
       - name: tax_lines
         description: The tax lines associated with the order.
       - name: total_discounts
@@ -75,19 +75,26 @@ models:
       - name: order_item_quantity
         description: The total number of items in the order.
       - name: order_line_item_total
-        description: The total price of all line items in the order.
+        description: The total price of all line items in the order. Does not include discounts, shipping, or tax.
       - name: total_net_order_value
         description: The total net value of the order, calculated as the total price minus total discounts.
 
   - name: recharge__charge_line_item_history
     description: Each record represents a specific line item charge, refund, or other line item that accumulates into final charges.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - charge_id
+            - charge_row_num
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
         tests:
           - not_null
-      - name: index
-        description: A unique numeric row produced for every concurrent charge_id.
+      - name: charge_row_num
+        description: EXPLAIN
+      - name: source_index
+        description: The line item source's primary key index. This is provided for matching back to the line item type's source.
       - name: charge_created_at
         description: The date and time the charge was created.
       - name: customer_id

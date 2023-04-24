@@ -1,26 +1,14 @@
 with aggs as (
     select 
-        distinct date_month,
+        date_month,
         customer_id,
-        round(cast(sum(subscription_amount_realized) as {{ dbt.type_numeric() }}), 2) as current_mrr,
-        round(cast(sum(one_time_amount_realized) as {{ dbt.type_numeric() }}), 2) as current_non_mrr
+        round(cast(sum(charge_recurring_amount_realized) as {{ dbt.type_numeric() }}), 2) as total_recurring_charges,
+        round(cast(sum(charge_one_time_amount_realized) as {{ dbt.type_numeric() }}), 2) as total_one_time_charges,
+        round(cast(sum(calculated_order_recurring_amount_realized) as {{ dbt.type_numeric() }}), 2) as calculated_order_mrr,
+        round(cast(sum(calculated_order_one_time_amount_realized) as {{ dbt.type_numeric() }}), 2) as calculated_order_non_mrr
     from {{ ref('recharge__customer_daily_rollup') }}
     group by 1,2
-
-), aggs_running as (
-    select 
-        customer_id,
-        date_month,
-        current_mrr,
-        lag(current_mrr, 1) over(partition by customer_id order by date_month asc) as previous_mrr,
-        round(cast(sum(current_mrr) over( partition by customer_id order by date_month asc
-            rows unbounded preceding) as {{ dbt.type_numeric() }}), 2) as current_mrr_running_total,
-        current_non_mrr,
-        lag(current_non_mrr, 1) over(partition by customer_id order by date_month asc) as previous_non_mrr,
-        round(cast(sum(current_non_mrr) over( partition by  customer_id order by date_month asc
-            rows unbounded preceding) as {{ dbt.type_numeric() }}), 2) as current_non_mrr_running_total
-    from aggs
 )
 
 select *
-from aggs_running
+from aggs

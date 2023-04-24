@@ -40,3 +40,7 @@ models:
     +materialized: table
     intermediate:
       +materialized: ephemeral
+      int_recharge__calendar_spine:
+        +materialized: table
+      int_recharge__customer_daily_rollup:
+        +materialized: table
