@@ -116,9 +116,9 @@ models:
         tests:
           - not_null
       - name: charge_row_num
-        description: EXPLAIN
+        description: Unique row number assigned to line items with the same `charge_id`.
       - name: source_index
-        description: The line item source's primary key index. This is provided for matching back to the line item type's source.
+        description: The line item's primary key `index` carried over from its source.
       - name: charge_created_at
         description: The date and time the charge was created.
       - name: customer_id

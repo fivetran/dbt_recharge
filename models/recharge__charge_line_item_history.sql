@@ -95,7 +95,7 @@ with charges as (
         unioned.charge_id,
         row_number() over(partition by unioned.charge_id 
             order by unioned.line_item_type, unioned.index) 
-            as charge_row_num, -- CLARIFY IN DOCS
+            as charge_row_num,
         unioned.index as source_index,
         charges.charge_created_at,
         charges.customer_id,
