@@ -6,7 +6,6 @@ require-dbt-version: [">=1.3.0", "<2.0.0"]
 
 vars:
   recharge:
-    dbt_date:time_zone: "UTC"
     address: "{{ ref('stg_recharge__address') }}"
     address_shipping_line: "{{ ref('stg_recharge__address_shipping_line') }}"
     charge: "{{ ref('stg_recharge__charge') }}"

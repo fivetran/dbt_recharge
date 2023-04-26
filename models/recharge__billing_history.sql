@@ -34,10 +34,11 @@ with orders as (
     select 
         orders.*,
         -- recognized_total (calculated total based on prepaid subscriptions)
-        charges_enriched.created_at as charged_at,
+        charges_enriched.charge_created_at,
         charges_enriched.processor_name,
         charges_enriched.tags,
-        
+        charges_enriched.shipments_count,
+        charges_enriched.charge_type,
         {% set agg_cols = ['total_price', 'subtotal_price', 'tax_lines', 'total_discounts', 
             'total_refunds', 'total_tax', 'total_weight', 'total_shipping'] %}
         {% for col in agg_cols %}
@@ -61,8 +62,9 @@ with orders as (
 ), joined_enriched as (
     select 
         joined.*,
+        -- total_price includes taxes and discounts, so only need to subtract total_refunds to get net.
         charge_total_price - charge_total_refunds as total_net_charge_value,
-        calculated_order_total_price - calculated_order_total_refunds as total_calculated_net_order_value -- total_price includes taxes and discounts, so only need to subtract total_refunds to get net. 
+        calculated_order_total_price - calculated_order_total_refunds as total_calculated_net_order_value  
     from joined
 )
 

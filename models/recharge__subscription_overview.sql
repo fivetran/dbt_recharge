@@ -20,7 +20,7 @@ with subscriptions as (
         charge_line_items.shopify_variant_id,
         charges.customer_id,
         charges.address_id,
-        charges.created_at as charged_at,
+        charges.charge_created_at,
         charges.charge_status
     from charge_line_items
     left join charges
@@ -40,8 +40,8 @@ with subscriptions as (
         on customers_charge_lines.customer_id = subscriptions.customer_id
         and customers_charge_lines.address_id = subscriptions.address_id
         and customers_charge_lines.shopify_product_id = subscriptions.shopify_product_id
-    where subscriptions.created_at <= customers_charge_lines.charged_at
-        and subscriptions.cancelled_at >= customers_charge_lines.charged_at
+    where subscriptions.subscription_created_at <= customers_charge_lines.charge_created_at
+        and subscriptions.subscription_cancelled_at >= customers_charge_lines.charge_created_at
     group by 1
 
 ), subscriptions_enriched as (
@@ -49,7 +49,7 @@ with subscriptions as (
         subscriptions.*,
         subscriptions_charges.count_successful_charges,
         subscriptions_charges.count_queued_charges,
-        case when next_charge_scheduled_at is null then null
+        case when subscription_next_charge_scheduled_at is null then null
             when expire_after_specific_number_of_charges - count_successful_charges < 0 then null
             else expire_after_specific_number_of_charges - count_successful_charges
             end as charges_until_expiration,

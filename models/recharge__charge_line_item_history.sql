@@ -97,7 +97,7 @@ with charges as (
             order by unioned.line_item_type, unioned.index) 
             as charge_row_num, -- CLARIFY IN DOCS
         unioned.index as source_index,
-        charges.created_at as charge_created_at,
+        charges.charge_created_at,
         charges.customer_id,
         charges.address_id,
         unioned.amount,
