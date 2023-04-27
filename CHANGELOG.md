@@ -1,4 +1,5 @@
 # dbt_recharge v0.1.1
+[PR #2](https://github.com/fivetran/dbt_recharge/pull/2) includes the following changes:
  ## Under the Hood:
 
 - Incorporated the new `fivetran_utils.drop_schemas_automation` macro into the end of each Buildkite integration test job.
