@@ -10,6 +10,7 @@ with orders as (
     from {{ var('order_line_item') }}
     group by 1
 
+
 ), charges as ( --each charge can have multiple orders associated with it
     select *
     from {{ var('charge') }}
@@ -33,16 +34,22 @@ with orders as (
     select 
         orders.*,
         -- recognized_total (calculated total based on prepaid subscriptions)
-        charges_enriched.created_at as charged_at,
+        charges_enriched.charge_created_at,
         charges_enriched.processor_name,
-        coalesce(charges_enriched.shipments_count, 0) as shipments_count,
         charges_enriched.tags,
-        -- when several prepaid orders are generated from a single charge, we only want to add charge aggregates on the first instance.
-        {% set charge_agg_cols = ['subtotal_price', 'tax_lines', 'total_discounts', 'total_refunds', 'total_tax', 'total_weight', 'total_shipping'] %}
-        {% for col in charge_agg_cols %}
+        charges_enriched.shipments_count,
+        charges_enriched.charge_type,
+        {% set agg_cols = ['total_price', 'subtotal_price', 'tax_lines', 'total_discounts', 
+            'total_refunds', 'total_tax', 'total_weight', 'total_shipping'] %}
+        {% for col in agg_cols %}
+            -- when several prepaid orders are generated from a single charge, we only want to show total aggregates from the charge on the first instance.
             case when orders.is_prepaid = true then 0 
                 else coalesce(charges_enriched.{{ col }}, 0)
-                end as {{ col }},
+                end as charge_{{ col }},
+            -- this divides a charge over all the related orders.
+            coalesce(round(cast({{ dbt_utils.safe_divide('charges_enriched.' ~ col, 
+                'charges_enriched.shipments_count') }} as {{ dbt.type_numeric() }}), 2), 0)
+                as calculated_order_{{ col }},
         {% endfor %}
         coalesce(order_line_items.order_item_quantity, 0) as order_item_quantity,
         coalesce(order_line_items.order_line_item_total, 0) as order_line_item_total
@@ -55,7 +62,9 @@ with orders as (
 ), joined_enriched as (
     select 
         joined.*,
-        total_price - total_refunds as total_net_order_value -- total_price includes taxes and discounts, so only need to subtract total_refunds to get net. 
+        -- total_price includes taxes and discounts, so only need to subtract total_refunds to get net.
+        charge_total_price - charge_total_refunds as total_net_charge_value,
+        calculated_order_total_price - calculated_order_total_refunds as total_calculated_net_order_value  
     from joined
 )
 

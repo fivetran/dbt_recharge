@@ -5,7 +5,7 @@ with calendar as (
 ), customers as (
     select 
         customer_id, 
-        created_at
+        customer_created_at
     from {{ ref('recharge__customer_details') }}
 
 ), customers_dates as (
@@ -17,7 +17,7 @@ with calendar as (
         cast({{ dbt.date_trunc('year', 'calendar.date_day') }} as date) as date_year
     from calendar
     cross join customers
-    where cast({{ dbt.date_trunc('day', 'customers.created_at') }} as date) <= calendar.date_day
+    where cast({{ dbt.date_trunc('day', 'customers.customer_created_at') }} as date) <= calendar.date_day
 )
 
 select *
