@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 with spine as (
     
     {# Calculates first and last dates if at least one is not manually set #}
