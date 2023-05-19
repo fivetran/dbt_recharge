@@ -38,7 +38,7 @@ with customers as (
 ), subscriptions as (
     select 
         customer_id,
-        count(subscription_id) as calculated_active_subscriptions -- this value will differ from the recharge-provided number_active_subscriptions until we get confirmation from recharge how this is calculated on their end
+        count(subscription_id) as calculated_subscriptions_active_count -- this value will differ from the recharge-provided subscriptions_active_count until we get confirmation from recharge how this is calculated on their end
     from {{ var('subscription') }}
     where lower(subscription_status) = 'active'
     group by 1
@@ -61,7 +61,7 @@ with customers as (
         charge_aggs.total_one_time_purchases,
         round(cast(charge_aggs.avg_amount_charged - charge_aggs.total_refunds as {{ dbt.type_numeric() }}), 2) 
             as total_net_spend,
-        subscriptions.calculated_active_subscriptions
+        subscriptions.calculated_subscriptions_active_count
     from customers
     left join charge_aggs 
         on charge_aggs.customer_id = customers.customer_id

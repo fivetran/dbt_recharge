@@ -35,12 +35,12 @@ with orders as (
         orders.*,
         -- recognized_total (calculated total based on prepaid subscriptions)
         charges_enriched.charge_created_at,
-        charges_enriched.processor_name,
+        charges_enriched.payment_processor,
         charges_enriched.tags,
-        charges_enriched.shipments_count,
+        charges_enriched.orders_count,
         charges_enriched.charge_type,
         {% set agg_cols = ['total_price', 'subtotal_price', 'tax_lines', 'total_discounts', 
-            'total_refunds', 'total_tax', 'total_weight', 'total_shipping'] %}
+            'total_refunds', 'total_tax', 'total_weight_grams', 'total_shipping'] %}
         {% for col in agg_cols %}
             -- when several prepaid orders are generated from a single charge, we only want to show total aggregates from the charge on the first instance.
             case when orders.is_prepaid = true then 0 
@@ -48,7 +48,7 @@ with orders as (
                 end as charge_{{ col }},
             -- this divides a charge over all the related orders.
             coalesce(round(cast({{ dbt_utils.safe_divide('charges_enriched.' ~ col, 
-                'charges_enriched.shipments_count') }} as {{ dbt.type_numeric() }}), 2), 0)
+                'charges_enriched.orders_count') }} as {{ dbt.type_numeric() }}), 2), 0)
                 as calculated_order_{{ col }},
         {% endfor %}
         coalesce(order_line_items.order_item_quantity, 0) as order_item_quantity,

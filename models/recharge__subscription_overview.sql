@@ -16,8 +16,8 @@ with subscriptions as (
 ), customers_charge_lines as (
     select 
         charge_line_items.charge_id,
-        charge_line_items.shopify_product_id,
-        charge_line_items.shopify_variant_id,
+        charge_line_items.external_product_id_ecommerce,
+        charge_line_items.external_variant_id_ecommerce,
         charges.customer_id,
         charges.address_id,
         charges.charge_created_at,
@@ -39,7 +39,7 @@ with subscriptions as (
     left join customers_charge_lines
         on customers_charge_lines.customer_id = subscriptions.customer_id
         and customers_charge_lines.address_id = subscriptions.address_id
-        and customers_charge_lines.shopify_product_id = subscriptions.shopify_product_id
+        and customers_charge_lines.external_product_id_ecommerce = subscriptions.external_product_id_ecommerce
     where subscriptions.subscription_created_at <= customers_charge_lines.charge_created_at
         and subscriptions.subscription_cancelled_at >= customers_charge_lines.charge_created_at
     group by 1

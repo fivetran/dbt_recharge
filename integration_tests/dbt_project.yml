@@ -13,7 +13,7 @@ vars:
     recharge_charge_identifier: "charge_data"
     recharge_charge_discount_code_identifier: "charge_discount_code_data"
     recharge_charge_line_item_identifier: "charge_line_item_data"
-    recharge_charge_note_attribute_identifier: "charge_note_attribute_data"
+    recharge_charge_order_attribute_identifier: "charge_order_attribute_data"
     recharge_charge_shipping_line_identifier: "charge_shipping_line_data"
     recharge_charge_tax_line_identifier: "charge_tax_line_data"
     recharge_customer_identifier: "customer_data"
@@ -49,12 +49,11 @@ seeds:
       CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       DISCOUNT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      SHOPIFY_PRODUCT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      SHOPIFY_VARIANT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+      EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+      EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       SUBSCRIPTION_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
     charge_data:
       +column_types:
-        LAST_CHARGE_ATTEMPT_DATE: "timestamp"
         RETRY_DATE: "timestamp"
     charge_line_item_data:
       +column_types:
@@ -71,4 +70,3 @@ seeds:
     order_data:
       +column_types:
         SHIPPED_DATE: "timestamp"
-        SHIPPING_DATE: "timestamp"
