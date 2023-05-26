@@ -19,8 +19,8 @@ vars:
     recharge_customer_identifier: "customer_data"
     recharge_discount_identifier: "discount_data"
     recharge_one_time_product_identifier: "one_time_product_data"
-    # order: "{{ ref('order_data') }}" # Comment out for generating docs -- Uncomment this before sending to buildkite.
-    recharge_order_identifier: "order_data" # Uncomment for generating docs -- Comment this out before sending to buildkite.
+    order: "{{ ref('order_data') }}" # Comment out for generating docs -- Uncomment this before sending to buildkite.
+    # recharge_order_identifier: "order_data" # Uncomment for generating docs -- Comment this out before sending to buildkite.
     recharge_order_line_item_identifier: "order_line_item_data"
     recharge_subscription_identifier: "subscription_data"
     recharge_subscription_history_identifier: "subscription_history_data"
