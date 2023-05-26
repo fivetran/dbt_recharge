@@ -61,7 +61,7 @@ with customers as (
         charge_aggs.total_one_time_purchases,
         round(cast(charge_aggs.avg_amount_charged - charge_aggs.total_refunds as {{ dbt.type_numeric() }}), 2) 
             as total_net_spend,
-        subscriptions.calculated_subscriptions_active_count
+        coalesce(subscriptions.calculated_subscriptions_active_count, 0) as calculated_subscriptions_active_count
     from customers
     left join charge_aggs 
         on charge_aggs.customer_id = customers.customer_id
@@ -69,6 +69,7 @@ with customers as (
         on order_aggs.customer_id = customers.customer_id
     left join subscriptions
         on subscriptions.customer_id = customers.customer_id
+
 )
 
 select * 

@@ -6,7 +6,7 @@ with orders as (
     select 
         order_id,
         sum(quantity) as order_item_quantity,
-        round(cast(sum(price) as {{ dbt.type_numeric() }}), 2) as order_line_item_total
+        round(cast(sum(total_price) as {{ dbt.type_numeric() }}), 2) as order_line_item_total
     from {{ var('order_line_item') }}
     group by 1
 

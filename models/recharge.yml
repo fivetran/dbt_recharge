@@ -16,8 +16,6 @@ models:
         description: The order number in your external ecommerce platform.
       - name: customer_id
         description: Unique numeric identifier for the customer associated with the order.
-      - name: customer_full_name
-        description: The full name of the customer.
       - name: email
         description: The email address of the customer.
       - name: order_created_at
@@ -35,7 +33,7 @@ models:
       - name: charge_status
         description: "{{ doc('charge_status') }}"
       - name: is_prepaid
-        description: An order that has been paid for a pre-determined number of months, accepted values; 0 = "No" and 1 = "Yes".
+        description: Boolean indicating if the Order is prepaid.
       - name: order_type
         description: "{{ doc('type') }}"
       - name: charge_type
@@ -227,8 +225,10 @@ models:
         description: The ID for the customer in your external ecommerce platform.
       - name: email
         description: The email address of the customer.
-      - name: customer_full_name
-        description: The full name of the customer.
+      - name: first_name
+        description: The customer's first name.
+      - name: last_name
+        description: The customer's last name.
       - name: customer_created_at
         description: The date and time the customer was created.
       - name: customer_updated_at
@@ -239,12 +239,12 @@ models:
         description: The number of active subscriptions associated with the customer.
       - name: subscriptions_total_count
         description: The total number of subscriptions associated with the customer.
-      - name: customer_billing_full_name
-        description: The full name of the customer for billing purposes.
       - name: has_valid_payment_method
         description: Boolean indicating if the payment value is valid.
       - name: has_payment_method_in_dunning
         description: Boolean indicating if the customer has a credit card in dunning.
+      - name: tax_exempt
+        description: Boolean indicating if the customer is tax exempt.
       - name: total_orders
         description: The total number of orders associated with the customer.
       - name: total_amount_ordered

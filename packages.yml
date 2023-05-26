@@ -5,5 +5,3 @@ packages:
 - git: https://github.com/fivetran/dbt_recharge_source.git
   revision: feature/api-updates
   warn-unpinned: false
-
-# - local: ../dbt_recharge_source
