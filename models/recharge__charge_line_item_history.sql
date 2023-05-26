@@ -23,7 +23,7 @@ with charges as (
             then round(cast(charge_discounts.discount_value / 100 * charges.total_line_items_price as {{ dbt.type_numeric() }}), 2)
             else charge_discounts.discount_value 
             end as {{ dbt.type_float() }}) as amount,
-        charge_discounts.value_type as title,
+        charge_discounts.code as title,
         'discount' as line_item_type
     from charge_discounts
     left join charges

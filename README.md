@@ -67,11 +67,10 @@ vars:
 ```
 
 ## Step 4: Disable models for non-existent sources
-Your Recharge connector may not sync every table that this package expects. If you do not have the `PAYMENT_METHOD`, `ONE_TIME_PRODUCT`, and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
+Your Recharge connector may not sync every table that this package expects. If you do not have the `ONE_TIME_PRODUCT` and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
 
 ```yml
 vars:
-  recharge__payment_method_enabled: false # Disables if you do not have the PAYMENT_METHOD table. Default is True.
   recharge__one_time_product_enabled: false # Disables if you do not have the ONE_TIME_PRODUCT table. Default is True.
   recharge__charge_tax_line_enabled: false # Disables if you do not have the CHARGE_TAX_LINE table. Default is True.
 ``` 
@@ -101,7 +100,6 @@ vars:
     recharge__charge_line_item_passthrough_columns: 
     recharge__order_passthrough_columns:
     recharge__order_line_passthrough_columns:
-    recharge__product_passthrough_columns:
     recharge__subscription_passthrough_columns:
     recharge__subscription_history_passthrough_columns:
 ```
