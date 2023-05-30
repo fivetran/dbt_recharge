@@ -37,7 +37,7 @@ An example churn model is separately available in the analysis folder:
 ## Step 1: Prerequisites
 To use this dbt package, you must have the following:
 - At least one Fivetran Recharge connector syncing data into your destination. 
-- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, **Databricks** destination.
+- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
 ## Step 2: Install the package
 Include the following recharge package version in your `packages.yml` file.
