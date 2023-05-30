@@ -273,7 +273,9 @@ models:
       - name: total_net_spend
         description: The total net spend of the customer, calculated as the total amount charged minus total refunds.
       - name: calculated_subscriptions_active_count
-        description: The number of active subscriptions for the customer, calculated as the sum of subscriptions with status `ACTIVE`.
+        description: >
+          The number of active subscriptions for the customer, calculated as the sum of subscriptions with status ACTIVE. 
+          Note - this value may differ from the Recharge-provided subscriptions_active_count. See DECISIONLOG for more information.
       - name: is_currently_subscribed
         description: Indicates whether the customer currently has an active subscription.
       - name: is_new_customer

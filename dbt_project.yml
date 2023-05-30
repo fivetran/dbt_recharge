@@ -7,6 +7,7 @@ require-dbt-version: [">=1.3.0", "<2.0.0"]
 vars:
   recharge:
     address: "{{ ref('stg_recharge__address') }}"
+    address_discounts: "{{ ref('stg_recharge__address_discounts') }}"
     address_shipping_line: "{{ ref('stg_recharge__address_shipping_line') }}"
     charge: "{{ ref('stg_recharge__charge') }}"
     charge_discount: "{{ ref('stg_recharge__charge_discount') }}"

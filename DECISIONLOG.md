@@ -7,3 +7,7 @@
 
 ## Charge Line Item History
 - Since the billing history model summarized at the order level, we also wanted to provide insight at the line item model. For this model, the charges data was used since most of the line item data, such as shipping, tax, discounts, is provided at this level by the Fivetran connector. 
+
+## Customer Details
+- We provide a column called `calculated_subscriptions_active_count`. This is meant to supplement the Recharge-provided `subscriptions_active_count` due to possible discrepancies with this value. Our calculation counts the number of subscriptions with an `active` status, from the `SUBSCRIPTION` table, for each customer. 
+    - We use this column in the [example analysis model](https://fivetran.github.io/dbt_recharge/#!/analysis/analysis.recharge.recharge__churn_analysis), however we suggest you to use the column that works best for you. 

@@ -38,7 +38,7 @@ with customers as (
 ), subscriptions as (
     select 
         customer_id,
-        count(subscription_id) as calculated_subscriptions_active_count -- this value will differ from the recharge-provided subscriptions_active_count until we get confirmation from recharge how this is calculated on their end
+        count(subscription_id) as calculated_subscriptions_active_count -- this value may differ from the recharge-provided subscriptions_active_count. See DECISIONLOG. 
     from {{ var('subscription') }}
     where lower(subscription_status) = 'active'
     group by 1
