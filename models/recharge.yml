@@ -3,21 +3,18 @@ version: 2
 models:
   - name: recharge__billing_history
     description: Each record represents an order, enriched with metrics about related charges and line items.
-    tests:     
     columns:
       - name: order_id
         description: "{{ doc('order_id') }}"
         tests: 
           - not_null
           - unique
-      - name: shopify_order_id
-        description: The ID for the order in the external ecommerce platform.
-      - name: shopify_order_number
-        description: The order number in the external ecommerce platform.
+      - name: external_order_id_ecommerce
+        description: The ID for the order in your external ecommerce platform.
+      - name: external_order_number_ecommerce
+        description: The order number in your external ecommerce platform.
       - name: customer_id
         description: Unique numeric identifier for the customer associated with the order.
-      - name: customer_full_name
-        description: The full name of the customer.
       - name: email
         description: The email address of the customer.
       - name: order_created_at
@@ -35,9 +32,7 @@ models:
       - name: charge_status
         description: "{{ doc('charge_status') }}"
       - name: is_prepaid
-        description: An order that has been paid for a pre-determined number of months, accepted values; 0 = "No" and 1 = "Yes".
-      - name: payment_processor
-        description: The type of payment the processor has chosen.
+        description: Boolean indicating if the Order is prepaid.
       - name: order_type
         description: "{{ doc('type') }}"
       - name: charge_type
@@ -50,14 +45,12 @@ models:
         description: The date and time the order was shipped.
       - name: address_id
         description: "{{ doc('address_id') }}"
-      - name: address_is_active
-        description: Indicates if the address is currently active, accepted values range from 0 = "No" and 1 = "Yes".
       - name: is_deleted
         description: Boolean indicating if the order (record) is deleted.
-      - name: processor_name
+      - name: payment_processor
         description: The name of the payment processor.
-      - name: shipments_count
-        description: The number of successful processed child orders on the charge.
+      - name: orders_count
+        description: The number of orders generated from this charge (Will be >1 for prepaid).
       - name: tags
         description: A comma-separated list of tags on the charge.
       - name: charge_total_price
@@ -86,10 +79,10 @@ models:
         description: The total tax due associated with the charge.
       - name: calculated_order_total_tax
         description: The charge_total_tax divided equally amongst all orders stemming from the same charge.
-      - name: charge_total_weight
+      - name: charge_total_weight_grams
         description: The total weight of all items in the charge in grams.
-      - name: calculated_order_total_weight
-        description: The charge_total_weight divided equally amongst all orders stemming from the same charge.
+      - name: calculated_order_total_weight_grams
+        description: The charge_total_weight_grams divided equally amongst all orders stemming from the same charge.
       - name: charge_total_shipping
         description: The total shipping costs associated with the charge.
       - name: calculated_order_total_shipping
@@ -227,46 +220,30 @@ models:
           - unique
       - name: customer_hash
         description: The unique string identifier used in a customer portal link.
-      - name: shopify_customer_id
-        description: The ID for the customer in the external ecommerce platform.
+      - name: external_customer_id_ecommerce
+        description: The ID for the customer in your external ecommerce platform.
       - name: email
         description: The email address of the customer.
-      - name: customer_full_name
-        description: The full name of the customer.
+      - name: first_name
+        description: The customer's first name.
+      - name: last_name
+        description: The customer's last name.
       - name: customer_created_at
         description: The date and time the customer was created.
       - name: customer_updated_at
         description: The date and time the customer was last updated.
       - name: first_charge_processed_at
         description: The date and time of the customer's first processed charge.
-      - name: active_subscriptions
+      - name: subscriptions_active_count
         description: The number of active subscriptions associated with the customer.
-      - name: total_subscriptions
+      - name: subscriptions_total_count
         description: The total number of subscriptions associated with the customer.
-      - name: customer_billing_full_name
-        description: The full name of the customer for billing purposes.
-      - name: billing_company
-        description: The name of the company associated with the customer's billing address.
-      - name: billing_address_line_1
-        description: The first line of the customer's billing address.
-      - name: billing_address_line_2
-        description: The second line of the customer's billing address.
-      - name: billing_zip
-        description: The postal code of the customer's billing address.
-      - name: billing_city
-        description: The city of the customer's billing address.
-      - name: billing_province
-        description: The province of the customer's billing address.
-      - name: billing_country
-        description: The country of the customer's billing address.
-      - name: billing_phone
-        description: The phone number associated with the customer's billing address.
       - name: has_valid_payment_method
         description: Boolean indicating if the payment value is valid.
-      - name: reason_payment_method_not_valid
-        description: Field indicating why the payment method is not valid.
-      - name: has_card_error_in_dunning
+      - name: has_payment_method_in_dunning
         description: Boolean indicating if the customer has a credit card in dunning.
+      - name: tax_exempt
+        description: Boolean indicating if the customer is tax exempt.
       - name: total_orders
         description: The total number of orders associated with the customer.
       - name: total_amount_ordered
@@ -295,8 +272,10 @@ models:
         description: The total number of charges made to the customer.
       - name: total_net_spend
         description: The total net spend of the customer, calculated as the total amount charged minus total refunds.
-      - name: calculated_active_subscriptions
-        description: The number of active subscriptions for the customer, calculated as the sum of subscriptions with status `ACTIVE`.
+      - name: calculated_subscriptions_active_count
+        description: >
+          The number of active subscriptions for the customer, calculated as the sum of subscriptions with status ACTIVE. 
+          Note - this value may differ from the Recharge-provided subscriptions_active_count. See DECISIONLOG for more information.
       - name: is_currently_subscribed
         description: Indicates whether the customer currently has an active subscription.
       - name: is_new_customer
@@ -357,12 +336,12 @@ models:
         description: "{{ doc('address_id') }}"
       - name: subscription_created_at
         description: The date and time the subscription was created.
-      - name: shopify_product_id
-        description: The ID of the product in the external ecommerce platform.
+      - name: external_product_id_ecommerce
+        description: The ID of the product in your external ecommerce platform.
       - name: product_title
         description: The name of the product in a shop's catalog.
-      - name: shopify_variant_id
-        description: The ID of the variant in the external ecommerce platform.
+      - name: external_variant_id_ecommerce
+        description: The ID of the variant in your external ecommerce platform.
       - name: variant_title
         description: The name of the variant in a shop's catalog.
       - name: sku

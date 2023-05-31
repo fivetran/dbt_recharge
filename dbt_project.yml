@@ -1,17 +1,18 @@
 
 name: 'recharge'
-version: '0.1.1'
+version: '0.1.0'
 config-version: 2
 require-dbt-version: [">=1.3.0", "<2.0.0"]
 
 vars:
   recharge:
     address: "{{ ref('stg_recharge__address') }}"
+    address_discounts: "{{ ref('stg_recharge__address_discounts') }}"
     address_shipping_line: "{{ ref('stg_recharge__address_shipping_line') }}"
     charge: "{{ ref('stg_recharge__charge') }}"
-    charge_discount_code: "{{ ref('stg_recharge__charge_discount_code') }}"
+    charge_discount: "{{ ref('stg_recharge__charge_discount') }}"
     charge_line_item: "{{ ref('stg_recharge__charge_line_item') }}"
-    charge_note_attribute: "{{ ref('stg_recharge__charge_note_attribute') }}"
+    charge_order_attribute: "{{ ref('stg_recharge__charge_order_attribute') }}"
     charge_tax_line: "{{ ref('stg_recharge__charge_tax_line') }}"
     charge_shipping_line: "{{ ref('stg_recharge__charge_shipping_line') }}"
     customer: "{{ ref('stg_recharge__customer') }}"
@@ -19,7 +20,6 @@ vars:
     one_time_product: "{{ ref('stg_recharge__one_time_product') }}"
     order: "{{ ref('stg_recharge__order') }}"
     order_line_item: "{{ ref('stg_recharge__order_line_item') }}"
-    payment_source: "{{ ref('stg_recharge__payment_source') }}"
     product: "{{ ref('stg_recharge__product') }}"
     subscription: "{{ ref('stg_recharge__subscription') }}"
     subscription_history: "{{ ref('stg_recharge__subscription_history') }}"
@@ -29,7 +29,6 @@ vars:
     recharge__charge_line_item_passthrough_columns: [] 
     recharge__order_passthrough_columns: [] 
     recharge__order_line_passthrough_columns: [] 
-    recharge__plan_passthrough_columns: [] 
     recharge__subscription_passthrough_columns: [] 
     recharge__subscription_history_passthrough_columns: []
 

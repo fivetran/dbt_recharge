@@ -6,35 +6,34 @@ with charges as (
     select 
         charge_id,
         index,
-        price as amount,
+        cast(total_price as {{ dbt.type_float() }}) as amount,
         title,
         'charge line' as line_item_type
     from {{ var('charge_line_item') }}
 
-), discounts as (
+), charge_discounts as (
     select *
-    from {{ var('discount') }}
-
-), charge_discount_codes as (
-    select *
-    from {{ var('charge_discount_code') }}
+    from {{ var('charge_discount') }}
 
 ), discounts_enriched as (
     select
-        charge_discount_codes.charge_id,
-        charge_discount_codes.index,
-        charge_discount_codes.amount,
-        discounts.discount_code as title,
+        charge_discounts.charge_id,
+        charge_discounts.index,
+        cast(case when lower(charge_discounts.value_type) = 'percentage'
+            then round(cast(charge_discounts.discount_value / 100 * charges.total_line_items_price as {{ dbt.type_numeric() }}), 2)
+            else charge_discounts.discount_value 
+            end as {{ dbt.type_float() }}) as amount,
+        charge_discounts.code as title,
         'discount' as line_item_type
-    from charge_discount_codes
-    left join discounts
-        on discounts.discount_id = charge_discount_codes.discount_id
+    from charge_discounts
+    left join charges
+        on charges.charge_id = charge_discounts.charge_id
 
 ), charge_shipping_lines as (
     select 
         charge_id,
         index,
-        price as amount,
+        cast(price as {{ dbt.type_float() }}) as amount,
         title,
         'shipping' as line_item_type
     from {{ var('charge_shipping_line') }}
@@ -44,26 +43,26 @@ with charges as (
         select 
             charge_id,
             index,
-            price as amount,
+            cast(price as {{ dbt.type_float() }}) as amount,
             title,
             'tax' as line_item_type
-        from {{ var('charge_tax_line') }}
+        from {{ var('charge_tax_line') }} -- use this if possible since it is individual tax items
     {% else %} 
         select
             charge_id,
-            0 as index,
-            total_tax as amount,
+            index,
+            cast(tax_due as {{ dbt.type_float() }}) as amount,
             'total tax' as title,
             'tax' as line_item_type
-        from charges
-        where total_tax > 0
+        from {{ var('charge_line_item') }} -- use this secodary since it is total tax per charge line item
+        where tax_due is not null
     {% endif %}
 
 ), refunds as (
     select
         charge_id,
         0 as index,
-        total_refunds as amount,
+        cast(total_refunds as {{ dbt.type_float() }}) as amount,
         'total refunds' as title,
         'refund' as line_item_type
     from charges -- have to extract refunds from charges table since a refund line item table is not available

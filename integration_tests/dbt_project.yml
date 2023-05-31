@@ -1,19 +1,20 @@
 config-version: 2
 
 name: 'recharge_integration_tests'
-version: '0.1.1'
+version: '0.1.0'
 
 profile: 'integration_tests' 
 
 vars:
   recharge_source:
-    recharge_schema: recharge_integration_tests_02
+    recharge_schema: recharge_integration_tests_03
     recharge_address_identifier: "address_data"
+    recharge_address_discounts_identifier: "address_discounts_data"
     recharge_address_shipping_line_identifier: "address_shipping_line_data"
     recharge_charge_identifier: "charge_data"
-    recharge_charge_discount_code_identifier: "charge_discount_code_data"
+    recharge_charge_discount_identifier: "charge_discount_data"
     recharge_charge_line_item_identifier: "charge_line_item_data"
-    recharge_charge_note_attribute_identifier: "charge_note_attribute_data"
+    recharge_charge_order_attribute_identifier: "charge_order_attribute_data"
     recharge_charge_shipping_line_identifier: "charge_shipping_line_data"
     recharge_charge_tax_line_identifier: "charge_tax_line_data"
     recharge_customer_identifier: "customer_data"
@@ -22,8 +23,6 @@ vars:
     order: "{{ ref('order_data') }}" # Comment out for generating docs -- Uncomment this before sending to buildkite.
     # recharge_order_identifier: "order_data" # Uncomment for generating docs -- Comment this out before sending to buildkite.
     recharge_order_line_item_identifier: "order_line_item_data"
-    recharge_payment_method_identifier: "payment_method_data"
-    recharge_plan_identifier: "plan_data"
     recharge_subscription_identifier: "subscription_data"
     recharge_subscription_history_identifier: "subscription_history_data"
 
@@ -42,24 +41,23 @@ seeds:
       NEXT_CHARGE_SCHEDULED_AT: "timestamp"
       SCHEDULED_AT: "timestamp"
       SUBTOTAL_PRICE: "float"
-      TOTAL_PRICE: "float"
+      TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
       UPDATED_AT: "timestamp"
       ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       DISCOUNT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      SHOPIFY_PRODUCT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      SHOPIFY_VARIANT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+      EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+      EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       SUBSCRIPTION_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
     charge_data:
       +column_types:
         LAST_CHARGE_ATTEMPT_DATE: "timestamp"
         RETRY_DATE: "timestamp"
-    charge_line_item_data:
+    charge_discount_data:
       +column_types:
-        PROPERTY_BUNDLE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-        PROPERTY_WIDGET_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        VALUE: "float"
     customer_data:
       +column_types:
         FIRST_CHARGE_PROCESSED_AT: "timestamp"

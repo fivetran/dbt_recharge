@@ -2,20 +2,23 @@ with customers as (
     select *
     from {{ ref('recharge__customer_details') }}
 
-), why_churned as (
+), churn_types as (
     select 
         customers.*,
-
-        {# Definitions of churned per recharge docs #}
-        case when calculated_active_subscriptions = 0 and has_valid_payment_method is false
-            then 'passive cancellation' as churn_reason,
-        case when calculated_active_subscriptions = 0 and has_valid_payment_method is true
-            then 'active cancellation' as churn_reason,
-        case when calculated_active_subscriptions > 0 and has_valid_payment_method is false
-            then 'charge error' as churn_reason
-
+        case when calculated_subscriptions_active_count > 0 and has_valid_payment_method = true
+            then false else true
+            end as is_churned,
+        {# Definitions of churn reasons per recharge docs #}
+        case when calculated_subscriptions_active_count = 0 and has_valid_payment_method = false
+            then 'passive cancellation'
+        when calculated_subscriptions_active_count = 0 and has_valid_payment_method = true
+            then 'active cancellation'
+        when calculated_subscriptions_active_count > 0 and has_valid_payment_method = false
+            then 'charge error'
+        else cast(null as {{ dbt.type_string() }})
+        end as churn_type
     from customers
 )
 
 select *
-from why_churned
+from churn_type
