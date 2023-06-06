@@ -35,8 +35,8 @@ An example churn model is separately available in the analysis folder:
 # 🎯 How do I use the dbt package?
 ## Step 1: Prerequisites
 To use this dbt package, you must have the following:
-- At least one Fivetran Recharge connector syncing data into your destination. 
-- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
+- At least one Fivetran Recharge connector syncing data into your destination 
+- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination
 
 ## Step 2: Install the package
 Include the following recharge package version in your `packages.yml` file.
@@ -49,7 +49,7 @@ packages:
 Do **NOT** include the `recharge_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
 
 ### Databricks Dispatch Configuration
-If you are using a Databricks destination with this package, you must add the following (or a variation of the following) dispatch configuration within your `dbt_project.yml`. This is required for the package to accurately search for macros within the `dbt-labs/spark_utils` then the `dbt-labs/dbt_utils` packages respectively.
+If you are using a Databricks destination with this package, you must add the following dispatch configuration (or a variation thereof) within your `dbt_project.yml`. This is required for the package to accurately search for macros within the `dbt-labs/spark_utils` package, then the `dbt-labs/dbt_utils` package, respectively.
 
 ```yml
 dispatch:
@@ -57,7 +57,7 @@ dispatch:
     search_order: ['spark_utils', 'dbt_utils']
 ```
 ## Step 3: Define database and schema variables
-By default, this package runs using your destination and the `recharge` schema. If your Recharge data is in a different database or schema (for example, if your recharge schema is named `recharge_fivetran`), add the following configuration to your root `dbt_project.yml` file:
+By default, this package runs using your destination and the `recharge` schema. If your Recharge data is in a different database or schema (for example, if your Recharge schema is named `recharge_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 vars:
@@ -85,7 +85,7 @@ vars:
     recharge_last_date: "yyyy-mm-dd"
 ```
 ### Passing Through Additional Columns
-This package includes all source columns defined in the macros folder. If you would like to pass through additional columns to the staging models, add the following configurations to your `dbt_project.yml` file. These variables allow for the pass-through fields to be aliased (`alias`) and casted (`transform_sql`) if desired, but not required. Datatype casting is configured via a sql snippet within the `transform_sql` key. You may add the desired sql while omitting the `as field_name` at the end and your custom pass-though fields will be casted accordingly. Use the below format for declaring the respective pass-through variables in your root `dbt_project.yml`.
+This package includes all source columns defined in the macros folder. If you would like to pass through additional columns to the staging models, add the following configurations to your `dbt_project.yml` file. These variables allow the pass-through fields to be aliased (`alias`) and casted (`transform_sql`) if desired, but not required. Datatype casting is configured via a SQL snippet within the `transform_sql` key. You may add the desired SQL while omitting the `as field_name` at the end and your custom pass-though fields will be casted accordingly. Use the below format for declaring the respective pass-through variables in your root `dbt_project.yml`.
 ```yml
 vars:
     recharge__address_passthrough_columns: 
@@ -133,7 +133,7 @@ vars:
   recharge_order_identifier: '"Order"' # as an example, must include this quoting pattern and adjust for your exact casing
 ```
 
-**Note!** if you have sources defined in your project's yml, the above will not work. Instead you will need to add the following where your order table is defined in your yml:
+**Note!** if you have sources defined in your project's yml, the above will not work. Instead, you will need to add the following where your order table is defined in your yml:
 ```yml
 sources:
   tables:
@@ -177,7 +177,7 @@ A small team of analytics engineers at Fivetran develops these dbt packages. How
 We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) to learn how to contribute to a dbt package!
 
 ## Opinionated Modelling Decisions
-This dbt package takes an opinionated stance on revenue is calculated, using charges in some cases and orders in others. If you would like a deeper explanation of the logic used by default in the dbt package you may reference the [DECISIONLOG](https://github.com/fivetran/dbt_recharge/blob/main/DECISIONLOG.md).
+This dbt package takes an opinionated stance on revenue is calculated, using charges in some cases and orders in others. If you would like a deeper explanation of the logic used by default in the dbt package, you may reference the [DECISIONLOG](https://github.com/fivetran/dbt_recharge/blob/main/DECISIONLOG.md).
 
 # 🏪 Are there any resources available?
 - If you have questions or want to reach out for help, please refer to the [GitHub Issue](https://github.com/fivetran/dbt_microsoft_ads/issues/new/choose) section to find the right avenue of support for you.
