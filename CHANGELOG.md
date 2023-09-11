@@ -1,5 +1,5 @@
 # dbt_Recharge_source v0.1.1
-[PR #11](https://github.com/fivetran/dbt_recharge/pull/11) includes the following updates:
+[PR #12](https://github.com/fivetran/dbt_recharge/pull/12) includes the following updates:
 ## Features
 - Updated the join logic for `recharge__subscription_overview` to produce more accurate results.
 
