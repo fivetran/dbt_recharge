@@ -1,3 +1,8 @@
+# dbt_Recharge_source v0.1.1
+[PR #11](https://github.com/fivetran/dbt_recharge/pull/11) includes the following updates:
+## Features
+- Updated the join logic for `recharge__subscription_overview` to produce more accurate results.
+
 # dbt_Recharge_source v0.1.0
 🎉 This is the initial release of this package! 🎉
 # 📣 What does this dbt package do?
