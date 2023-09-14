@@ -2,7 +2,7 @@
 [PR #13](https://github.com/fivetran/dbt_recharge/pull/13) includes the following updates:
 ## Features
 - Updated the join logic for `recharge__subscription_overview` to produce more accurate results.
-- The [source package](https://github.com/fivetran/dbt_recharge_source/) model `stg_recharge__subscription_history` was updated model to use `updated_at` column to determine most recent record. See the source package [CHANGELOG](https://github.com/fivetran/dbt_recharge_source/blob/main/CHANGELOG.md) for more details. 
+- The [source package](https://github.com/fivetran/dbt_recharge_source/) model `stg_recharge__subscription_history` was updated to use `updated_at` column to determine most recent record. See the source package [CHANGELOG](https://github.com/fivetran/dbt_recharge_source/blob/main/CHANGELOG.md) for more details. 
 
 # dbt_Recharge_source v0.1.0
 🎉 This is the initial release of this package! 🎉
