@@ -20,7 +20,7 @@ vars:
     recharge_customer_identifier: "customer_data"
     recharge_discount_identifier: "discount_data"
     recharge_one_time_product_identifier: "one_time_product_data"
-    recharge_orders_identifier: "order_data"
+    recharge_orders_identifier: "orders_data"
     recharge_order_line_item_identifier: "order_line_item_data"
     recharge_subscription_identifier: "subscription_data"
     recharge_subscription_history_identifier: "subscription_history_data"
