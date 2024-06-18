@@ -134,7 +134,7 @@ vars:
 ### 🚨 Snowflake Users 🚨
 You may need to provide the case-sensitive spelling of your source tables that are also Snowflake reserved words.
 
-In this package, this would apply to the `ORDER` source. If you are receiving errors for this source, include the following in your `dbt_project.yml` file:
+In this package, this would apply to the `ORDER` source. If you are receiving errors for this source, include the following in your `dbt_project.yml` file. (**Note:** This should not be necessary for the `ORDERS` source table.)
 ```yml
 vars:
   recharge_order_identifier: '"Order"' # as an example, must include this quoting pattern and adjust for your exact casing
