@@ -20,6 +20,8 @@ vars:
     recharge_customer_identifier: "customer_data"
     recharge_discount_identifier: "discount_data"
     recharge_one_time_product_identifier: "one_time_product_data"
+    order: "{{ ref('order_data') }}" # Comment out for generating docs -- Uncomment this before sending to buildkite.
+    # recharge_order_identifier: "order_data" # Uncomment for generating docs -- Comment this out before sending to buildkite.
     recharge_orders_identifier: "orders_data"
     recharge_order_line_item_identifier: "order_line_item_data"
     recharge_subscription_identifier: "subscription_data"
@@ -65,6 +67,10 @@ seeds:
         APPLIES_TO_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
         ENDS_AT: "timestamp"
         STARTS_AT: "timestamp"
+    order_data:
+      +column_types:
+        SHIPPED_DATE: "timestamp"
+        SHIPPING_DATE: "timestamp"
     orders_data:
       +column_types:
         SHIPPED_DATE: "timestamp"
