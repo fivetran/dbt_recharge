@@ -1,7 +1,7 @@
 config-version: 2
 
 name: 'recharge_integration_tests'
-version: '0.1.1'
+version: '0.2.0'
 
 profile: 'integration_tests' 
 
@@ -22,6 +22,7 @@ vars:
     recharge_one_time_product_identifier: "one_time_product_data"
     order: "{{ ref('order_data') }}" # Comment out for generating docs -- Uncomment this before sending to buildkite.
     # recharge_order_identifier: "order_data" # Uncomment for generating docs -- Comment this out before sending to buildkite.
+    recharge_orders_identifier: "orders_data"
     recharge_order_line_item_identifier: "order_line_item_data"
     recharge_subscription_identifier: "subscription_data"
     recharge_subscription_history_identifier: "subscription_history_data"
@@ -67,6 +68,10 @@ seeds:
         ENDS_AT: "timestamp"
         STARTS_AT: "timestamp"
     order_data:
+      +column_types:
+        SHIPPED_DATE: "timestamp"
+        SHIPPING_DATE: "timestamp"
+    orders_data:
       +column_types:
         SHIPPED_DATE: "timestamp"
         SHIPPING_DATE: "timestamp"
