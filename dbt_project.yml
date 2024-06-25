@@ -15,6 +15,7 @@ vars:
     charge_order_attribute: "{{ ref('stg_recharge__charge_order_attribute') }}"
     charge_tax_line: "{{ ref('stg_recharge__charge_tax_line') }}"
     charge_shipping_line: "{{ ref('stg_recharge__charge_shipping_line') }}"
+    checkout: "{{ ref('stg_recharge__checkout') }}"
     customer: "{{ ref('stg_recharge__customer') }}"
     discount: "{{ ref('stg_recharge__discount') }}"
     one_time_product: "{{ ref('stg_recharge__one_time_product') }}"
@@ -26,7 +27,8 @@ vars:
     
     recharge__address_passthrough_columns: [] 
     recharge__charge_passthrough_columns: [] 
-    recharge__charge_line_item_passthrough_columns: [] 
+    recharge__charge_line_item_passthrough_columns: []
+    recharge__checkout_passthrough_columns: [] 
     recharge__order_passthrough_columns: [] 
     recharge__order_line_passthrough_columns: [] 
     recharge__subscription_passthrough_columns: [] 

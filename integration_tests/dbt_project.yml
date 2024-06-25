@@ -17,6 +17,7 @@ vars:
     recharge_charge_order_attribute_identifier: "charge_order_attribute_data"
     recharge_charge_shipping_line_identifier: "charge_shipping_line_data"
     recharge_charge_tax_line_identifier: "charge_tax_line_data"
+    recharge_checkout_identifier: "checkout_data"
     recharge_customer_identifier: "customer_data"
     recharge_discount_identifier: "discount_data"
     recharge_one_time_product_identifier: "one_time_product_data"
