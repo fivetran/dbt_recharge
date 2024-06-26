@@ -53,6 +53,7 @@ seeds:
       EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       SUBSCRIPTION_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+      COMPANY: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
     charge_data:
       +column_types:
         LAST_CHARGE_ATTEMPT_DATE: "timestamp"
