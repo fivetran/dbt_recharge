@@ -3,11 +3,6 @@ with charge_line_items as (
     select * 
     from {{ var('charge_line_item')}}
 
-), addresses as (
-
-    select * 
-    from {{ var('address') }}
-
 ), charges as (
 
     select * 
@@ -28,6 +23,16 @@ with charge_line_items as (
     from {{ var('checkout') }}
 
 {% endif %}
+
+), addresses as (
+
+    select * 
+    from {{ var('address') }}
+
+), customers as (
+
+    select * 
+    from {{ var('customer') }}
 
 ), subscriptions as (
 
@@ -57,7 +62,8 @@ with charge_line_items as (
         {% if var('recharge__using_checkout', false) %}
         checkouts.currency,
         {% else %}
-        cast(null as {{ dbt.type_string() }}) as currency,
+        cast(null as {{ dbt.type_string() }}) as currency, 
+        -- currency is in the charges api but not the fivetran schema, so relying on checkouts for now. this only has 20% utilization though so we will want to switch if they add it.
         {% endif %}
 
         charge_line_items.purchase_item_type as transaction_type, -- possible values: subscription, onetime
@@ -69,17 +75,24 @@ with charge_line_items as (
         charge_line_items.unit_price as unit_amount,
         charge_line_items.tax_due as tax_amount,
         charge_line_items.total_price as total_amount,
-        subscriptions.subscription_id, -- on charge_line_items.purchase_item_id = subscriptions.subscription_id
+        case when charge_line_items.purchase_item_type = 'subscription'
+            then charge_line_items.purchase_item_id
+            else null
+            end as subscription_id,
         subscriptions.subscription_created_at as subscription_period_started_at,
         subscriptions.subscription_cancelled_at as subscription_period_ended_at,
         subscriptions.subscription_status,
         'customer' as customer_level,
         charges.customer_id as customer_id,
-        charges.email as customer_email,
-        {{ dbt.concat(["addresses.first_name", "' '", "addresses.last_name"]) }} as customer_name,
-        addresses.company as customer_company,
-        addresses.city as customer_city,
-        addresses.country as customer_country
+        -- coalesces are since information may be incomplete in various tables
+        coalesce(charges.email, customers.email) as customer_email,
+        coalesce(
+            {{ dbt.concat(["customers.billing_first_name", "' '", "customers.billing_last_name"]) }},
+            {{ dbt.concat(["addresses.first_name", "' '", "addresses.last_name"]) }}
+            ) as customer_name,
+        coalesce(customers.billing_company, addresses.company) as customer_company,
+        coalesce(customers.billing_city, addresses.city) as customer_city,
+        coalesce(customers.billing_country, addresses.country) as customer_country
 
     from charge_line_items
 
@@ -88,6 +101,9 @@ with charge_line_items as (
 
     left join addresses
         on addresses.address_id = charges.address_id
+
+    left join customers
+        on customers.customer_id = charges.customer_id
 
     {% if var('recharge__using_checkout', false) %}
     left join checkouts
@@ -102,6 +118,7 @@ with charge_line_items as (
 
 ), final as (
 
+    -- line item level
     select 
         header_id,
         line_item_id,
@@ -141,7 +158,7 @@ with charge_line_items as (
 
     union all
 
-    -- Refund information is only reliable at the charge header. Therefore the below operation creates a new line to track the refund values.
+    -- header level
     select
         header_id,
         cast(null as {{ dbt.type_int() }}) as line_item_id,
@@ -182,4 +199,4 @@ with charge_line_items as (
 )
 
 select *
-from enhanced
+from final
