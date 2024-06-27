@@ -77,7 +77,6 @@ with charge_line_items as (
         charge_line_items.total_price as total_amount,
         case when charge_line_items.purchase_item_type = 'subscription'
             then charge_line_items.purchase_item_id
-            else null
             end as subscription_id,
         subscriptions.subscription_created_at as subscription_period_started_at,
         subscriptions.subscription_cancelled_at as subscription_period_ended_at,
