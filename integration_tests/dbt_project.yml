@@ -1,7 +1,7 @@
 config-version: 2
 
 name: 'recharge_integration_tests'
-version: '0.2.0'
+version: '0.3.0'
 
 profile: 'integration_tests' 
 
@@ -17,6 +17,7 @@ vars:
     recharge_charge_order_attribute_identifier: "charge_order_attribute_data"
     recharge_charge_shipping_line_identifier: "charge_shipping_line_data"
     recharge_charge_tax_line_identifier: "charge_tax_line_data"
+    recharge_checkout_identifier: "checkout_data"
     recharge_customer_identifier: "customer_data"
     recharge_discount_identifier: "discount_data"
     recharge_one_time_product_identifier: "one_time_product_data"
@@ -52,6 +53,7 @@ seeds:
       EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       SUBSCRIPTION_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+      COMPANY: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
     charge_data:
       +column_types:
         LAST_CHARGE_ATTEMPT_DATE: "timestamp"

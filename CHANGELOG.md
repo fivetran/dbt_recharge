@@ -1,3 +1,8 @@
+# dbt_recharge v0.3.0
+[PR #17](https://github.com/fivetran/dbt_recharge/pull/17) includes the following updates:
+## Feature Updates
+- Introduced the new `recharge__line_item_enhanced` model. This model includes a line item enriched with invoice, subscription, payment, and refund information. This model has been built with the intention of retaining a common line item schema across all other Fivetran billing data models.
+
 # dbt_recharge v0.2.0
 [PR #16](https://github.com/fivetran/dbt_recharge/pull/16) includes the following updates:
 ## Features
