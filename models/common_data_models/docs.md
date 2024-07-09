@@ -26,10 +26,6 @@ description
 description
 {% enddocs %}
 
-{% docs customer_id %}
-description
-{% enddocs %}
-
 {% docs customer_level %}
 description
 {% enddocs %}
@@ -106,19 +102,11 @@ description
 description
 {% enddocs %}
 
-{% docs subscription_id %}
-description
-{% enddocs %}
-
 {% docs subscription_period_ended_at %}
 description
 {% enddocs %}
 
 {% docs subscription_period_started_at %}
-description
-{% enddocs %}
-
-{% docs subscription_status %}
 description
 {% enddocs %}
 
