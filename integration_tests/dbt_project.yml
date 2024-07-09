@@ -6,6 +6,7 @@ version: '0.3.0'
 profile: 'integration_tests' 
 
 vars:
+  # recharge__checkout_enabled: true # Uncomment for generating docs -- Comment this out before sending to buildkite.
   recharge_source:
     recharge_schema: recharge_integration_tests_03
     recharge_address_identifier: "address_data"
