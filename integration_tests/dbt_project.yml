@@ -61,6 +61,9 @@ seeds:
     charge_discount_data:
       +column_types:
         VALUE: "float"
+    checkout_data:
+      +column_types:
+        COMPLETED_AT: "timestamp"
     customer_data:
       +column_types:
         FIRST_CHARGE_PROCESSED_AT: "timestamp"

@@ -1,127 +1,127 @@
 {% docs billing_type %}
-description
+Billing type of the charge.
 {% enddocs %}
 
 {% docs created_at %}
-description
+Date the line item entry was created.
 {% enddocs %}
 
 {% docs currency %}
-description
+Determines the currency in which the transaction took place.
 {% enddocs %}
 
 {% docs customer_city %}
-description
+City of the customer's address.
 {% enddocs %}
 
 {% docs customer_company %}
-description
+Company name of the customer (if applicable).
 {% enddocs %}
 
 {% docs customer_country %}
-description
+Country of the customer's address.
 {% enddocs %}
 
 {% docs customer_email %}
-description
+Email address of the customer.
 {% enddocs %}
 
 {% docs customer_level %}
-description
+Identifies if the customer is reported at the account or customer level.
 {% enddocs %}
 
 {% docs customer_name %}
-description
+Name of the customer.
 {% enddocs %}
 
 {% docs discount_amount %}
-description
+Amount of discount applied to the line item.
 {% enddocs %}
 
 {% docs fee_amount %}
-description
+Any additional fees associated with the payment.
 {% enddocs %}
 
 {% docs header_id %}
-description
+ID of either the invoice or order.
 {% enddocs %}
 
 {% docs header_status %}
-description
+Indicates the status of the header. Eg. paid, voided, returned.
 {% enddocs %}
 
 {% docs line_item_id %}
-description
+ID of either the invoice line or order line item.
 {% enddocs %}
 
 {% docs line_item_index %}
-description
+Numerical identifier of the line item within the header object.
 {% enddocs %}
 
 {% docs payment_at %}
-description
+Date and time of the payment.
 {% enddocs %}
 
 {% docs payment_id %}
-description
+ID of the payment associated with the line item.
 {% enddocs %}
 
 {% docs payment_method %}
-description
+Method used for payment (e.g., credit card, PayPal).
 {% enddocs %}
 
 {% docs payment_method_id %}
-description
+ID of the payment method.
 {% enddocs %}
 
 {% docs product_category %}
-description
+Category to which the product belongs (e.g., electronics, clothing).
 {% enddocs %}
 
 {% docs product_id %}
-description
+ID of the product associated with the line item.
 {% enddocs %}
 
 {% docs product_name %}
-description
+Name of the product associated with the line item.
 {% enddocs %}
 
 {% docs product_type %}
-description
+Type of the product (e.g., physical, digital).
 {% enddocs %}
 
 {% docs quantity %}
-description
+Quantity of the product in the line item.
 {% enddocs %}
 
 {% docs record_type %}
-description
+Either 'header' or 'line_item' to differentiate if the record is originally from the line item table or was created to document information only available at the header level.
 {% enddocs %}
 
 {% docs refund_amount %}
-description
+Amount refunded for the line item (if applicable).
 {% enddocs %}
 
 {% docs subscription_period_ended_at %}
-description
+End date of the subscription period (if applicable).
 {% enddocs %}
 
 {% docs subscription_period_started_at %}
-description
+Start date of the subscription period (if applicable).
 {% enddocs %}
 
 {% docs tax_amount %}
-description
+Amount of tax applied to the line item.
 {% enddocs %}
 
 {% docs total_amount %}
-description
+Total amount for the line item (including tax and discounts).
 {% enddocs %}
 
 {% docs transaction_type %}
-description
+Type of the line item.
 {% enddocs %}
 
 {% docs unit_amount %}
-description
+Unit price of the product.
 {% enddocs %}

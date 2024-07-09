@@ -5,10 +5,10 @@
 - Introduced the new `recharge__line_item_enhanced` model. This model includes a line item enriched with invoice, subscription, payment, and refund information. This model has been built with the intention of retaining a common line item schema across all other Fivetran billing data models.
 
 ## 🚨 Breaking Changes 🚨
-- In the dbt_recharge_source v0.3.0 release, the following columns were added to model `stg_recharge__address`:
-  - country
-  - payment_method_id
-  - ❗Note: If you have already added any of these fields as passthrough columns to the `recharge__address_passthrough_columns` var, you will need to remove or alias these fields from the var to avoid duplicate column errors. Refer to the [source package's release notes](https://github.com/fivetran/dbt_recharge_source/releases/tag/v0.3.0) for more details.
+- In the [dbt_recharge_source v0.3.0 release](https://github.com/fivetran/dbt_recharge_source/releases/tag/v0.3.0), the following columns were added to model `stg_recharge__address`:
+  - `country`
+  - `payment_method_id`
+  - ❗Note: If you have already added any of these fields as passthrough columns to the `recharge__address_passthrough_columns` var, you will need to remove or alias these fields from the var to avoid duplicate column errors.
 
 ## Additional source package updates ([release notes](https://github.com/fivetran/dbt_recharge_source/releases/tag/v0.3.0))
 - Added staging model `stg_recharge__checkout`. See [this doc](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge_source.stg_recharge__checkout) for the fields added and their definitions.
