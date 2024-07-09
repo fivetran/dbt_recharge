@@ -72,7 +72,7 @@ Your Recharge connector may not sync every table that this package expects. If y
 vars:
   recharge__one_time_product_enabled: false # Disables if you do not have the ONE_TIME_PRODUCT table. Default is True.
   recharge__charge_tax_line_enabled: false # Disables if you do not have the CHARGE_TAX_LINE table. Default is True.
-  recharge__checkout_enabled: false # Disables if you do not have the CHECKOUT table. Default is True.
+  recharge__checkout_enabled: true # Enables if you do have the CHECKOUT table. Default is False.
 ```
 
 ## (Optional) Step 5: Additional configurations
