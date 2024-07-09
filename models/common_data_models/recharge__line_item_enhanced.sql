@@ -16,7 +16,7 @@ with charge_line_items as (
     from {{ var('charge_shipping_line') }}
     group by 1
 
-{% if var('recharge__using_checkout', false) %}
+{% if var('recharge__checkout_enabled', false) %}
 ), checkouts as (
 
     select *
@@ -42,56 +42,62 @@ with charge_line_items as (
 
 ), enhanced as (
     select
-        charge_line_items.charge_id as header_id,
-        charge_line_items.index as line_item_id,
+        cast(charge_line_items.charge_id as {{ dbt.type_string() }}) as header_id,
+        cast(charge_line_items.index as {{ dbt.type_string() }}) as line_item_id,
         row_number() over (partition by charge_line_items.charge_id
             order by charge_line_items.index) as line_item_index,
 
-        -- header level items
+        -- header level fields
         charges.charge_created_at as created_at,
         charges.charge_status as header_status,
-        charges.total_discounts as discount_amount,
-        charges.total_refunds as refund_amount,
-        charge_shipping_lines.total_shipping as fee_amount,
+        cast(charges.total_discounts as {{ dbt.type_numeric() }}) as discount_amount,
+        cast(charges.total_refunds as {{ dbt.type_numeric() }}) as refund_amount,
+        cast(charge_shipping_lines.total_shipping as {{ dbt.type_numeric() }}) as fee_amount,
         addresses.payment_method_id,
         charges.external_transaction_id_payment_processor as payment_id,
         charges.payment_processor as payment_method,
         charges.charge_processed_at as payment_at,
         charges.charge_type as billing_type,  -- possible values: checkout, recurring
 
-        {% if var('recharge__using_checkout', false) %}
-        checkouts.currency,
-        {% else %}
-        cast(null as {{ dbt.type_string() }}) as currency, 
-        -- currency is in the charges api but not the fivetran schema, so relying on checkouts for now. this only has 20% utilization though so we will want to switch if they add it.
-        {% endif %}
+        -- Currency is in the Charges api object but not the Fivetran schema, so relying on Checkouts for now.
+        -- Checkouts has only 20% utilization, so we should switch to the Charges field when it is added.
+        cast({{ 'checkouts.currency' if var('recharge__using_checkout', false) else 'null' }} as {{ dbt.type_string() }}) as currency,
 
-        charge_line_items.purchase_item_type as transaction_type, -- possible values: subscription, onetime
-        charge_line_items.external_product_id_ecommerce as product_id,
-        charge_line_items.title as product_name,
-        -- product_type unknown for now
-        cast(null as {{ dbt.type_string() }}) as product_type,
-        charge_line_items.quantity,
-        charge_line_items.unit_price as unit_amount,
-        charge_line_items.tax_due as tax_amount,
-        charge_line_items.total_price as total_amount,
+        -- line item level fields
+        cast(charge_line_items.purchase_item_type as {{ dbt.type_string() }}) as transaction_type, -- possible values: subscription, onetime
+        cast(charge_line_items.external_product_id_ecommerce as {{ dbt.type_string() }}) as product_id,
+        cast(charge_line_items.title as {{ dbt.type_string() }}) as product_name,
+        cast(null as {{ dbt.type_string() }}) as product_type, -- product_type not available
+        cast(charge_line_items.quantity as {{ dbt.type_int() }}) as quantity,
+        cast(charge_line_items.unit_price as {{ dbt.type_numeric() }}) as unit_amount,
+        cast(charge_line_items.tax_due as {{ dbt.type_numeric() }}) as tax_amount,
+        cast(charge_line_items.total_price as {{ dbt.type_numeric() }}) as total_amount,
         case when charge_line_items.purchase_item_type = 'subscription'
-            then charge_line_items.purchase_item_id
+            then cast(charge_line_items.purchase_item_id as {{ dbt.type_string() }})
             end as subscription_id,
         subscriptions.subscription_created_at as subscription_period_started_at,
         subscriptions.subscription_cancelled_at as subscription_period_ended_at,
-        subscriptions.subscription_status,
+        cast(subscriptions.subscription_status as {{ dbt.type_string() }}) as subscription_status,
         'customer' as customer_level,
-        charges.customer_id as customer_id,
-        -- coalesces are since information may be incomplete in various tables
-        coalesce(charges.email, customers.email) as customer_email,
+        cast(charges.customer_id as {{ dbt.type_string() }}) as customer_id,
+        -- coalesces are since information may be incomplete in various tables and casts for consistency
+        coalesce(
+            cast(charges.email as {{ dbt.type_string() }}),
+            cast(customers.email as {{ dbt.type_string() }})
+            ) as customer_email,
         coalesce(
             {{ dbt.concat(["customers.billing_first_name", "' '", "customers.billing_last_name"]) }},
             {{ dbt.concat(["addresses.first_name", "' '", "addresses.last_name"]) }}
             ) as customer_name,
-        coalesce(customers.billing_company, addresses.company) as customer_company,
-        coalesce(customers.billing_city, addresses.city) as customer_city,
-        coalesce(customers.billing_country, addresses.country) as customer_country
+        coalesce(cast(customers.billing_company as {{ dbt.type_string() }}),
+            cast(addresses.company as {{ dbt.type_string() }})
+            ) as customer_company,
+        coalesce(cast(customers.billing_city as {{ dbt.type_string() }}),
+            cast(addresses.city as {{ dbt.type_string() }})
+            ) as customer_city,
+        coalesce(cast(customers.billing_country as {{ dbt.type_string() }}),
+            cast(addresses.country as {{ dbt.type_string() }})
+            ) as customer_country
 
     from charge_line_items
 
@@ -104,7 +110,7 @@ with charge_line_items as (
     left join customers
         on customers.customer_id = charges.customer_id
 
-    {% if var('recharge__using_checkout', false) %}
+    {% if var('recharge__checkout_enabled', false) %}
     left join checkouts
         on checkouts.charge_id = charges.charge_id
     {% endif %}
@@ -133,9 +139,9 @@ with charge_line_items as (
         transaction_type,
         quantity,
         unit_amount,
-        cast(null as {{ dbt.type_float() }}) as discount_amount,
-        cast(null as {{ dbt.type_float() }}) as refund_amount,
-        cast(null as {{ dbt.type_float() }}) as fee_amount,
+        cast(null as {{ dbt.type_numeric() }}) as discount_amount,
+        cast(null as {{ dbt.type_numeric() }}) as refund_amount,
+        cast(null as {{ dbt.type_numeric() }}) as fee_amount,
         tax_amount,
         total_amount,
         payment_id,
@@ -160,29 +166,29 @@ with charge_line_items as (
     -- header level
     select
         header_id,
-        cast(null as {{ dbt.type_int() }}) as line_item_id,
+        cast(null as {{ dbt.type_string() }}) as line_item_id,
         cast(0 as {{ dbt.type_int() }}) as line_item_index,
         'header' as record_type,
         created_at,
         header_status,
         billing_type,
         currency,
-        cast(null as {{ dbt.type_int() }}) as product_id,
+        cast(null as {{ dbt.type_string() }}) as product_id,
         cast(null as {{ dbt.type_string() }}) as product_name,
         cast(null as {{ dbt.type_string() }}) as product_type,
         cast(null as {{ dbt.type_string() }}) as transaction_type,
         cast(null as {{ dbt.type_int() }}) as quantity,
-        cast(null as {{ dbt.type_float() }}) as unit_amount,
+        cast(null as {{ dbt.type_numeric() }}) as unit_amount,
         discount_amount,
         refund_amount,
         fee_amount,
-        cast(null as {{ dbt.type_float() }}) as tax_amount,
-        cast(null as {{ dbt.type_float() }}) as total_amount,
+        cast(null as {{ dbt.type_numeric() }}) as tax_amount,
+        cast(null as {{ dbt.type_numeric() }}) as total_amount,
         payment_id,
         payment_method_id,
         payment_method,
         payment_at,
-        cast(null as {{ dbt.type_int() }}) as subscription_id,
+        cast(null as {{ dbt.type_string() }}) as subscription_id,
         cast(null as {{ dbt.type_timestamp() }}) as subscription_period_started_at,
         cast(null as {{ dbt.type_timestamp() }}) as subscription_period_ended_at,
         cast(null as {{ dbt.type_string() }}) as subscription_status,

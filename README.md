@@ -65,17 +65,18 @@ vars:
   recharge_schema: your_schema_name 
 ```
 
-## Step 4: Disable models for non-existent sources
+## Step 4: Enable/disable models and sources
 Your Recharge connector may not sync every table that this package expects. If you do not have the `ONE_TIME_PRODUCT` and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
 
 ```yml
 vars:
   recharge__one_time_product_enabled: false # Disables if you do not have the ONE_TIME_PRODUCT table. Default is True.
   recharge__charge_tax_line_enabled: false # Disables if you do not have the CHARGE_TAX_LINE table. Default is True.
-``` 
+  recharge__checkout_enabled: false # Disables if you do not have the CHECKOUT table. Default is True.
+```
 
 ## (Optional) Step 5: Additional configurations
-<details open><summary>Expand for configurations</summary>
+<details open><summary>Expand/collapse section.</summary>
 
 ### Leveraging `orders` vs `order` source
 For Fivetran Recharge connectors created on or after June 18, 2024, the `ORDER` source table has been renamed to `ORDERS`. Refer to the [June 2024 connector release notes](https://fivetran.com/docs/connectors/applications/recharge/changelog#june2024) for more information.
@@ -105,7 +106,8 @@ vars:
         transform_sql:  "cast(a_second_field as string)"
     # a similar pattern can be applied to the rest of the following variables.
     recharge__charge_passthrough_columns:
-    recharge__charge_line_item_passthrough_columns: 
+    recharge__charge_line_item_passthrough_columns:
+    recharge__checkout_passthrough_columns:
     recharge__order_passthrough_columns:
     recharge__order_line_passthrough_columns:
     recharge__subscription_passthrough_columns:

@@ -8,6 +8,8 @@ table_variables:
     - one_time_product
   recharge__charge_tax_line_enabled:
     - charge_tax_line
+  recharge__checkout_enabled:
+    - checkout
 
 destination_configurations:
   databricks:
