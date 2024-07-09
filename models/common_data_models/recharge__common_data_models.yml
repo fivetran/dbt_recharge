@@ -7,7 +7,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - header_id
-            - line_item_id
+            - line_item_index
     columns:
       - name: header_id
         description: "{{ doc('header_id') }}"
