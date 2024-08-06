@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: recharge__line_item_enhanced
-    description: This table is a standardized model designed to consolidate and enhance line item data and charges. It captures detailed information about each line item, including product details, payment methods, subscription information, customer details, and various financial metrics like taxes, discounts, and total amounts. This unified model facilitates comprehensive analysis and reporting across different transactional data sources.
+    description: This model constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It’s designed to align with the schema of the `*__line_item_enhanced` model found in Recharge, Recurly, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). Visit the app for more details.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -55,6 +55,8 @@ models:
         description: "Amount refunded for the charge."
       - name: subscription_id
         description: "ID of the subscription (if applicable)."
+      - name: subscription_plan
+        description: "The product title associated with the subscription."
       - name: subscription_period_started_at
         description: "Start date of the subscription period (if applicable)."
       - name: subscription_period_ended_at
@@ -63,6 +65,8 @@ models:
         description: "Status of the subscription."
       - name: customer_id
         description: "ID of the customer"
+      - name: customer_created_at
+        description: "Date the customer was created in Recharge."
       - name: customer_level
         description: "Identifies if the customer is reported at the account or customer level."
       - name: customer_name
