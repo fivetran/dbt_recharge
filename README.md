@@ -71,7 +71,7 @@ vars:
 ```
 
 ## Step 4: Enable/disable models and sources
-Your Recharge connector may not sync every table that this package expects. If you do not have the `ONE_TIME_PRODUCT` and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
+Your Recharge connector may not sync every table that this package expects. If you do not have the `CHECKOUT`, `ONE_TIME_PRODUCT` and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
 
 ```yml
 vars:
