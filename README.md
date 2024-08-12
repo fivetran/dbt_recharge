@@ -16,6 +16,7 @@
 - Enables you to better understand your Recharge data by summarizing customer, revenue, and subscription trends.
 - Generates a comprehensive data dictionary of your source and modeled Recharge data through the [dbt docs site](https://fivetran.github.io/dbt_recharge/).
 
+<!--section="recharge_transformation_model"-->
 The following table provides a detailed list of all models materialized within this package by default. 
 > TIP: See more details about these models in the package's [dbt docs site](https://fivetran.github.io/dbt_recharge/#!/overview?g_v=1).
  
@@ -35,7 +36,15 @@ An example churn model is separately available in the analysis folder:
 | [recharge__account_churn_analysis](https://fivetran.github.io/dbt_recharge/#!/analysis/analysis.recharge.recharge__churn_analysis) | Each record represents a customer and their churn reason according to recharge's documentation. |
 
 ## Example Visualizations
-Explore example visualizations produced by the [recharge__line_item_enhanced](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced) model in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). For further details and to see how these insights can be applied, visit the app.
+Curious what these models can do? Check out example visualizations from the [recharge__line_item_enhanced](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced) model in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/), and see how you can use these models in your own reporting. Below is a screenshot of an example report—-explore the app for more.
+
+<p align="center">
+  <a href="https://fivetran-billing-model.streamlit.app/">
+    <img src="https://raw.githubusercontent.com/fivetran/dbt_recharge/main/images/streamlit_example.png" alt="Streamlit Billing Model App" width="75%">
+  </a>
+</p>
+
+<!--section-end-->
 
 # 🎯 How do I use the dbt package?
 ## Step 1: Prerequisites
@@ -82,6 +91,14 @@ vars:
 
 ## (Optional) Step 5: Additional configurations
 <details open><summary>Expand/collapse section.</summary>
+
+### Enabling Standardized Billing Model
+This package contains the `recharge__line_item_enhanced` model which constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It’s designed to align with the schema of the `*__line_item_enhanced` model found in Recurly, Recharge, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). For the time being, this model is disabled by default. If you would like to enable this model you will need to adjust the `recharge__standardized_billing_model_enabled` variable to be `true` within your `dbt_project.yml`:
+
+```yml
+vars:
+  recharge__standardized_billing_model_enabled: true # false by default.
+```
 
 ### Leveraging `orders` vs `order` source
 For Fivetran Recharge connectors created on or after June 18, 2024, the `ORDER` source table has been renamed to `ORDERS`. Refer to the [June 2024 connector release notes](https://fivetran.com/docs/connectors/applications/recharge/changelog#june2024) for more information.
