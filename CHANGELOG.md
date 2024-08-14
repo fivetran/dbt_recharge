@@ -1,3 +1,28 @@
+# dbt_recharge v0.3.0
+[PR #17](https://github.com/fivetran/dbt_recharge/pull/17) includes the following updates:
+
+## Features
+- Addition of the `recharge__line_item_enhanced` model. This model constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It’s designed to align with the schema of the `*__line_item_enhanced` model found in Recharge, Recurly, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). Visit the app for more details.
+  - This model is currently disabled by default. You may enable it by setting the `recharge__standardized_billing_model_enabled` as `true` in your `dbt_project.yml`.
+
+## Breaking Changes
+- In the [dbt_recharge_source v0.3.0 release](https://github.com/fivetran/dbt_recharge_source/releases/tag/v0.3.0), the following columns were added to model `stg_recharge__address`:
+  - `country`
+  - `payment_method_id`
+  - Note: If you have already added any of these fields as passthrough columns to the `recharge__address_passthrough_columns` var, you will need to remove or alias these fields from the var to avoid duplicate column errors.
+
+## Additional source package updates ([release notes](https://github.com/fivetran/dbt_recharge_source/releases/tag/v0.3.0))
+- Added staging model `stg_recharge__checkout`. See [this doc](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge_source.stg_recharge__checkout) for the fields added and their definitions.
+  - This model is disabled by default but can be enabled by setting variable `recharge__checkout_enabled` to true in your `dbt_project.yml` file. See the [Enable/disable models and sources section](https://github.com/fivetran/dbt_recharge/blob/main/README.md#step-4-enable-disable-models-and-sources) of the README for more information.
+  - This model can also be passed additional columns beyond the predefined columns by using the variable `recharge__checkout_passthrough_columns`. See the [Passing Through Additional Columns](https://github.com/fivetran/dbt_recharge/blob/main/README.md#passing-through-additional-columns) section of the README for more information on how to set this variable.
+
+- Added the following columns to model `stg_recharge__customer`. See [this doc](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge_source.stg_recharge__customer) for field definitions.
+  - `billing_first_name`
+  - `billing_last_name`
+  - `billing_company`
+  - `billing_city`
+  - `billing_country`
+
 # dbt_recharge v0.2.0
 [PR #16](https://github.com/fivetran/dbt_recharge/pull/16) includes the following updates:
 ## Features
