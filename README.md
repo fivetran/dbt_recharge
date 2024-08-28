@@ -17,10 +17,10 @@
 - Generates a comprehensive data dictionary of your source and modeled Recharge data through the [dbt docs site](https://fivetran.github.io/dbt_recharge/).
 
 <!--section="recharge_transformation_model"-->
-The following table provides a detailed list of all models materialized within this package by default.
-> TIP: See more details about these models in the package's [dbt docs site](https://fivetran.github.io/dbt_recharge/#!/overview?g_v=1).
+The following table provides a detailed list of all tables materialized within this package by default.
+> TIP: See more details about these tables in the package's [dbt docs site](https://fivetran.github.io/dbt_recharge/#!/overview?g_v=1).
 
-| **model** | **description** |
+| **Table** | **Description** |
 |-----------|-----------------|
 | [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Each record represents an order, enriched with metrics about related charges and line items. Line items are aggregated at the billing (order) level. |
 | [recharge__charge_line_item_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__charge_line_item_history) | Each record represents a specific line item charge, refund, or other line item that accumulates into final charges. |
