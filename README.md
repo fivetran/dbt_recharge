@@ -166,7 +166,7 @@ vars:
   recharge_order_identifier: '"Order"' # as an example, must include this quoting pattern and adjust for your exact casing
 ```
 
-**Note!** if you have sources defined in your project's yml, the above will not work. Instead, you will need to add the following where your order table is defined in your yml:
+**Note:** if you have sources defined in your project's yml, the above will not work. Instead, you will need to add the following where your order table is defined in your yml:
 ```yml
 sources:
   tables:
@@ -213,5 +213,5 @@ We highly encourage and welcome contributions to this package. Check out [this d
 This dbt package takes an opinionated stance on revenue is calculated, using charges in some cases and orders in others. If you would like a deeper explanation of the logic used by default in the dbt package, you may reference the [DECISIONLOG](https://github.com/fivetran/dbt_recharge/blob/main/DECISIONLOG.md).
 
 ## Are there any resources available?
-- If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_microsoft_ads/issues/new/choose) section to find the right avenue of support for you.
+- If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_recharge/issues/new/choose) section to find the right avenue of support for you.
 - If you would like to provide feedback to the dbt package team at Fivetran or would like to request a new dbt package, fill out our [Feedback Form](https://www.surveymonkey.com/r/DQ7K7WW).
