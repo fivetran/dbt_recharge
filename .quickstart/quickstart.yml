@@ -16,3 +16,13 @@ destination_configurations:
     dispatch:
       - macro_namespace: dbt_utils
         search_order: [ 'spark_utils', 'dbt_utils' ]
+
+public_models: [
+  "recharge__billing_history",
+  "recharge__charge_line_item_history",
+  "recharge__monthly_recurring_revenue",
+  "recharge__customer_daily_rollup",
+  "recharge__customer_details",
+  "recharge__subscription_overview",
+  "recharge__line_item_enhanced"
+]
