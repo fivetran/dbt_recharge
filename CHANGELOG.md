@@ -1,3 +1,9 @@
+# dbt_recharge version.version
+
+## Documentation
+- Added Quickstart model counts to README. ([#22](https://github.com/fivetran/dbt_recharge/pull/22))
+- Corrected references to connectors and connections in the README. ([#22](https://github.com/fivetran/dbt_recharge/pull/22))
+
 # dbt_recharge v0.3.0
 [PR #17](https://github.com/fivetran/dbt_recharge/pull/17) includes the following updates:
 
