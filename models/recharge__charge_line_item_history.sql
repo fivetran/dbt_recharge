@@ -11,23 +11,15 @@ with charges as (
         'charge line' as line_item_type
     from {{ var('charge_line_item') }}
 
-), charge_discounts as (
-    select *
-    from {{ var('charge_discount') }}
-
-), discounts_enriched as (
+), discounts as (
     select
-        charge_discounts.charge_id,
-        charge_discounts.index,
-        cast(case when lower(charge_discounts.value_type) = 'percentage'
-            then round(cast(charge_discounts.discount_value / 100 * charges.total_line_items_price as {{ dbt.type_numeric() }}), 2)
-            else charge_discounts.discount_value 
-            end as {{ dbt.type_float() }}) as amount,
-        charge_discounts.code as title,
+        charge_id,
+        0 as index,
+        cast(total_discounts as {{ dbt.type_float() }}) as amount,
+        'total discounts' as title,
         'discount' as line_item_type
-    from charge_discounts
-    left join charges
-        on charges.charge_id = charge_discounts.charge_id
+    from charges -- have to extract discounts from charges table since not available on the line item level
+    where total_discounts > 0
 
 ), charge_shipping_lines as (
     select 
@@ -75,7 +67,7 @@ with charges as (
 
     union all
     select *
-    from discounts_enriched
+    from discounts
 
     union all
     select *
