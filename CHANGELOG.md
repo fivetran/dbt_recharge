@@ -1,5 +1,5 @@
 # dbt_recharge v0.3.1
-[PR #26](https://github.com/fivetran/dbt_recharge/pull/26) includes the following changes:
+[PR #27](https://github.com/fivetran/dbt_recharge/pull/27) includes the following changes:
 
 - For Quickstart users, removed `recharge__line_item_enhanced` from the public models list in `quickstart.yml` since the model is disabled by default.
 - In `recharge__charge_line_item_history`, updated the discounts section to pull directly from the `charges` table. This is because we are currently unable to determine discounts on a charge_line level. Therefore, we have decided to maintain discounts at the charge level. In a future release, we may re-examine calculating discounts on the charge_line level when we have more complete data.
