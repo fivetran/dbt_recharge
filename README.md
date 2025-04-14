@@ -1,4 +1,6 @@
-<p align="center">
+# Recharge dbt package ([Docs](https://fivetran.github.io/dbt_recharge/))
+
+<p align="left">
     <a alt="License"
         href="https://github.com/fivetran/dbt_recharge/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a>
@@ -10,7 +12,6 @@
         <img src="https://img.shields.io/badge/Contributions-welcome-blueviolet" /></a>
 </p>
 
-# Recharge dbt package ([Docs](https://fivetran.github.io/dbt_recharge/))
 ## What does this dbt package do?
 - Produces modeled tables that leverage Recharge data from [Fivetran's connector](https://fivetran.com/docs/applications/recharge) in the format described by [this ERD](https://fivetran.com/docs/applications/recharge#schemainformation) and build off the output of our [Recharge source package](https://github.com/fivetran/dbt_recharge_source).
 - Enables you to better understand your Recharge data by summarizing customer, revenue, and subscription trends.

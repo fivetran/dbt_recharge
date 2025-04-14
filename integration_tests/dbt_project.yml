@@ -1,9 +1,12 @@
 config-version: 2
 
 name: 'recharge_integration_tests'
-version: '0.3.0'
+version: '0.3.1'
 
 profile: 'integration_tests' 
+
+models:
+  +schema: "recharge_{{ var('directed_schema','dev') }}"  ## To be used for validation tests
 
 vars:
   # recharge__checkout_enabled: true # Uncomment for generating docs -- Comment this out before sending to buildkite.
