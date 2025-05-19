@@ -1,6 +1,12 @@
 # dbt_recharge v0.4.0
 [PR #28](https://github.com/fivetran/dbt_recharge/pull/28) includes the following changes:
 
+## Schema/Data Changes
+**1 total change • 0 possible breaking changes**
+| **Data Model** | **Change type** | **Old name** | **New name** | **Notes** |
+| ---------------- | --------------- | ------------ | ------------ | --------- |
+| [`recharge__line_item_enhanced`](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced) | Modified Model | | | Now enabled by default. |
+
 ## Features
 - Enabled the `recharge__line_item_enhanced` model by default. Previously, this model required opting in via the `recharge__standardized_billing_model_enabled` variable. This change ensures the model is available by default for Quickstart users.
   - Users can still disable the model by setting the variable to `false` in `dbt_project.yml`.
