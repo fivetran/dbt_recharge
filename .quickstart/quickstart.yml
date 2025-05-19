@@ -23,5 +23,6 @@ public_models: [
   "recharge__monthly_recurring_revenue",
   "recharge__customer_daily_rollup",
   "recharge__customer_details",
-  "recharge__subscription_overview"
+  "recharge__subscription_overview",
+  "recharge__line_item_enhanced"
 ]
