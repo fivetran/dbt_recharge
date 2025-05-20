@@ -1,0 +1,62 @@
+# .github/workflows/regen_dbt_docs.yml
+
+name: Regen dbt Docs from integration_tests
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  generate-docs:
+    if: |
+      github.event.issue.pull_request &&
+      github.event.comment.body == 'regen docs'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout PR branch
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.issue.pull_request.head.ref }}
+        repository: ${{ github.repository }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dbt
+      run: |
+        python -m pip install --upgrade pip
+        pip install dbt-core dbt-postgres
+
+    - name: Set up dbt profiles
+      run: |
+        mkdir -p ~/.dbt
+        echo "$DBT_PROFILES_YML" > ~/.dbt/profiles.yml
+      env:
+        DBT_PROFILES_YML: ${{ secrets.DBT_PROFILES_YML }}
+
+    - name: Run integration_tests project
+      working-directory: dbt_recharge/integration_tests
+      run: |
+        dbt deps
+        dbt seed --full-refresh
+        dbt run
+        dbt docs generate
+
+    - name: Move generated docs to root docs/ folder
+      run: |
+        rm -rf docs/*
+        mkdir -p docs
+        cp packages/your_package/integration_tests/target/catalog.json docs/
+        cp packages/your_package/integration_tests/target/index.html docs/
+        cp packages/your_package/integration_tests/target/manifest.json docs/
+
+    - name: Commit docs update to PR branch
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add docs/
+        git commit -m "Regenerate dbt docs from integration_tests" || echo "No changes to commit"
+        git push
