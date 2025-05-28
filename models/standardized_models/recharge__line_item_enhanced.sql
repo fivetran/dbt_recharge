@@ -1,4 +1,4 @@
-{{ config(enabled=var('recharge__standardized_billing_model_enabled', False)) }}
+{{ config(enabled=var('recharge__standardized_billing_model_enabled', True)) }}
 
 with charge_line_items as (
 
