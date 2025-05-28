@@ -20,7 +20,7 @@ dbt seed --target "$db" --full-refresh
 dbt compile --target "$db"
 dbt run --target "$db" --full-refresh
 dbt test --target "$db"
-dbt run --vars '{recharge__using_orders: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_id]}' --target "$db" --full-refresh
-dbt test --vars '{recharge__using_orders: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_id]}' --target "$db"
+dbt run --vars '{recharge__standardized_billing_model_enabled: false, recharge__using_orders: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_id]}' --target "$db" --full-refresh
+dbt test --vars '{recharge__standardized_billing_model_enabled: false, recharge__using_orders: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_id]}' --target "$db"
 
 dbt run-operation fivetran_utils.drop_schemas_automation --target "$db"
