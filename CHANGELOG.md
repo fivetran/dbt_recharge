@@ -1,5 +1,5 @@
 # dbt_recharge v0.4.1
-[PR #XX](https://github.com/fivetran/dbt_recharge/pull/XX) includes the following changes:
+[PR #31](https://github.com/fivetran/dbt_recharge/pull/31) includes the following changes:
 
 ## Bug Fixes
 - Updated `recharge__billing_history` to evaluate `orders.is_prepaid` without explicitly comparing to `true`, ensuring compatibility with integer-based booleans.
