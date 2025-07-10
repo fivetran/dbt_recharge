@@ -1,3 +1,12 @@
+# dbt_recharge v0.4.1
+[PR #XX](https://github.com/fivetran/dbt_recharge/pull/XX) includes the following changes:
+
+## Bug Fixes
+- Updated `recharge__billing_history` to evaluate `orders.is_prepaid` without explicitly comparing to `true`, ensuring compatibility with integer-based booleans.
+
+## Under the Hood
+- Added a new `ORDERS` seed data file to properly test cases where `is_prepaid` is either a boolean or integer.
+
 # dbt_recharge v0.4.0
 [PR #28](https://github.com/fivetran/dbt_recharge/pull/28) includes the following changes:
 

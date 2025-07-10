@@ -84,3 +84,9 @@ seeds:
       +column_types:
         SHIPPED_DATE: "timestamp"
         SHIPPING_DATE: "timestamp"
+        IS_PREPAID: boolean
+    orders_bool_int_data:
+      +column_types:
+        SHIPPED_DATE: "timestamp"
+        SHIPPING_DATE: "timestamp"
+        IS_PREPAID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
