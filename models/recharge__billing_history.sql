@@ -43,7 +43,7 @@ with orders as (
             'total_refunds', 'total_tax', 'total_weight_grams', 'total_shipping'] %}
         {% for col in agg_cols %}
             -- when several prepaid orders are generated from a single charge, we only want to show total aggregates from the charge on the first instance.
-            case when orders.is_prepaid then 0
+            case when cast(orders.is_prepaid as {{ dbt.type_int() }}) = 1 then 0
                 else coalesce(charges_enriched.{{ col }}, 0)
                 end as charge_{{ col }},
             -- this divides a charge over all the related orders.

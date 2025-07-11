@@ -16,7 +16,7 @@
 
 
 ## Bug Fixes
-- Updated `recharge__billing_history` to evaluate `orders.is_prepaid` without explicitly comparing to `true`, ensuring compatibility with integer-based booleans.
+- Updated `recharge__billing_history` to cast `orders.is_prepaid` as an integer and evaluate the result, ensuring compatibility with integer-based booleans as well as boolean data types.
 
 ## Documentation
 - Added all new column documentation in the relevant recharge.yml file.
