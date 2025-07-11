@@ -46,7 +46,7 @@ models:
       - name: address_id
         description: "{{ doc('address_id') }}"
       - name: is_deleted
-        description: Boolean indicating if the order (record) is deleted.
+        description: This column has been deprecated as of July 2025 in favor of the `_fivetran_deleted` column. Boolean indicating if the order (record) is deleted.
       - name: payment_processor
         description: The name of the payment processor.
       - name: orders_count
