@@ -12,8 +12,8 @@ vars:
   # recharge__checkout_enabled: true # @docs-include
   recharge_source:
     recharge_schema: recharge_integration_tests_03
-    # order: "{{ ref('order_data') }}" # @docs-ignore
-    recharge_order_identifier: "order_data" # @docs-include
+    order: "{{ ref('order_data') }}" # @docs-ignore
+    # recharge_order_identifier: "order_data" # @docs-include
     recharge_address_identifier: "address_data" # @docs-include
     recharge_address_discounts_identifier: "address_discounts_data" # @docs-include
     recharge_address_shipping_line_identifier: "address_shipping_line_data" # @docs-include
