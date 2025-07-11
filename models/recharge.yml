@@ -95,6 +95,8 @@ models:
         description: The total net value of the charge, calculated as the total price minus total discounts.
       - name: total_calculated_net_order_value
         description: The `total_net_charge_value` divided equally amongst all orders stemming from the same charge.
+      - name: _fivetran_deleted
+        description: "{{ doc('_fivetran_deleted') }}"
 
   - name: recharge__charge_line_item_history
     description: Each record represents a specific line item charge, refund, or other line item that accumulates into final charges.
@@ -296,6 +298,18 @@ models:
         description: The monthly average amount taxed for the customer.
       - name: net_spend_monthly_average
         description: The monthly average net spend of the customer, calculated as the total amount charged minus total refunds, divided by the number of months since the first charge.
+      - name: billing_first_name
+        description: First name associated with the billing details. 
+      - name: billing_last_name
+        description: Last name associated with the billing details.
+      - name: billing_company
+        description: Company associated with the billing details.
+      - name: billing_city
+        description: City associated with the billing details.
+      - name: billing_country
+        description: Country associated with the billing details.
+      - name: _fivetran_deleted
+        description: "{{ doc('_fivetran_deleted') }}"
 
   - name: recharge__monthly_recurring_revenue
     description: Each record represents a customer, MRR, and non-MRR generated on a monthly basis.

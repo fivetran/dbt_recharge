@@ -22,7 +22,7 @@ dbt run --target "$db" --full-refresh
 dbt test --target "$db"
 dbt run --vars '{recharge__standardized_billing_model_enabled: false, recharge__using_orders: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_id]}' --target "$db" --full-refresh
 dbt test --vars '{recharge__standardized_billing_model_enabled: false, recharge__using_orders: false, recharge__one_time_product_enabled: false, recharge__address_passthrough_columns: [cart_attribute_id]}' --target "$db"
-dbt run --vars '{recharge_orders_identifier: orders_bool_int_data}' --target "$db" --full-refresh
+dbt run --vars '{recharge_orders_identifier: order_bool_int_data}' --target "$db" --full-refresh
 dbt test --target "$db"
 
 dbt run-operation fivetran_utils.drop_schemas_automation --target "$db"
