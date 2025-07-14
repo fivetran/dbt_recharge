@@ -1,4 +1,4 @@
-# dbt_recharge v0.4.1
+# dbt_recharge v0.5.0
 
 [PR #31](https://github.com/fivetran/dbt_recharge/pull/31) includes the following changes:
 
