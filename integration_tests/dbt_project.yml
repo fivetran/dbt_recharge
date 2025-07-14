@@ -14,23 +14,23 @@ vars:
     recharge_schema: recharge_integration_tests_03
     order: "{{ ref('order_data') }}" # @docs-ignore
     # recharge_order_identifier: "order_data" # @docs-include
-    recharge_address_identifier: "address_data" # @docs-include
-    recharge_address_discounts_identifier: "address_discounts_data" # @docs-include
-    recharge_address_shipping_line_identifier: "address_shipping_line_data" # @docs-include
-    recharge_charge_identifier: "charge_data" # @docs-include
-    recharge_charge_discount_identifier: "charge_discount_data" # @docs-include
-    recharge_charge_line_item_identifier: "charge_line_item_data" # @docs-include
-    recharge_charge_order_attribute_identifier: "charge_order_attribute_data" # @docs-include
-    recharge_charge_shipping_line_identifier: "charge_shipping_line_data" # @docs-include
-    recharge_charge_tax_line_identifier: "charge_tax_line_data" # @docs-include
-    recharge_checkout_identifier: "checkout_data" # @docs-include
-    recharge_customer_identifier: "customer_data" # @docs-include
-    recharge_discount_identifier: "discount_data" # @docs-include
-    recharge_one_time_product_identifier: "one_time_product_data" # @docs-include
-    recharge_orders_identifier: "orders_data" # @docs-include
-    recharge_order_line_item_identifier: "order_line_item_data" # @docs-include
-    recharge_subscription_identifier: "subscription_data" # @docs-include
-    recharge_subscription_history_identifier: "subscription_history_data" # @docs-include
+    recharge_address_identifier: "address_data"
+    recharge_address_discounts_identifier: "address_discounts_data"
+    recharge_address_shipping_line_identifier: "address_shipping_line_data"
+    recharge_charge_identifier: "charge_data"
+    recharge_charge_discount_identifier: "charge_discount_data"
+    recharge_charge_line_item_identifier: "charge_line_item_data" 
+    recharge_charge_order_attribute_identifier: "charge_order_attribute_data"
+    recharge_charge_shipping_line_identifier: "charge_shipping_line_data"
+    recharge_charge_tax_line_identifier: "charge_tax_line_data"
+    recharge_checkout_identifier: "checkout_data"
+    recharge_customer_identifier: "customer_data"
+    recharge_discount_identifier: "discount_data"
+    recharge_one_time_product_identifier: "one_time_product_data"
+    recharge_orders_identifier: "orders_data"
+    recharge_order_line_item_identifier: "order_line_item_data"
+    recharge_subscription_identifier: "subscription_data"
+    recharge_subscription_history_identifier: "subscription_history_data"
 
 dispatch:
   - macro_namespace: dbt_utils
