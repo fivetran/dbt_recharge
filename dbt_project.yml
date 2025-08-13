@@ -41,6 +41,9 @@ models:
     intermediate:
       +materialized: ephemeral
       int_recharge__calendar_spine:
-        +materialized: table    staging:
+        +materialized: table    
+    staging:
       +schema: recharge_source
-      +materialized: view
+      +materialized: table
+      tmp:
+        +materialized: view
