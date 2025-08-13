@@ -61,9 +61,9 @@ Include the following recharge package version in your `packages.yml` file.
 ```yaml
 packages:
   - package: fivetran/recharge
-    version: [">=0.5.0", "<0.6.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=1.0.0", "<1.1.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
-Do **NOT** include the `recharge_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
+> All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/recharge_source` in your `packages.yml` since this package has been deprecated.
 
 #### Databricks Dispatch Configuration
 If you are using a Databricks destination with this package, you must add the following dispatch configuration (or a variation thereof) within your `dbt_project.yml`. This is required for the package to accurately search for macros within the `dbt-labs/spark_utils` package, then the `dbt-labs/dbt_utils` package, respectively.
@@ -145,9 +145,9 @@ By default, this package builds the Recharge staging models within a schema titl
 ```yml
 models:
     recharge:
-      +schema: my_new_schema_name # leave blank for just the target_schema
-    recharge_source:
-      +schema: my_new_schema_name # leave blank for just the target_schema
+      +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
+      staging:
+        +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
 ```
 
 #### Change the source table references
@@ -193,9 +193,6 @@ This dbt package is dependent on the following dbt packages. These dependencies 
 > IMPORTANT: If you have any of these dependent packages in your own `packages.yml` file, we highly recommend that you remove them from your root `packages.yml` to avoid package version conflicts.
 ```yml
 packages:
-    - package: fivetran/recharge_source
-      version: [">=0.4.0", "<0.5.0"]
-
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
 

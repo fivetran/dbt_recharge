@@ -3,43 +3,43 @@
 with charge_line_items as (
 
     select * 
-    from {{ var('charge_line_item')}}
+    from {{ ref('stg_recharge__charge_line_item') }}
 
 ), charges as (
 
     select * 
-    from {{ var('charge') }}
+    from {{ ref('stg_recharge__charge') }}
 
 ), charge_shipping_lines as (
 
     select
         charge_id,
         sum(price) as total_shipping
-    from {{ var('charge_shipping_line') }}
+    from {{ ref('stg_recharge__charge_shipping_line') }}
     group by 1
 
 {% if var('recharge__checkout_enabled', false) %}
 ), checkouts as (
 
     select *
-    from {{ var('checkout') }}
+    from {{ ref('stg_recharge__checkout') }}
 
 {% endif %}
 
 ), addresses as (
 
     select * 
-    from {{ var('address') }}
+    from {{ ref('stg_recharge__address') }}
 
 ), customers as (
 
     select * 
-    from {{ var('customer') }}
+    from {{ ref('stg_recharge__customer') }}
 
 ), subscriptions as (
 
     select *
-    from {{ var('subscription_history') }} 
+    from {{ ref('stg_recharge__subscription_history') }} 
     where is_most_recent_record
 
 ), enhanced as (

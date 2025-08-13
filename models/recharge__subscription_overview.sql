@@ -1,17 +1,17 @@
 with subscriptions as (
 
     select * 
-    from {{ var('subscription_history') }}
+    from {{ ref('stg_recharge__subscription_history') }}
     where is_most_recent_record
 
 ), charges as (
     select * 
-    from {{ var('charge') }}
+    from {{ ref('stg_recharge__charge') }}
     where lower(charge_type) = 'recurring'
 
 ), charge_line_items as (
     select * 
-    from {{ var('charge_line_item') }}
+    from {{ ref('stg_recharge__charge_line_item') }}
 
 ), customers_charge_lines as (
     select 
