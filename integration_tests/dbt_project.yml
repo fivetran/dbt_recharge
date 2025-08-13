@@ -10,7 +10,7 @@ models:
 
 vars:
   # recharge__checkout_enabled: true # @docs-include
-  recharge_source:
+  recharge:
     recharge_schema: recharge_integration_tests_03
     order: "{{ ref('order_data') }}" # @docs-ignore
     # recharge_order_identifier: "order_data" # @docs-include

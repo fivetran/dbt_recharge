@@ -16,7 +16,7 @@
 </p>
 
 ## What does this dbt package do?
-- Produces modeled tables that leverage Recharge data from [Fivetran's connector](https://fivetran.com/docs/applications/recharge) in the format described by [this ERD](https://fivetran.com/docs/applications/recharge#schemainformation) and build off the output of our [Recharge source package](https://github.com/fivetran/dbt_recharge_source).
+- Produces modeled tables that leverage Recharge data from [Fivetran's connector](https://fivetran.com/docs/applications/recharge) in the format described by [this ERD](https://fivetran.com/docs/applications/recharge#schemainformation).
 - Enables you to better understand your Recharge data by summarizing customer, revenue, and subscription trends.
 - Generates a comprehensive data dictionary of your source and modeled Recharge data through the [dbt docs site](https://fivetran.github.io/dbt_recharge/).
 
@@ -41,6 +41,12 @@ An example churn model is separately available in the analysis folder:
 
 ### Example Visualizations
 Curious what these models can do? Check out example visualizations from the [recharge__line_item_enhanced](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced) model in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/), and see how you can use these models in your own reporting. Below is a screenshot of an example report—-explore the app for more.
+
+<p align="center">
+<a href="https://fivetran-billing-model.streamlit.app/">
+    <img src="https://raw.githubusercontent.com/fivetran/dbt_recharge/main/images/streamlit_example.png" alt="Streamlit Billing Model App" width="75%">
+</a>
+</p>
 
 ### Materialized Models
 Each Quickstart transformation job run materializes 38 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
@@ -150,7 +156,7 @@ models:
 #### Change the source table references
 If an individual source table has a different name than the package expects, add the table name as it appears in your destination to the respective variable:
 
-> IMPORTANT: See this project's [`dbt_project.yml`](https://github.com/fivetran/dbt_recharge_source/blob/main/dbt_project.yml) variable declarations to see the expected names.
+> IMPORTANT: See this project's [`dbt_project.yml`](https://github.com/fivetran/dbt_recharge/blob/main/dbt_project.yml) variable declarations to see the expected names.
 
 ```yml
 vars:
