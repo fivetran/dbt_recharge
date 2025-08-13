@@ -1,6 +1,6 @@
 with customers as (
     select *
-    from {{ var('customer') }}
+    from {{ ref('stg_recharge__customer') }}
 
 ), billing as (
     select * 
@@ -39,7 +39,7 @@ with customers as (
     select 
         customer_id,
         count(subscription_id) as calculated_subscriptions_active_count -- this value may differ from the recharge-provided subscriptions_active_count. See DECISIONLOG. 
-    from {{ var('subscription') }}
+    from {{ ref('stg_recharge__subscription') }}
     where lower(subscription_status) = 'active'
     group by 1
 

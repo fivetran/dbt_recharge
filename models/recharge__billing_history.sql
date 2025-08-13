@@ -1,25 +1,25 @@
 with orders as (
     select *
-    from {{ var('order') }}
+    from {{ ref('stg_recharge__order') }}
 
 ), order_line_items as (
     select 
         order_id,
         sum(quantity) as order_item_quantity,
         round(cast(sum(total_price) as {{ dbt.type_numeric() }}), 2) as order_line_item_total
-    from {{ var('order_line_item') }}
+    from {{ ref('stg_recharge__order_line_item') }}
     group by 1
 
 
 ), charges as ( --each charge can have multiple orders associated with it
     select *
-    from {{ var('charge') }}
+    from {{ ref('stg_recharge__charge') }}
 
 ), charge_shipping_lines as (
     select 
         charge_id,
         round(cast(sum(price) as {{ dbt.type_numeric() }}), 2) as total_shipping
-    from {{ var('charge_shipping_line') }}
+    from {{ ref('stg_recharge__charge_shipping_line') }}
     group by 1
 
 ), charges_enriched as (
