@@ -1,6 +1,6 @@
 with charges as (
     select *
-    from {{ var('charge') }}
+    from {{ ref('stg_recharge__charge') }}
 
 ), charge_line_items as (
     select 
@@ -9,7 +9,7 @@ with charges as (
         cast(total_price as {{ dbt.type_float() }}) as amount,
         title,
         'charge line' as line_item_type
-    from {{ var('charge_line_item') }}
+    from {{ ref('stg_recharge__charge_line_item') }}
 
 ), discounts as (
     select
@@ -28,7 +28,7 @@ with charges as (
         cast(price as {{ dbt.type_float() }}) as amount,
         title,
         'shipping' as line_item_type
-    from {{ var('charge_shipping_line') }}
+    from {{ ref('stg_recharge__charge_shipping_line') }}
 
 ), charge_tax_lines as (
     {% if var('recharge__charge_tax_line_enabled', true) %}
@@ -38,7 +38,7 @@ with charges as (
             cast(price as {{ dbt.type_float() }}) as amount,
             title,
             'tax' as line_item_type
-        from {{ var('charge_tax_line') }} -- use this if possible since it is individual tax items
+        from {{ ref('stg_recharge__charge_tax_line') }} -- use this if possible since it is individual tax items
     {% else %} 
         select
             charge_id,
@@ -46,7 +46,7 @@ with charges as (
             cast(tax_due as {{ dbt.type_float() }}) as amount,
             'total tax' as title,
             'tax' as line_item_type
-        from {{ var('charge_line_item') }} -- use this secodary since it is total tax per charge line item
+        from {{ ref('stg_recharge__charge_line_item') }} -- use this secodary since it is total tax per charge line item
         where tax_due is not null
     {% endif %}
 

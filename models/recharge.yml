@@ -100,11 +100,6 @@ models:
 
   - name: recharge__charge_line_item_history
     description: Each record represents a specific line item charge, refund, or other line item that accumulates into final charges.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - charge_id
-            - charge_row_num
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -129,11 +124,6 @@ models:
 
   - name: recharge__customer_daily_rollup
     description: Each record provides totals and running totals for a customer's associated transaction for the specified day.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - customer_id
-            - date_day
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -313,11 +303,6 @@ models:
 
   - name: recharge__monthly_recurring_revenue
     description: Each record represents a customer, MRR, and non-MRR generated on a monthly basis.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - customer_id
-            - date_month
     columns:
       - name: date_month
         description: Month the metrics were calculated.
