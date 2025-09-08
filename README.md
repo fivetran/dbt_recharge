@@ -136,6 +136,7 @@ vars:
     recharge__charge_passthrough_columns:
     recharge__charge_line_item_passthrough_columns:
     recharge__checkout_passthrough_columns:
+    recharge__discount_passthrough_columns:
     recharge__order_passthrough_columns:
     recharge__order_line_passthrough_columns:
     recharge__subscription_passthrough_columns:

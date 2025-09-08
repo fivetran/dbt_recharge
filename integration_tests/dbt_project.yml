@@ -12,8 +12,6 @@ vars:
   # recharge__checkout_enabled: true # @docs-include
   recharge:
     recharge_schema: recharge_integration_tests_03
-    order: "{{ ref('order_data') }}" # @docs-ignore
-    # recharge_order_identifier: "order_data" # @docs-include
     recharge_address_identifier: "address_data"
     recharge_address_discounts_identifier: "address_discounts_data"
     recharge_address_shipping_line_identifier: "address_shipping_line_data"
@@ -78,10 +76,6 @@ seeds:
         APPLIES_TO_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
         ENDS_AT: "timestamp"
         STARTS_AT: "timestamp"
-    order_data:
-      +column_types:
-        SHIPPED_DATE: "timestamp"
-        SHIPPING_DATE: "timestamp"
     orders_data:
       +column_types:
         SHIPPED_DATE: "timestamp"

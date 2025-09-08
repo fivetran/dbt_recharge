@@ -31,9 +31,11 @@ final as (
         usage_limits,
         applies_to,
         applies_to_resource,
-        applies_to_id,
         applies_to_product_type,
         minimum_order_amount
+
+        {{ fivetran_utils.fill_pass_through_columns('recharge__discount_passthrough_columns') }}
+
     from fields
 )
 

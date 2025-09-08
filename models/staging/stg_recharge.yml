@@ -364,8 +364,6 @@ models:
         description: Indicates where the discount applies.
       - name: applies_to_resource
         description: An indicator of the type of resource which applies_to_id refers.
-      - name: applies_to_id
-        description: A list of ids of the type indicated in applies_to_resource for which the discount can be applied.
       - name: applies_to_product_type
         description: Indicates which product types the discount applies to.
       - name: minimum_order_amount

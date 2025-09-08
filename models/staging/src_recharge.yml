@@ -389,8 +389,6 @@ sources:
             description: Indicates where the discount applies.
           - name: applies_to_resource
             description: An indicator of the type of resource which applies_to_id refers.
-          - name: applies_to_id
-            description: A list of ids of the type indicated in applies_to_resource for which the discount can be applied.
           - name: applies_to_product_type
             description: Indicates which product types the discount applies to.
           - name: minimum_order_amount
@@ -437,60 +435,7 @@ sources:
           - name: _fivetran_synced
             description: "{{ doc('_fivetran_synced') }}"
 
-      - name: order # applies to connectors created before 2024-06-18
-        identifier: >
-          {%- if target.type == 'snowflake' -%} {{ var('recharge_order_identifier', 'ORDER') }} 
-          {%- else -%} {{ var('recharge_order_identifier', 'order') }} {%- endif -%}
-        quoting:
-          identifier: true
-        description: Table of all orders after a charge is successfully processed.
-        columns:
-          - name: id
-            description: "{{ doc('order_id') }}"
-          - name: customer_id
-            description: "{{ doc('customer_id') }}"
-          - name: address_id
-            description: "{{ doc('address_id') }}"
-          - name: charge_id
-            description: The unique numeric identifier of the charge.
-          - name: is_deleted
-            description: This column has been deprecated as of July 2025 in favor of the `_fivetran_deleted` column. Boolean indicating if the order (record) is deleted.
-          - name: _fivetran_deleted
-            description: "{{ doc('_fivetran_deleted') }}"
-          - name: created_at
-            description: The date and time when the order was created.
-          - name: email
-            description: The email address of the customer.
-          - name: transaction_id
-            description: The unique alphanumeric identifier of the transaction.
-          - name: charge_status
-            description:  "{{ doc('charge_status') }}"
-          - name: is_prepaid
-            description:  Boolean indicating if the Order is prepaid.
-          - name: status
-            description:  "{{ doc('order_status') }}"
-          - name: total_price
-            description: The sum of all prices of the item in the order with taxes and discounts included (must be positive).
-          - name: type
-            description: "{{ doc('type') }}"
-          - name: external_order_id_ecommerce
-            description: Unique numeric identifier within your external ecommerce platform for the order.
-          - name: external_order_number_ecommerce
-            description: The unique order number within your external ecommerce platform.
-          - name: created_at
-            description: The date and time when the order was created.
-          - name: updated_at
-            description: The date and time when the order was last updated.
-          - name: processed_at
-            description: The date and time when the order was submitted. 
-          - name: scheduled_at
-            description: The date and time when the order will be shipped.
-          - name: shipped_date
-            description: The date when the order will be processed.
-          - name: _fivetran_synced
-            description: "{{ doc('_fivetran_synced') }}"
-
-      - name: orders # applies to connectors created on or after 2024-06-18
+      - name: orders
         identifier: "{{ var('recharge_orders_identifier', 'orders') }}"
         description: Table of all orders after a charge is successfully processed.
         columns:
