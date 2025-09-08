@@ -111,7 +111,6 @@ seeds:
         UPDATED_AT: "timestamp"
         SUBTOTAL_PRICE: "float"
         TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
-        _FIVETRAN_SYNCED: "timestamp"
 
     customer_data:
       +column_types:
@@ -155,16 +154,24 @@ seeds:
         PROCESSED_AT: "timestamp"
         SCHEDULED_AT: "timestamp"
         SHIPPED_DATE: "timestamp"
-        SHIPPING_DATE: "timestamp"
         TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
         IS_PREPAID: boolean
         _FIVETRAN_SYNCED: "timestamp"
 
     order_bool_int_data:
       +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        PROCESSED_AT: "timestamp"
+        SCHEDULED_AT: "timestamp"
         SHIPPED_DATE: "timestamp"
-        SHIPPING_DATE: "timestamp"
-        IS_PREPAID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
+        IS_PREPAID: boolean
+        _FIVETRAN_SYNCED: "timestamp"
 
     order_line_item_data:
       +column_types:
