@@ -1,4 +1,15 @@
 # dbt_recharge v1.0.0
+[PR #35](https://github.com/fivetran/dbt_recharge/pull/35) includes the following updates:
+
+## Schema/Data Changes
+
+**__ total changes • 0 possible breaking changes**
+| **Data Model/Column** | **Change type** | **Old** | **New** | **Notes** |
+| --------------------- | --------------- | ------- |-------- | --------- |
+| [`stg_recharge__discount`](https://fivetran.github.io/dbt_recharge/#!/model/model.zendesk.stg_recharge__discount) | Removed column | `applies_to_id` | | Removed to avoid JSON vs. string issues in the source, but can be added back via var `recharge__discount_passthrough_columns`. See pass through vars readme section for details how to use.
+| `ORDER` | Removed source | | | Sunset in favor of `ORDERS`, which is used in all connectors now. ORDERS was previously introduced in coalesced with ORDER, but now is unnecessary. |
+
+# dbt_recharge v1.0.0
 
 [PR #34](https://github.com/fivetran/dbt_recharge/pull/34) includes the following updates:
 

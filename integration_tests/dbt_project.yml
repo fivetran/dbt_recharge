@@ -1,7 +1,7 @@
 config-version: 2
 
 name: 'recharge_integration_tests'
-version: '1.0.0'
+version: '1.1.0'
 
 profile: 'integration_tests' 
 
@@ -39,53 +39,168 @@ seeds:
     show: False
   +quote_columns: "{{ true if target.type == 'redshift' else false }}"
   recharge_integration_tests:
-    +column_types:
-      _FIVETRAN_SYNCED: "timestamp"
-      CANCELLED_AT: "timestamp"
-      CREATED_AT: "timestamp"
-      PROCESSED_AT: "timestamp"
-      NEXT_CHARGE_SCHEDULED_AT: "timestamp"
-      SCHEDULED_AT: "timestamp"
-      SUBTOTAL_PRICE: "float"
-      TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
-      UPDATED_AT: "timestamp"
-      ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      DISCOUNT_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      SUBSCRIPTION_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-      COMPANY: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
+    address_data:
+      +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        COMPANY: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    address_discounts_data:
+      +column_types:
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    address_shipping_line_data:
+      +column_types:
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
     charge_data:
       +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        PROCESSED_AT: "timestamp"
+        SCHEDULED_AT: "timestamp"
+        SUBTOTAL_PRICE: "float"
+        TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
         LAST_CHARGE_ATTEMPT_DATE: "timestamp"
         RETRY_DATE: "timestamp"
+        _FIVETRAN_SYNCED: "timestamp"
+
     charge_discount_data:
       +column_types:
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
         VALUE: "float"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    charge_line_item_data:
+      +column_types:
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    charge_order_attribute_data:
+      +column_types:
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    charge_shipping_line_data:
+      +column_types:
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    charge_tax_line_data:
+      +column_types:
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
     checkout_data:
       +column_types:
         COMPLETED_AT: "timestamp"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        SUBTOTAL_PRICE: "float"
+        TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
     customer_data:
       +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
         FIRST_CHARGE_PROCESSED_AT: "timestamp"
+        _FIVETRAN_SYNCED: "timestamp"
+
     discount_data:
       +column_types:
-        APPLIES_TO_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
-        ENDS_AT: "timestamp"
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
         STARTS_AT: "timestamp"
+        ENDS_AT: "timestamp"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        APPLIES_TO_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    one_time_product_data:
+      +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        NEXT_CHARGE_SCHEDULED_AT: "timestamp"
+        PRICE: "float"
+        EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
     orders_data:
       +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CHARGE_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        PROCESSED_AT: "timestamp"
+        SCHEDULED_AT: "timestamp"
         SHIPPED_DATE: "timestamp"
         SHIPPING_DATE: "timestamp"
+        TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
         IS_PREPAID: boolean
+        _FIVETRAN_SYNCED: "timestamp"
+
     order_bool_int_data:
       +column_types:
         SHIPPED_DATE: "timestamp"
         SHIPPING_DATE: "timestamp"
         IS_PREPAID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+
+    order_line_item_data:
+      +column_types:
+        ORDER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        TOTAL_PRICE: "{{ 'string' if target.name in ['bigquery', 'spark', 'databricks'] else 'varchar' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    subscription_data:
+      +column_types:
+        ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        UPDATED_AT: "timestamp"
+        CANCELLED_AT: "timestamp"
+        NEXT_CHARGE_SCHEDULED_AT: "timestamp"
+        PRICE: "float"
+        EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
+
+    subscription_history_data:
+      +column_types:
+        SUBSCRIPTION_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        UPDATED_AT: "timestamp"
+        ADDRESS_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CUSTOMER_ID: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        CREATED_AT: "timestamp"
+        CANCELLED_AT: "timestamp"
+        NEXT_CHARGE_SCHEDULED_AT: "timestamp"
+        PRICE: "float"
+        EXTERNAL_PRODUCT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        EXTERNAL_VARIANT_ID_ECOMMERCE: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+        _FIVETRAN_SYNCED: "timestamp"
 flags:
   send_anonymous_usage_stats: False
   use_colors: True
