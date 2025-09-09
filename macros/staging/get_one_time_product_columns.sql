@@ -5,7 +5,6 @@
     {"name": "id", "datatype": dbt.type_int()},
     {"name": "address_id", "datatype": dbt.type_int()},
     {"name": "customer_id", "datatype": dbt.type_int()},
-    {"name": "is_deleted", "datatype": dbt.type_boolean()},
     {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "updated_at", "datatype": dbt.type_timestamp()},
     {"name": "next_charge_scheduled_at", "datatype": dbt.type_timestamp()},

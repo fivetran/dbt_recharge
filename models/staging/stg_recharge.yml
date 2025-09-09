@@ -381,8 +381,6 @@ models:
         description: The unique identifier of the address. Cannot be used with `next_charge_scheduled_at`.
       - name: customer_id
         description: Unique numeric identifier for the customer the onetime purchase is tied to.
-      - name: is_deleted
-        description: This column has been deprecated as of July 2025 in favor of the `_fivetran_deleted` column. Boolean indicating if the onetime is deleted.
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
       - name: one_time_created_at
@@ -448,8 +446,6 @@ models:
         description: The date when the order will be processed.
       - name: address_id
         description: "{{ doc('address_id') }}"
-      - name: is_deleted
-        description: This column has been deprecated as of July 2025 in favor of the `_fivetran_deleted` column. Boolean indicating if the order (record) is deleted.
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
 

@@ -408,8 +408,6 @@ sources:
             description: The unique identifier of the address. Cannot be used with `next_charge_scheduled_at`.
           - name: customer_id
             description: "{{ doc('customer_id') }}"
-          - name: is_deleted
-            description: This column has been deprecated as of July 2025 in favor of the `_fivetran_deleted` column. Boolean indicating if the onetime is deleted.
           - name: _fivetran_deleted
             description: "{{ doc('_fivetran_deleted') }}"
           - name: created_at
@@ -447,8 +445,6 @@ sources:
             description: "{{ doc('address_id') }}"
           - name: charge_id
             description: The unique numeric identifier of the charge.
-          - name: is_deleted
-            description: Boolean indicating if the order (record) is deleted.
           - name: email
             description: The email address of the customer.
           - name: transaction_id
@@ -478,6 +474,8 @@ sources:
           - name: shipped_date
             description: The date when the order will be processed.
           - name: _fivetran_synced
+            description: "{{ doc('_fivetran_synced') }}"
+          - name: _fivetran_deleted
             description: "{{ doc('_fivetran_synced') }}"
 
       - name: order_line_item
