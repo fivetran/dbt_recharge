@@ -13,10 +13,11 @@
     {"name": "usage_limits", "datatype": dbt.type_int()},
     {"name": "applies_to", "datatype": dbt.type_string()},
     {"name": "applies_to_resource", "datatype": dbt.type_string()},
-    {"name": "applies_to_id", "datatype": dbt.type_int()},
     {"name": "applies_to_product_type", "datatype": dbt.type_string()},
     {"name": "minimum_order_amount", "datatype": dbt.type_int()}
 ] %}
+
+{{ fivetran_utils.add_pass_through_columns(columns, var('recharge__discount_passthrough_columns')) }}
 
 {{ return(columns) }}
 

@@ -38,7 +38,6 @@ final as (
         cast(scheduled_at as {{ dbt.type_timestamp() }}) as order_scheduled_at,
         cast(shipped_date as {{ dbt.type_timestamp() }}) as order_shipped_date,
         address_id,
-        is_deleted, --Deprecated in favor of the _fivetran_deleted column.
         _fivetran_deleted
 
         {{ fivetran_utils.fill_pass_through_columns('recharge__order_passthrough_columns') }}

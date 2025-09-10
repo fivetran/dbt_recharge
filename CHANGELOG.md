@@ -1,3 +1,22 @@
+# dbt_recharge v1.1.0
+This release aligns with the [Fivetran Recharge Connector August 2025](https://fivetran.com/docs/changelog/2025/august-2025#recharge) updates. [PR #35](https://github.com/fivetran/dbt_recharge/pull/35) includes the following updates:
+
+## Schema/Data Changes
+
+**3 total changes • 3 possible breaking changes**
+| **Data Model/Column** | **Change type** | **Old** | **New** | **Notes** |
+| --------------------- | --------------- | ------- |-------- | --------- |
+| `ORDER` | Source removed | | | Sunset in favor of `ORDERS`, which is now standard across all connections. |
+| [`stg_recharge__discount`](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.stg_recharge__discount) | Column removed | `applies_to_id` | | Removed due to inconsistent data types (JSON vs. string) in the source. It can be re-enabled via the newly added `recharge__discount_passthrough_columns` variable. See the [Passing Through Additional Columns](https://github.com/fivetran/dbt_recharge/blob/main/README.md#passing-through-additional-columns) section in the README for usage details. |
+| [`stg_recharge__one_time_product`](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.stg_recharge__one_time_product)<br>[`stg_recharge__order`](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.stg_recharge__order)<br>[`recharge__billing_history`](https://fivetran.github.io/dbt_recharge/#!/model/model.re-0charge.recharge__billing_history) | Column removed | `is_deleted` | | Removed deprecated column. The same information is already captured in `_fivetran_deleted`. |
+
+## Documentation
+- Removed deprecated source and columns from documentation.
+
+## Under the Hood
+- Removed deprecated source and columns from testing seed files.
+- Removed deprecated source and columns from `get_*_column` macros.
+
 # dbt_recharge v1.0.0
 
 [PR #34](https://github.com/fivetran/dbt_recharge/pull/34) includes the following updates:

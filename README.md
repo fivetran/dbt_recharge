@@ -64,7 +64,7 @@ Include the following recharge package version in your `packages.yml` file.
 ```yaml
 packages:
   - package: fivetran/recharge
-    version: [">=1.0.0", "<1.1.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=1.1.0", "<1.2.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/recharge_source` in your `packages.yml` since this package has been deprecated.
 
@@ -106,15 +106,6 @@ vars:
   recharge__standardized_billing_model_enabled: false # true by default.
 ```
 
-#### Leveraging `orders` vs `order` source
-For Fivetran Recharge connections created on or after June 18, 2024, the `ORDER` source table has been renamed to `ORDERS`. Refer to the [June 2024 connector release notes](https://fivetran.com/docs/connectors/applications/recharge/changelog#june2024) for more information.
-
-The package will default to use the `ORDERS` table if it exists and then `ORDER` if not. If you have both versions but wish to use the `ORDER` table instead, you can set the variable `recharge__using_orders` to false in your `dbt_project.yml` file.
-```yml
-vars:
-  recharge__using_orders: false # default is true, which will use the `orders` version of the source.
-```
-
 #### Setting the date range
 By default, the models `customer_daily_rollup` and `monthly_recurring_revenue` will aggregate data for the entire date range of your data set. However, you may limit this date range if desired by defining the following variables. You do not need to set both if you only want to limit one.
 ```yml
@@ -136,6 +127,7 @@ vars:
     recharge__charge_passthrough_columns:
     recharge__charge_line_item_passthrough_columns:
     recharge__checkout_passthrough_columns:
+    recharge__discount_passthrough_columns:
     recharge__order_passthrough_columns:
     recharge__order_line_passthrough_columns:
     recharge__subscription_passthrough_columns:
