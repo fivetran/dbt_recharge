@@ -76,3 +76,5 @@ models:
         description: "Country of the customer's address."
       - name: fee_amount
         description: "Shipping fees associated with the charge."
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"

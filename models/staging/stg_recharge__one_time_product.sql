@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_one_time_product_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
-    
+
     select
+        source_relation,
         id as one_time_product_id,
         address_id,
         customer_id,

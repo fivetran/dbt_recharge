@@ -1,20 +1,22 @@
+-- depends_on: {{ ref('stg_recharge__charge_tmp') }}
+
 with spine as (
-    
+
     {# Calculates first and last dates if at least one is not manually set #}
     {% if execute %}
         {% if not var('recharge_first_date', None) or not var('recharge_last_date', None) %}
             {% set date_query %}
-                select  
+                select
                     cast(min(created_at) as {{ dbt.type_timestamp() }}) as min_date,
-                    cast(max(created_at) as {{ dbt.type_timestamp() }}) as max_date 
-                from {{ source('recharge','charge') }}
+                    cast(max(created_at) as {{ dbt.type_timestamp() }}) as max_date
+                from {{ ref('stg_recharge__charge_tmp') }}
                 {% endset %}
             {% set calc_first_date = run_query(date_query).columns[0][0]|string %}
             {% set calc_last_date = run_query(date_query).columns[1][0]|string %}
         {% endif %}
 
     {# If only compiling, creates range going back 1 year #}
-    {% else %} 
+    {% else %}
         {% set calc_first_date = dbt.dateadd("year", "-1", "current_date") %}
         {% set calc_last_date = dbt.current_timestamp_backcompat() %}
 

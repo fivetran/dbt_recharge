@@ -1,5 +1,5 @@
 
-with base as (
+with base as ( 
 
     select *
     from {{ ref('stg_recharge__subscription_history_tmp') }}
@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_subscription_history_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         coalesce(cast(id as {{ dbt.type_int() }}), cast(subscription_id as {{ dbt.type_int() }})) as subscription_id,
         customer_id,
         address_id,
@@ -43,7 +45,7 @@ final as (
         cast(cancelled_at as {{ dbt.type_timestamp() }}) as subscription_cancelled_at,
         cancellation_reason,
         cancellation_reason_comments,
-        _fivetran_synced
+        cast(_fivetran_synced as {{ dbt.type_timestamp() }}) as _fivetran_synced
 
         {{ fivetran_utils.fill_pass_through_columns('recharge__subscription_history_passthrough_columns') }}
 

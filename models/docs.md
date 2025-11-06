@@ -49,3 +49,11 @@ The status of the subscription. Possible values are ACTIVE, CANCELLED, EXPIRED.
 {% docs type %}
 Possible values are CHECKOUT, RECURRING.
 {% enddocs %}
+
+{% docs discount_id %}
+The unique identifier of the discount.
+{% enddocs %}
+
+{% docs source_relation %}
+Identifies the record's source.
+{% enddocs %}

@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_order_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         id as order_id,
         external_order_id_ecommerce,
         external_order_number_ecommerce,

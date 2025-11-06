@@ -3,7 +3,8 @@ with charges as (
     from {{ ref('stg_recharge__charge') }}
 
 ), charge_line_items as (
-    select 
+    select
+        source_relation,
         charge_id,
         index,
         cast(total_price as {{ dbt.type_float() }}) as amount,
@@ -13,6 +14,7 @@ with charges as (
 
 ), discounts as (
     select
+        source_relation,
         charge_id,
         0 as index,
         cast(total_discounts as {{ dbt.type_float() }}) as amount,
@@ -22,7 +24,8 @@ with charges as (
     where total_discounts > 0
 
 ), charge_shipping_lines as (
-    select 
+    select
+        source_relation,
         charge_id,
         index,
         cast(price as {{ dbt.type_float() }}) as amount,
@@ -32,15 +35,17 @@ with charges as (
 
 ), charge_tax_lines as (
     {% if var('recharge__charge_tax_line_enabled', true) %}
-        select 
+        select
+            source_relation,
             charge_id,
             index,
             cast(price as {{ dbt.type_float() }}) as amount,
             title,
             'tax' as line_item_type
         from {{ ref('stg_recharge__charge_tax_line') }} -- use this if possible since it is individual tax items
-    {% else %} 
+    {% else %}
         select
+            source_relation,
             charge_id,
             index,
             cast(tax_due as {{ dbt.type_float() }}) as amount,
@@ -52,6 +57,7 @@ with charges as (
 
 ), refunds as (
     select
+        source_relation,
         charge_id,
         0 as index,
         cast(total_refunds as {{ dbt.type_float() }}) as amount,
@@ -76,16 +82,17 @@ with charges as (
     union all
     select *
     from charge_tax_lines
-    
+
     union all
     select *
     from refunds
 
 ), joined as (
     select
+        unioned.source_relation,
         unioned.charge_id,
-        row_number() over(partition by unioned.charge_id 
-            order by unioned.line_item_type, unioned.index) 
+        row_number() over(partition by unioned.charge_id{{ recharge.partition_by_source_relation(alias='unioned') }}
+            order by unioned.line_item_type, unioned.index)
             as charge_row_num,
         unioned.index as source_index,
         charges.charge_created_at,
@@ -97,6 +104,7 @@ with charges as (
     from unioned
     left join charges
         on charges.charge_id = unioned.charge_id
+        and charges.source_relation = unioned.source_relation
 )
 
 select *

@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_subscription_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         id as subscription_id,
         customer_id,
         address_id,

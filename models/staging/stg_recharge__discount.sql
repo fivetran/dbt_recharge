@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_discount_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         id as discount_id,
         cast(created_at as {{ dbt.type_timestamp() }}) as discount_created_at,
         cast(updated_at as {{ dbt.type_timestamp() }}) as discount_updated_at,

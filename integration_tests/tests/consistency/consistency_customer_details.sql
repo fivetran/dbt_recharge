@@ -3,13 +3,15 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
+{% set exclude_cols = ['_fivetran_deleted'] + var('consistency_test_exclude_metrics', []) %}
+
 with prod as (
-    select {{ dbt_utils.star(from=ref('recharge__customer_details'), except=['_fivetran_deleted']) }}
+    select {{ dbt_utils.star(from=ref('recharge__customer_details'), except=exclude_cols) }}
     from {{ target.schema }}_recharge_prod.recharge__customer_details
 ),
 
 dev as (
-    select {{ dbt_utils.star(from=ref('recharge__customer_details'), except=['_fivetran_deleted']) }}
+    select {{ dbt_utils.star(from=ref('recharge__customer_details'), except=exclude_cols) }}
     from {{ target.schema }}_recharge_dev.recharge__customer_details
 ), 
 

@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_charge_shipping_line_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         charge_id,
         index,
         price,

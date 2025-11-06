@@ -1,20 +1,21 @@
 with subscriptions as (
 
-    select * 
+    select *
     from {{ ref('stg_recharge__subscription_history') }}
     where is_most_recent_record
 
 ), charges as (
-    select * 
+    select *
     from {{ ref('stg_recharge__charge') }}
     where lower(charge_type) = 'recurring'
 
 ), charge_line_items as (
-    select * 
+    select *
     from {{ ref('stg_recharge__charge_line_item') }}
 
 ), customers_charge_lines as (
-    select 
+    select
+        charge_line_items.source_relation,
         charge_line_items.charge_id,
         charge_line_items.purchase_item_id,
         charge_line_items.external_product_id_ecommerce,
@@ -26,20 +27,23 @@ with subscriptions as (
     from charge_line_items
     left join charges
         on charges.charge_id = charge_line_items.charge_id
+        and charges.source_relation = charge_line_items.source_relation
 
 ), subscriptions_charges as (
-    select 
+    select
+        subscriptions.source_relation,
         subscriptions.subscription_id,
-        count(case when lower(customers_charge_lines.charge_status) = 'success' 
+        count(case when lower(customers_charge_lines.charge_status) = 'success'
             then 1 else null
             end) as count_successful_charges,
-        count(case when lower(customers_charge_lines.charge_status) = 'queued' 
+        count(case when lower(customers_charge_lines.charge_status) = 'queued'
             then 1 else null
             end) as count_queued_charges
     from subscriptions
     left join customers_charge_lines
         on customers_charge_lines.purchase_item_id = subscriptions.subscription_id
-    group by 1
+        and customers_charge_lines.source_relation = subscriptions.source_relation
+    group by 1, 2
 
 ), subscriptions_enriched as (
     select
@@ -52,12 +56,13 @@ with subscriptions as (
             end as charges_until_expiration,
         case when lower(order_interval_unit) = 'month' then charge_interval_frequency * 30
             when lower(order_interval_unit) = 'week' then charge_interval_frequency * 7
-            else charge_interval_frequency 
+            else charge_interval_frequency
             end as charge_interval_frequency_days
     from subscriptions
     left join subscriptions_charges
         on subscriptions_charges.subscription_id = subscriptions.subscription_id
+        and subscriptions_charges.source_relation = subscriptions.source_relation
 )
 
-select * 
+select *
 from subscriptions_enriched
