@@ -7,6 +7,7 @@ profile: 'integration_tests'
 
 models:
   +schema: "recharge_{{ var('directed_schema','dev') }}"  ## To be used for validation tests
+  
 vars:
   # recharge__checkout_enabled: true # @docs-include
   recharge:
