@@ -91,7 +91,7 @@ with charges as (
     select
         unioned.source_relation,
         unioned.charge_id,
-        row_number() over(partition by unioned.charge_id{{ recharge.partition_by_source_relation(alias='unioned') }}
+        row_number() over(partition by unioned.charge_id {{ recharge.partition_by_source_relation(alias='unioned') }}
             order by unioned.line_item_type, unioned.index)
             as charge_row_num,
         unioned.index as source_index,

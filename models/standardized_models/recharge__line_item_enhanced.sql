@@ -48,7 +48,7 @@ with charge_line_items as (
         charge_line_items.source_relation,
         cast(charge_line_items.charge_id as {{ dbt.type_string() }}) as header_id,
         cast(charge_line_items.index as {{ dbt.type_string() }}) as line_item_id,
-        row_number() over (partition by charge_line_items.charge_id{{ recharge.partition_by_source_relation(alias='charge_line_items') }}
+        row_number() over (partition by charge_line_items.charge_id {{ recharge.partition_by_source_relation(alias='charge_line_items') }}
             order by charge_line_items.index) as line_item_index,
 
         -- header level fields

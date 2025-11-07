@@ -59,7 +59,7 @@ with spine as (
     select
         *,
         {% for col_name in cols %}
-            round(cast(sum({{col_name}}_realized) over (partition by customer_id{{ recharge.partition_by_source_relation() }} order by date_day asc
+            round(cast(sum({{col_name}}_realized) over (partition by customer_id {{ recharge.partition_by_source_relation() }} order by date_day asc
                 rows unbounded preceding) as {{ dbt.type_numeric() }}), 2)
                 as {{col_name}}_running_total
             {{ ',' if not loop.last -}}
