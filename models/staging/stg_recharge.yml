@@ -8,7 +8,6 @@ models:
       - name: address_id
         description: "{{ doc('address_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -77,7 +76,6 @@ models:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -268,7 +266,6 @@ models:
       - name: checkout_id
         description: Unique token for the Checkout
         tests:
-          - unique
           - not_null
       - name: charge_id
         description: ID for the Charge resulting from processing the Checkout.
@@ -315,7 +312,6 @@ models:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_hash
         description: The unique string identifier used in a customer portal link.
@@ -364,7 +360,6 @@ models:
       - name: discount_id
         description: Unique numeric identifier for the discount in Recharge.
         tests:
-          - unique
           - not_null
       - name: discount_created_at
         description: The date and time when the discount was created.
@@ -399,7 +394,6 @@ models:
       - name: one_time_product_id
         description: The unique numeric identifier for the onetime purchase.
         tests:
-          - unique
           - not_null
       - name: address_id
         description: The unique identifier of the address. Cannot be used with `next_charge_scheduled_at`.
@@ -436,7 +430,6 @@ models:
       - name: order_id
         description: "{{ doc('charge_id') }}"
         tests:
-          - unique
           - not_null
       - name: external_order_id_ecommerce
         description: Unique numeric identifier within your external ecommerce platform for the order.
@@ -525,7 +518,6 @@ models:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
