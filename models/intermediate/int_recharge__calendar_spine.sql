@@ -1,5 +1,3 @@
--- depends_on: {{ ref('stg_recharge__charge_tmp') }}
-
 with spine as (
 
     {# Calculates first and last dates if at least one is not manually set #}
@@ -9,7 +7,7 @@ with spine as (
                 select
                     cast(min(created_at) as {{ dbt.type_timestamp() }}) as min_date,
                     cast(max(created_at) as {{ dbt.type_timestamp() }}) as max_date
-                from {{ ref('stg_recharge__charge_tmp') }}
+                from {{ source('recharge','charge') }}
                 {% endset %}
             {% set calc_first_date = run_query(date_query).columns[0][0]|string %}
             {% set calc_last_date = run_query(date_query).columns[1][0]|string %}
