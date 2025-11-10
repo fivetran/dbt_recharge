@@ -54,7 +54,4 @@ final as (
 
 select
     *,
-    row_number() over(partition by fields.subscription_id{{ 
-recharge.partition_by_source_relation() }} 
-    order by subscription_updated_at desc) = 1 
-    as is_most_recent_record
+    row_number() over (partition by subscription_id {{ recharge.partition_by_source_relation() }} order by subscription_updated_at desc) = 1 as is_most_recent_record
