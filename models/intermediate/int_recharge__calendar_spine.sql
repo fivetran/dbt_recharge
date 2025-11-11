@@ -15,6 +15,7 @@ with spine as (
             from {{ ref('stg_recharge__charge_tmp') }}
         {% endset -%}
 
+    {# If only compiling, creates range going back 1 year #}
     {% else %}
         {%- set first_date_query %}
             select cast({{ dbt.dateadd("year", -1, dbt.current_timestamp() ) }} as date) as min_date
