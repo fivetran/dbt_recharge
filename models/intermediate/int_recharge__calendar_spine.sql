@@ -1,5 +1,6 @@
 -- depends_on: {{ ref('stg_recharge__charge_tmp') }}
 with spine as (
+
     {# Calculates first and last dates if at least one is not manually set #}
     {% if execute and flags.WHICH in ('run', 'build') and (not var('recharge_first_date', None) or not var('recharge_last_date', None)) %}
         {%- set first_date_query %}
