@@ -3,17 +3,18 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
-{% set exclude_cols = ['_fivetran_deleted'] + var('consistency_test_exclude_metrics', []) %}
+{% set exclude_cols = var('consistency_test_exclude_metrics', []) %}
 
+-- this test ensures the recharge__customer_daily_rollup end model matches the prior version
 with prod as (
-    select {{ dbt_utils.star(from=ref('recharge__billing_history'), except=exclude_cols) }}
-    from {{ target.schema }}_recharge_prod.recharge__billing_history
+    select {{ dbt_utils.star(from=ref('recharge__customer_daily_rollup'), except=exclude_cols) }}
+    from {{ target.schema }}_recharge_prod.recharge__customer_daily_rollup
 ),
 
 dev as (
-    select {{ dbt_utils.star(from=ref('recharge__billing_history'), except=exclude_cols) }}
-    from {{ target.schema }}_recharge_dev.recharge__billing_history
-), 
+    select {{ dbt_utils.star(from=ref('recharge__customer_daily_rollup'), except=exclude_cols) }}
+    from {{ target.schema }}_recharge_dev.recharge__customer_daily_rollup
+),
 
 prod_not_in_dev as (
     -- rows from prod not found in dev

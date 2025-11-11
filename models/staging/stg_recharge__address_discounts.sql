@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_address_discounts_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         id as discount_id,
         address_id,
         index

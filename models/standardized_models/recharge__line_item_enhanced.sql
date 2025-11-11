@@ -2,21 +2,22 @@
 
 with charge_line_items as (
 
-    select * 
+    select *
     from {{ ref('stg_recharge__charge_line_item') }}
 
 ), charges as (
 
-    select * 
+    select *
     from {{ ref('stg_recharge__charge') }}
 
 ), charge_shipping_lines as (
 
     select
+        source_relation,
         charge_id,
         sum(price) as total_shipping
     from {{ ref('stg_recharge__charge_shipping_line') }}
-    group by 1
+    group by 1, 2
 
 {% if var('recharge__checkout_enabled', false) %}
 ), checkouts as (
@@ -28,25 +29,26 @@ with charge_line_items as (
 
 ), addresses as (
 
-    select * 
+    select *
     from {{ ref('stg_recharge__address') }}
 
 ), customers as (
 
-    select * 
+    select *
     from {{ ref('stg_recharge__customer') }}
 
 ), subscriptions as (
 
     select *
-    from {{ ref('stg_recharge__subscription_history') }} 
+    from {{ ref('stg_recharge__subscription_history') }}
     where is_most_recent_record
 
 ), enhanced as (
     select
+        charge_line_items.source_relation,
         cast(charge_line_items.charge_id as {{ dbt.type_string() }}) as header_id,
         cast(charge_line_items.index as {{ dbt.type_string() }}) as line_item_id,
-        row_number() over (partition by charge_line_items.charge_id
+        row_number() over (partition by charge_line_items.charge_id {{ recharge.partition_by_source_relation(alias='charge_line_items') }}
             order by charge_line_items.index) as line_item_index,
 
         -- header level fields
@@ -107,28 +109,35 @@ with charge_line_items as (
 
     left join charges
         on charges.charge_id = charge_line_items.charge_id
+        and charges.source_relation = charge_line_items.source_relation
 
     left join addresses
         on addresses.address_id = charges.address_id
+        and addresses.source_relation = charges.source_relation
 
     left join customers
         on customers.customer_id = charges.customer_id
+        and customers.source_relation = charges.source_relation
 
     {% if var('recharge__checkout_enabled', false) %}
     left join checkouts
         on checkouts.charge_id = charges.charge_id
+        and checkouts.source_relation = charges.source_relation
     {% endif %}
 
     left join charge_shipping_lines
         on charge_shipping_lines.charge_id = charges.charge_id
+        and charge_shipping_lines.source_relation = charges.source_relation
 
     left join subscriptions
         on subscriptions.subscription_id = charge_line_items.purchase_item_id
+        and subscriptions.source_relation = charge_line_items.source_relation
 
 ), final as (
 
     -- line item level
-    select 
+    select
+        source_relation,
         header_id,
         line_item_id,
         line_item_index,
@@ -171,6 +180,7 @@ with charge_line_items as (
 
     -- header level
     select
+        source_relation,
         header_id,
         cast(null as {{ dbt.type_string() }}) as line_item_id,
         cast(0 as {{ dbt.type_int() }}) as line_item_index,

@@ -8,7 +8,6 @@ models:
       - name: address_id
         description: "{{ doc('address_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -36,6 +35,8 @@ models:
         description: The company name associated with the customer.
       - name: phone
         description: The phone number associated with the customer.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__address_discounts
     description: Table of all addresses and corresponding associated shipping information.
@@ -48,6 +49,8 @@ models:
         description: A unique numeric row produced for every concurrent address_id.
       - name: discount_id
         description: "{{ doc('discount_id') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__address_shipping_line
     description: Table of all addresses and corresponding associated shipping information.
@@ -61,9 +64,11 @@ models:
       - name: price
         description: The price of the shipping amount.
       - name: code
-        description: The type of the shipping, can contain geographical shipping information. 
+        description: The type of the shipping, can contain geographical shipping information.
       - name: title
         description: The type of shipping consignment.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__charge
     description: Table of all charges (financial transactions) linked to the purchase of an item. A charge is linked to a corresponding order, an order is created once the corresponding charge is successful.
@@ -71,7 +76,6 @@ models:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -139,6 +143,8 @@ models:
         description: The user agent detected during checkout.
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__charge_discount
     description: Table of all charge discount codes.
@@ -157,6 +163,8 @@ models:
         description: The discounted value to be applied.
       - name: value_type
         description: Possible values - FIXED_AMOUNT, PERCENTAGE, SHIPPING
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__charge_line_item
     description: Table of all charge line items, each containing information about a distinct purchase item.
@@ -199,6 +207,8 @@ models:
         description: The subscription or onetime ID associated with the line_item.
       - name: purchase_item_type
         description: Possible values are SUBSCRIPTION, ONETIME.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__charge_order_attribute
     description: Table of notes associated to their corresponding charges.
@@ -211,6 +221,8 @@ models:
         description: A unique numeric row produced for every concurrent charge_id.
       - name: order_attribute
         description: An array of name-value pairs of order attributes on the charge.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__charge_shipping_line
     description: Table of all shipping information associated to their corresponding charges.
@@ -227,6 +239,8 @@ models:
         description: The code associated with the shipping line of a charge.
       - name: title
         description: The title of the shipping line.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__charge_tax_line
     description: Table of tax line information associated to their corresponding charges.
@@ -243,6 +257,8 @@ models:
         description: The tax rate associated with the listed jurisdiction.
       - name: title
         description: The title/name of the taxing jurisdiction.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__checkout
     description: checkouts
@@ -250,7 +266,6 @@ models:
       - name: checkout_id
         description: Unique token for the Checkout
         tests:
-          - unique
           - not_null
       - name: charge_id
         description: ID for the Charge resulting from processing the Checkout.
@@ -288,6 +303,8 @@ models:
         description: Tax charged on the Checkout.
       - name: checkout_updated_at
         description: Timestamp for the latest Checkout update.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__customer
     description: Table of all customer details holding account and billing information. Email is unique on the customer, no two customers for a store can have the same email.
@@ -295,7 +312,6 @@ models:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_hash
         description: The unique string identifier used in a customer portal link.
@@ -335,6 +351,8 @@ models:
         description: Country associated with the billing details.
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__discount
     description: Table of discounts that can be applied to a checkout, or that can be directly applied to an address.
@@ -342,7 +360,6 @@ models:
       - name: discount_id
         description: Unique numeric identifier for the discount in Recharge.
         tests:
-          - unique
           - not_null
       - name: discount_created_at
         description: The date and time when the discount was created.
@@ -368,6 +385,8 @@ models:
         description: Indicates which product types the discount applies to.
       - name: minimum_order_amount
         description: The minimum cart subtotal needed for the discount to be applicable. `duration` has to be `single_use` and the discount must apply to the entire order.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__one_time_product
     description: Table of all one-times which represent non-recurring line items on a queued charges.
@@ -375,7 +394,6 @@ models:
       - name: one_time_product_id
         description: The unique numeric identifier for the onetime purchase.
         tests:
-          - unique
           - not_null
       - name: address_id
         description: The unique identifier of the address. Cannot be used with `next_charge_scheduled_at`.
@@ -403,6 +421,8 @@ models:
         description: The variant ID that links to your external ecommerce platform.
       - name: sku
         description: The unique identifier of the item in fulfillment.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__order
     description: Table of all orders after a charge is successfully processed.
@@ -410,7 +430,6 @@ models:
       - name: order_id
         description: "{{ doc('charge_id') }}"
         tests:
-          - unique
           - not_null
       - name: external_order_id_ecommerce
         description: Unique numeric identifier within your external ecommerce platform for the order.
@@ -448,6 +467,8 @@ models:
         description: "{{ doc('address_id') }}"
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__order_line_item
     description: Table of all order line items. Each line containing information about an item in the order.
@@ -488,6 +509,8 @@ models:
         description: The subscription or onetime ID associated with the line_item.
       - name: purchase_item_type
         description: Possible values are SUBSCRIPTION, ONETIME.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: stg_recharge__subscription
     description: Table of all subscriptions for the merchant. Subscriptions are individual items a customer receives on a recurring basis.
@@ -495,7 +518,6 @@ models:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
         tests:
-          - unique
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -541,7 +563,9 @@ models:
         description: Reason provided for cancellation.
       - name: cancellation_reason_comments
         description: Additional comment for cancellation.
-        
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+
   - name: stg_recharge__subscription_history
     description: History table that builds over time. Does not capture history prior to connecting Fivetran.
     columns:
@@ -597,3 +621,5 @@ models:
         description: Boolean indicating whether record was the most recent instance.
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"

@@ -6,7 +6,7 @@ with base as (
 ),
 
 fields as (
-    
+
     select
         {{
             fivetran_utils.fill_staging_columns(
@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_charge_line_item_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
-    
+
     select
+        source_relation,
         charge_id,
         index,
         vendor,

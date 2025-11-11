@@ -1,35 +1,40 @@
+-- depends_on: {{ ref('stg_recharge__charge_tmp') }}
 with spine as (
-    
+
     {# Calculates first and last dates if at least one is not manually set #}
-    {% if execute %}
-        {% if not var('recharge_first_date', None) or not var('recharge_last_date', None) %}
-            {% set date_query %}
-                select  
-                    cast(min(created_at) as {{ dbt.type_timestamp() }}) as min_date,
-                    cast(max(created_at) as {{ dbt.type_timestamp() }}) as max_date 
-                from {{ source('recharge','charge') }}
-                {% endset %}
-            {% set calc_first_date = run_query(date_query).columns[0][0]|string %}
-            {% set calc_last_date = run_query(date_query).columns[1][0]|string %}
-        {% endif %}
+    {% if execute and flags.WHICH in ('run', 'build') and (not var('recharge_first_date', None) or not var('recharge_last_date', None)) %}
+        {%- set first_date_query %}
+            select 
+                cast(min(created_at) as date) as min_date
+            from {{ ref('stg_recharge__charge_tmp') }}
+        {% endset -%}
+        
+        {%- set last_date_query %}
+            select 
+                cast(max(created_at) as date) as max_date
+            from {{ ref('stg_recharge__charge_tmp') }}
+        {% endset -%}
 
     {# If only compiling, creates range going back 1 year #}
-    {% else %} 
-        {% set calc_first_date = dbt.dateadd("year", "-1", "current_date") %}
-        {% set calc_last_date = dbt.current_timestamp_backcompat() %}
+    {% else %}
+        {%- set first_date_query %}
+            select cast({{ dbt.dateadd("year", -1, dbt.current_timestamp() ) }} as date) as min_date
+        {% endset -%}
 
+        {%- set last_date_query %}
+            select cast({{ dbt.current_timestamp() }} as date) as max_date
+        {% endset -%}
     {% endif %}
 
     {# Prioritizes variables over calculated dates #}
-    {% set first_date = var('recharge_first_date', calc_first_date)|string %}
-    {% set last_date = var('recharge_last_date', calc_last_date)|string %}
+    {%- set first_date = var('recharge_first_date', dbt_utils.get_single_value(first_date_query))|string %}
+    {%- set last_date = var('recharge_last_date', dbt_utils.get_single_value(last_date_query))|string %}
 
-{{ dbt_utils.date_spine(
-    datepart = "day",
-    start_date = "cast('" ~ first_date[0:10] ~ "'as date)",
-    end_date = "cast('" ~ last_date[0:10] ~ "'as date)"
-    )
-}}
+    {{ dbt_utils.date_spine(
+        datepart = "day",
+        start_date = "cast('" ~ first_date ~ "' as date)",
+        end_date = "cast('" ~ last_date ~ "' as date)"
+    ) }}
 )
 
 select *

@@ -1,13 +1,13 @@
 config-version: 2
 
 name: 'recharge_integration_tests'
-version: '1.1.0'
+version: '1.2.0'
 
 profile: 'integration_tests' 
 
 models:
   +schema: "recharge_{{ var('directed_schema','dev') }}"  ## To be used for validation tests
-
+ 
 vars:
   # recharge__checkout_enabled: true # @docs-include
   recharge:

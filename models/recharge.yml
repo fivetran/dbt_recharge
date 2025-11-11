@@ -6,9 +6,8 @@ models:
     columns:
       - name: order_id
         description: "{{ doc('order_id') }}"
-        tests: 
+        tests:
           - not_null
-          - unique
       - name: external_order_id_ecommerce
         description: The ID for the order in your external ecommerce platform.
       - name: external_order_number_ecommerce
@@ -95,6 +94,8 @@ models:
         description: The `total_net_charge_value` divided equally amongst all orders stemming from the same charge.
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: recharge__charge_line_item_history
     description: Each record represents a specific line item charge, refund, or other line item that accumulates into final charges.
@@ -119,6 +120,8 @@ models:
         description: The title of the line item.
       - name: line_item_type
         description: The type of the line item. Possible values are (charge line, discount, shipping, tax, or refund).
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: recharge__customer_daily_rollup
     description: Each record provides totals and running totals for a customer's associated transaction for the specified day.
@@ -199,15 +202,16 @@ models:
         description: The `charge_one_time_net_amount_realized` divided equally amongst all orders stemming from the same charge.
       - name: calculated_order_one_time_net_amount_running_total
         description: Running total of the net value of the calculated one-time order amount.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: recharge__customer_details
     description: Each record represents a customer, enriched with metrics about their associated transactions.
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
-        tests: 
+        tests:
           - not_null
-          - unique
       - name: customer_hash
         description: The unique string identifier used in a customer portal link.
       - name: external_customer_id_ecommerce
@@ -298,6 +302,8 @@ models:
         description: Country associated with the billing details.
       - name: _fivetran_deleted
         description: "{{ doc('_fivetran_deleted') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: recharge__monthly_recurring_revenue
     description: Each record represents a customer, MRR, and non-MRR generated on a monthly basis.
@@ -318,15 +324,16 @@ models:
         description: The current net monthly one-time revenue for the customer based on charges, taking into account discounts and refunds.
       - name: calculated_net_order_one_times
         description: The current net monthly one-time revenue for the customer based on orders, taking into account discounts and refunds. This is the one-time charges divided equally amongst all orders stemming from the same charge.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
 
   - name: recharge__subscription_overview
     description: Each record represents a subscription, enriched with customer and charge information.
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
-        tests: 
+        tests:
           - not_null
-          - unique
       - name: customer_id
         description: "{{ doc('customer_id') }}"
       - name: address_id
@@ -383,3 +390,5 @@ models:
         description: The number of days between charges for the subscription.
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"

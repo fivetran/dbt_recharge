@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_customer_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         id as customer_id,
         customer_hash,
         external_customer_id_ecommerce,

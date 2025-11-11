@@ -1,5 +1,5 @@
 
-with base as (
+with base as ( 
 
     select *
     from {{ ref('stg_recharge__subscription_history_tmp') }}
@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_subscription_history_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         coalesce(cast(id as {{ dbt.type_int() }}), cast(subscription_id as {{ dbt.type_int() }})) as subscription_id,
         customer_id,
         address_id,
@@ -52,5 +54,5 @@ final as (
 
 select
     *,
-    row_number() over (partition by subscription_id order by subscription_updated_at desc) = 1 as is_most_recent_record
+    row_number() over (partition by subscription_id {{ recharge.partition_by_source_relation() }} order by subscription_updated_at desc) = 1 as is_most_recent_record
 from final

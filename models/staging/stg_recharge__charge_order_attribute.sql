@@ -14,12 +14,14 @@ fields as (
                 staging_columns = get_charge_order_attribute_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         charge_id,
         index,
         order_attribute

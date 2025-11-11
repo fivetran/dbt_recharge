@@ -9,6 +9,7 @@ sources:
     loader: Fivetran
     config:
       loaded_at_field: _fivetran_synced
+      enabled: "{{ var('recharge_sources', []) == [] }}"
 
     tables:
       - name: address
@@ -256,7 +257,7 @@ sources:
         description: Table of tax line information associated to their corresponding charges.
         config:
           loaded_at_field: _fivetran_synced
-          enabled: "{{ var('recharge__charge_tax_line_enabled', true) }}"
+          enabled: "{{ var('recharge__charge_tax_line_enabled', true) and var('recharge_sources', []) == [] }}"
         columns:
           - name: charge_id
             description: "{{ doc('charge_id') }}"
@@ -275,7 +276,7 @@ sources:
         identifier: "{{ var('recharge_checkout_identifier','checkout') }}"
         description: Table of checkout information associated to the corresponding charges.
         config:
-          enabled: "{{ var('recharge__checkout_enabled', false) }}"
+          enabled: "{{ var('recharge__checkout_enabled', false) and var('recharge_sources', []) == [] }}"
         columns:
           - name: token
             description: Unique token for the Checkout
@@ -400,7 +401,7 @@ sources:
         identifier: "{{ var('recharge_one_time_product_identifier','one_time_product') }}"
         description: Table of all one-times which represent non-recurring line items on a queued charges.
         config:
-          enabled: "{{ var('recharge__one_time_product_enabled', true) }}"
+          enabled: "{{ var('recharge__one_time_product_enabled', true) and var('recharge_sources', []) == [] }}"
         columns:
           - name: id
             description: The unique numeric identifier for the onetime purchase.

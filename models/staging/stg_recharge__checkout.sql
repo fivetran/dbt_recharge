@@ -15,12 +15,14 @@ fields as (
                 staging_columns = get_checkout_columns()
             )
         }}
+        {{ recharge.apply_source_relation() }}
     from base
 ),
 
 final as (
 
     select
+        source_relation,
         token as checkout_id,
         charge_id,
         buyer_accepts_marketing,

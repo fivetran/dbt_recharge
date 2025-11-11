@@ -1,3 +1,9 @@
 {{ config(enabled=var('recharge__charge_tax_line_enabled', True)) }}
-select *
-from {{ var('charge_tax_line') }}
+
+{{
+    recharge.recharge_union_connections(
+        connection_dictionary='recharge_sources',
+        single_source_name='recharge',
+        single_table_name='charge_tax_line'
+    )
+}}

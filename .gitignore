@@ -71,3 +71,6 @@ env/
 env.bak/
 venv/
 venv.bak/
+
+# Claude instructions
+union_data_agents.md
