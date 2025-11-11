@@ -17,7 +17,7 @@ with spine as (
 
     {% else %}
         {%- set first_date_query %}
-            select cast({{ dbt.dateadd("month", -1, dbt.current_timestamp() ) }} as date) as min_date
+            select cast({{ dbt.dateadd("year", -1, dbt.current_timestamp() ) }} as date) as min_date
         {% endset -%}
 
         {%- set last_date_query %}
