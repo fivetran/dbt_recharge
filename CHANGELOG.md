@@ -14,6 +14,9 @@
 - Removes uniqueness tests. The new unioning feature requires combination-of-column tests to consider the new `source_relation` column in addition to the existing primary key, but this is not supported across dbt versions.
 - These tests will be reintroduced once a version-agnostic solution is available.
 
+## Under the Hood
+- Refactored `int_recharge__calendar_spine` to include compile-time guards and determine spine boundaries from `ref('stg_recharge__charge_tmp')` instead of direct source reference, enabling compatibility when unioning multiple sources.
+
 # dbt_recharge v1.1.0
 This release aligns with the [Fivetran Recharge Connector August 2025](https://fivetran.com/docs/changelog/2025/august-2025#recharge) updates. [PR #35](https://github.com/fivetran/dbt_recharge/pull/35) includes the following updates:
 

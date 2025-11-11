@@ -45,7 +45,7 @@ final as (
         cast(cancelled_at as {{ dbt.type_timestamp() }}) as subscription_cancelled_at,
         cancellation_reason,
         cancellation_reason_comments,
-        cast(_fivetran_synced as {{ dbt.type_timestamp() }}) as _fivetran_synced
+        _fivetran_synced
 
         {{ fivetran_utils.fill_pass_through_columns('recharge__subscription_history_passthrough_columns') }}
 
