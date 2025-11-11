@@ -1,5 +1,7 @@
 # dbt_recharge v1.2.0
 
+[PR #41](https://github.com/fivetran/dbt_recharge/pull/41) includes the following updates:
+
 ## Schema/Data Change
 **1 total change • 0 possible breaking changes**
 
