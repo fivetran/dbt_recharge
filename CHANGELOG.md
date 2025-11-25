@@ -1,3 +1,10 @@
+# dbt_recharge v1.3.0
+
+[PR #43](https://github.com/fivetran/dbt_recharge/pull/43) includes the following updates:
+
+## Features
+  - Increases the required dbt version upper limit to v3.0.0
+
 # dbt_recharge v1.2.0
 
 [PR #41](https://github.com/fivetran/dbt_recharge/pull/41) includes the following updates:
