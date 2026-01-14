@@ -1,4 +1,5 @@
-# Recharge dbt package ([Docs](https://fivetran.github.io/dbt_recharge/))
+<!--section="recharge_transformation_model"-->
+# Recharge dbt Package
 
 <p align="left">
     <a alt="License"
@@ -15,32 +16,55 @@
         <img src="https://img.shields.io/badge/Fivetran_Quickstart_Compatible%3F-yes-green.svg" /></a>
 </p>
 
+This dbt package transforms data from Fivetran's Recharge connector into analytics-ready tables.
+
+## Resources
+
+- Number of materialized models¹: 38
+- Connector documentation
+  - [Recharge connector documentation](https://fivetran.com/docs/connectors/applications/recharge)
+  - [Recharge ERD](https://fivetran.com/docs/connectors/applications/recharge#schemainformation)
+- dbt package documentation
+  - [GitHub repository](https://github.com/fivetran/dbt_recharge)
+  - [dbt Docs](https://fivetran.github.io/dbt_recharge/#!/overview)
+  - [DAG](https://fivetran.github.io/dbt_recharge/#!/overview?g_v=1)
+  - [Changelog](https://github.com/fivetran/dbt_recharge/blob/main/CHANGELOG.md)
+
 ## What does this dbt package do?
-- Produces modeled tables that leverage Recharge data from [Fivetran's connector](https://fivetran.com/docs/applications/recharge) in the format described by [this ERD](https://fivetran.com/docs/applications/recharge#schemainformation).
-- Enables you to better understand your Recharge data by summarizing customer, revenue, and subscription trends.
-- Generates a comprehensive data dictionary of your source and modeled Recharge data through the [dbt docs site](https://fivetran.github.io/dbt_recharge/).
+This package enables you to better understand your Recharge data by summarizing customer, revenue, and subscription trends. It creates enriched models with metrics focused on billing history, customer details, and subscription analytics.
 
-<!--section="recharge_transformation_model"-->
-The following table provides a detailed list of all tables materialized within this package by default.
-> TIP: See more details about these tables in the package's [dbt docs site](https://fivetran.github.io/dbt_recharge/#!/overview?g_v=1).
+### Output schema
+Final output tables are generated in the following target schema:
 
-| **Table** | **Description** |
-|-----------|-----------------|
-| [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Each record represents an order, enriched with metrics about related charges and line items. Line items are aggregated at the billing (order) level. |
-| [recharge__charge_line_item_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__charge_line_item_history) | Each record represents a specific line item charge, refund, or other line item that accumulates into final charges. |
-| [recharge__customer_daily_rollup](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_daily_rollup) | Each record provides totals and running totals for a customer's associated transactions for the specified day. |
-| [recharge__customer_details](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_details) | Each record represents a customer, enriched with metrics about their associated transactions. |
-| [recharge__monthly_recurring_revenue](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__monthly_recurring_revenue) | Each record represents a customer, MRR, and non-MRR generated on a monthly basis. |
-| [recharge__subscription_overview](https://fivetran.github.io/dbt_recharge/#!/model/7+model.recharge.recharge__subscription_overview) | Each record represents a subscription, enriched with customer and charge information. |
-| [recharge__line_item_enhanced](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced)       | This model constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It’s designed to align with the schema of the `*__line_item_enhanced` model found in Recharge, Recurly, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). Visit the app for more details.  |
+```
+<your_database>.<connector/schema_name>_recharge
+```
+
+### Final output tables
+
+By default, this package materializes the following final tables:
+
+| Table | Description |
+| :---- | :---- |
+| [recharge__billing_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__billing_history) | Tracks order-level billing history with charge details including order and charge prices, subtotals, discounts, refunds, taxes, shipping costs, and item quantities to analyze order value and fulfillment patterns. <br></br>**Example Analytics Questions:**<ul><li>What is the average order_total_price and charge_total_price by order_status and charge_status?</li><li>How many orders are generated from each charge (orders_count) for prepaid versus non-prepaid orders?</li><li>What is the total_net_charge_value and how do discounts and refunds impact it by order_type?</li></ul>|
+| [recharge__charge_line_item_history](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__charge_line_item_history) | Chronicles individual line item transactions including charges, refunds, discounts, shipping, and taxes by line item type to provide granular visibility into charge components and calculations. <br></br>**Example Analytics Questions:**<ul><li>Which line item types (charge, discount, shipping, tax, refund) have the highest total amounts?</li><li>How many line items of each type are typically associated with each charge_id?</li><li>What is the distribution of line item amounts by line_item_type and customer_id?</li></ul>|
+| [recharge__customer_daily_rollup](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_daily_rollup) | Provides daily customer transaction snapshots with realized and running totals for orders, charges, discounts, taxes, refunds, and item quantities to track customer spending evolution and lifetime value trends. <br></br>**Example Analytics Questions:**<ul><li>How does the charge_total_price_running_total evolve day-by-day for each customer?</li><li>What are the daily trends in recurring_orders versus one_time_orders by customer?</li><li>How many active_months_to_date does each customer have and how does spending correlate?</li></ul>|
+| [recharge__customer_details](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__customer_details) | Consolidates customer profiles with comprehensive transaction metrics including order counts, amounts, subscription counts, discounts, taxes, refunds, and monthly averages to understand customer lifetime value and engagement patterns. <br></br>**Example Analytics Questions:**<ul><li>Which customers have the highest total_net_spend and subscriptions_active_count?</li><li>How do avg_order_amount and orders_monthly_average vary across customer segments?</li><li>What percentage of customers have is_currently_subscribed = true and how does their spending compare?</li></ul>|
+| [recharge__monthly_recurring_revenue](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__monthly_recurring_revenue) | Tracks monthly recurring revenue (MRR) and non-MRR by customer including recurring order counts, one-time order counts, net recurring charges, and net one-time charges to measure subscription business health and revenue trends. <br></br>**Example Analytics Questions:**<ul><li>What is the total_net_recurring_charges (MRR) by customer and how is it trending month-over-month?</li><li>How do recurring_orders versus one_time_orders contribute to total revenue by month?</li><li>Which customers have the highest calculated_net_order_mrr and lowest churn risk?</li></ul>|
+| [recharge__subscription_overview](https://fivetran.github.io/dbt_recharge/#!/model/7+model.recharge.recharge__subscription_overview) | Provides detailed subscription profiles with customer info, product details, pricing, subscription status, billing intervals, charge counts, and schedule information to monitor subscription lifecycle and billing patterns. <br></br>**Example Analytics Questions:**<ul><li>Which subscriptions have the highest price and quantity values by subscription_status?</li><li>How do charge_interval_frequency and order_interval_frequency vary across products?</li><li>What are the most common cancellation_reason values and how do they correlate with subscription tenure?</li></ul>|
+| [recharge__line_item_enhanced](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced) | This model constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It's designed to align with the schema of the `*__line_item_enhanced` model found in Recharge, Recurly, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). Visit the app for more details. |
 
 An example churn model is separately available in the analysis folder:
 | **analysis model** | **description** |
 |-----------|-----------------|
 | [recharge__account_churn_analysis](https://fivetran.github.io/dbt_recharge/#!/analysis/analysis.recharge.recharge__churn_analysis) | Each record represents a customer and their churn reason according to recharge's documentation. |
 
-### Example Visualizations
-Curious what these models can do? Check out example visualizations from the [recharge__line_item_enhanced](https://fivetran.github.io/dbt_recharge/#!/model/model.recharge.recharge__line_item_enhanced) model in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/), and see how you can use these models in your own reporting. Below is a screenshot of an example report—-explore the app for more.
+¹ Each Quickstart transformation job run materializes these models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
+
+---
+
+## Visualizations
+Many of the above reports are now configurable for [visualization via Streamlit](https://github.com/fivetran/streamlit_recharge). Check out some [sample reports here](https://fivetran-recharge.streamlit.app/).
 
 <p align="center">
 <a href="https://fivetran-billing-model.streamlit.app/">
@@ -48,23 +72,27 @@ Curious what these models can do? Check out example visualizations from the [rec
 </a>
 </p>
 
-### Materialized Models
-Each Quickstart transformation job run materializes 38 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
-<!--section-end-->
+## Prerequisites
+To use this dbt package, you must have the following:
+
+- At least one Fivetran Recharge connection syncing data into your destination.
+- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
 ## How do I use the dbt package?
-### Step 1: Prerequisites
-To use this dbt package, you must have the following:
-- At least one Fivetran Recharge connection syncing data into your destination
-- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination
+You can either add this dbt package in the Fivetran dashboard or import it into your dbt project:
 
-### Step 2: Install the package
+- To add the package in the Fivetran dashboard, follow our [Quickstart guide](https://fivetran.com/docs/transformations/dbt).
+- To add the package to your dbt project, follow the setup instructions in the dbt package's [README file](https://github.com/fivetran/dbt_recharge/blob/main/README.md#how-do-i-use-the-dbt-package) to use this package.
+
+<!--section-end-->
+
+### Install the package
 Include the following recharge package version in your `packages.yml` file.
 > TIP: Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 ```yaml
 packages:
   - package: fivetran/recharge
-    version: [">=1.3.0", "<1.4.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=1.4.0", "<1.5.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/recharge_source` in your `packages.yml` since this package has been deprecated.
 
@@ -76,7 +104,8 @@ dispatch:
   - macro_namespace: dbt_utils
     search_order: ['spark_utils', 'dbt_utils']
 ```
-### Step 3: Define database and schema variables
+
+### Define database and schema variables
 
 #### Option A: Single connection
 By default, this package runs using your [destination](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile) and the `recharge` schema. If this is not where your Recharge data is (for example, if your Recharge schema is named `recharge_fivetran`), add the following configuration to your root `dbt_project.yml` file:
@@ -135,7 +164,7 @@ sources:
     tables: # copy and paste from recharge/models/staging/src_recharge.yml - see https://support.atlassian.com/bitbucket-cloud/docs/yaml-anchors/ for how to use anchors to only do so once
 ```
 
-> **Note**: If there are source tables you do not have (see [Step 4](#step-4-enabledisable-models-and-sources)), you may still include them, as long as you have set the right variables to `False`.
+> **Note**: If there are source tables you do not have (see [Enable/disable models and sources](#enabledisable-models-and-sources)), you may still include them, as long as you have set the right variables to `False`.
 
 2. Set the `has_defined_sources` variable (scoped to the `recharge` package) to `True`, like such:
 ```yml
@@ -145,7 +174,7 @@ vars:
     has_defined_sources: true
 ```
 
-### Step 4: Enable/disable models and sources
+### Enable/disable models and sources
 Your Recharge connection may not sync every table that this package expects. If you do not have the `CHECKOUT`, `ONE_TIME_PRODUCT` and/or `CHARGE_TAX_LINE` tables synced, add the corresponding variable(s) to your root `dbt_project.yml` file to disable these sources:
 
 ```yml
@@ -155,11 +184,11 @@ vars:
   recharge__checkout_enabled: true # Enables if you do have the CHECKOUT table. Default is False.
 ```
 
-### (Optional) Step 5: Additional configurations
+### (Optional) Additional configurations
 <details open><summary>Expand/collapse section.</summary>
 
 #### Enabling Standardized Billing Model
-This package contains the `recharge__line_item_enhanced` model which constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It’s designed to align with the schema of the `*__line_item_enhanced` model found in Recurly, Recharge, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). This model is enabled by default. To disable it, set the `recharge__standardized_billing_model_enabled` variable to `false` in your `dbt_project.yml`:
+This package contains the `recharge__line_item_enhanced` model which constructs a comprehensive, denormalized analytical table that enables reporting on key revenue, subscription, customer, and product metrics from your billing platform. It's designed to align with the schema of the `*__line_item_enhanced` model found in Recurly, Recharge, Stripe, Shopify, and Zuora, offering standardized reporting across various billing platforms. To see the kinds of insights this model can generate, explore example visualizations in the [Fivetran Billing Model Streamlit App](https://fivetran-billing-model.streamlit.app/). This model is enabled by default. To disable it, set the `recharge__standardized_billing_model_enabled` variable to `false` in your `dbt_project.yml`:
 
 ```yml
 vars:
@@ -236,7 +265,7 @@ sources:
 ```
 </details>
 
-### (Optional) Step 6: Orchestrate your models with Fivetran Transformations for dbt Core™
+### (Optional) Orchestrate your models with Fivetran Transformations for dbt Core™
 <details><summary>Expand for more details</summary>
 
 Fivetran offers the ability for you to orchestrate your dbt project through [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt). Learn how to set up your project for orchestration through Fivetran in our [Transformations for dbt Core™ setup guides](https://fivetran.com/docs/transformations/dbt#setupguide).
@@ -255,17 +284,21 @@ packages:
       version: [">=1.0.0", "<2.0.0"]
 ```
 
+<!--section="recharge_maintenance"-->
 ## How is this package maintained and can I contribute?
+
 ### Package Maintenance
-The Fivetran team maintaining this package maintains _only_ the latest version of the package. We highly recommend that you consistently use the [latest version](https://hub.getdbt.com/fivetran/recharge/latest/) of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_recharge/blob/main/CHANGELOG.md) and release notes for more information about changes.
+The Fivetran team maintaining this package only maintains the [latest version](https://hub.getdbt.com/fivetran/recharge/latest/) of the package. We highly recommend you stay consistent with the latest version of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_recharge/blob/main/CHANGELOG.md) and release notes for more information on changes across versions.
 
 ### Contributions
 A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions.
 
-We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) to learn how to contribute to a dbt package.
+We highly encourage and welcome contributions to this package. Learn how to contribute to a package in dbt's [Contributing to an external dbt package article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657).
 
 ### Opinionated Modelling Decisions
 This dbt package takes an opinionated stance on revenue is calculated, using charges in some cases and orders in others. If you would like a deeper explanation of the logic used by default in the dbt package, you may reference the [DECISIONLOG](https://github.com/fivetran/dbt_recharge/blob/main/DECISIONLOG.md).
+
+<!--section-end-->
 
 ## Are there any resources available?
 - If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_recharge/issues/new/choose) section to find the right avenue of support for you.
