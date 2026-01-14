@@ -43,12 +43,12 @@ public_models: [
 supported_vars:
   recharge__order_passthrough_columns:
     type: dictionary
-    description: "Addtional `ORDER` columns to include in `recharge__billing_history`"
+    description: "Additional `ORDER` columns to include in `recharge__billing_history`"
     display_name: "Additional Order Columns"
 
   recharge__subscription_history_passthrough_columns:
     type: dictionary
-    description: "Addtional `SUBSCRIPTION_HISTORY` columns to include in `recharge__subscription_overview`"
+    description: "Additional `SUBSCRIPTION_HISTORY` columns to include in `recharge__subscription_overview`"
     display_name: "Additional Subscription History Columns"
 
   recharge_first_date:
