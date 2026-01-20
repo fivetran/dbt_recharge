@@ -11,6 +11,19 @@ table_variables:
   recharge__checkout_enabled:
     - checkout
 
+  _fivetran_quickstart_address_discounts:
+    - address_discounts
+  _fivetran_quickstart_address_shipping_line:
+    - address_shipping_line
+  _fivetran_quickstart_charge_discount:
+    - charge_discount
+  _fivetran_quickstart_charge_order_attribute:
+    - charge_order_attribute
+  _fivetran_quickstart_discount:
+    - discount
+  _fivetran_quickstart_product:
+    - product
+
 destination_configurations:
   databricks:
     dispatch:
@@ -26,3 +39,25 @@ public_models: [
   "recharge__subscription_overview",
   "recharge__line_item_enhanced"
 ]
+
+supported_vars:
+  recharge__order_passthrough_columns:
+    type: dictionary
+    description: "Additional `ORDER` columns to include in `recharge__billing_history`"
+    display_name: "Additional Order Columns"
+
+  recharge__subscription_history_passthrough_columns:
+    type: dictionary
+    description: "Additional `SUBSCRIPTION_HISTORY` columns to include in `recharge__subscription_overview`"
+    display_name: "Additional Subscription History Columns"
+
+  recharge_first_date:
+    type: string
+    description: "Start date for the window of data to transform in `recharge__customer_daily_rollup` and `recharge__monthly_recurring_revenue` (YYYY-MM-DD format)"
+    display_name: "Date Range Start"
+
+  recharge_last_date:
+    type: string
+    description: "End date for the window of data to transform in `recharge__customer_daily_rollup` and `recharge__monthly_recurring_revenue` (YYYY-MM-DD format)"
+    display_name: "Date Range End"
+
