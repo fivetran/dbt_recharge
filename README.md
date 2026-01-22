@@ -64,7 +64,7 @@ An example churn model is separately available in the analysis folder:
 ---
 
 ## Visualizations
-Many of the above reports are now configurable for [visualization via Streamlit](https://github.com/fivetran/streamlit_recharge). Check out some [sample reports here](https://fivetran-recharge.streamlit.app/).
+Many of the above reports are now configurable for [visualization via Streamlit](https://github.com/fivetran/streamlit_fivetran_billing_model). Check out some [sample reports here](https://fivetran-billing-model.streamlit.app/).
 
 <p align="center">
 <a href="https://fivetran-billing-model.streamlit.app/">
