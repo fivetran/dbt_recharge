@@ -89,6 +89,7 @@ You can either add this dbt package in the Fivetran dashboard or import it into 
 ### Install the package
 Include the following recharge package version in your `packages.yml` file.
 > TIP: Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
+
 ```yaml
 packages:
   - package: fivetran/recharge
