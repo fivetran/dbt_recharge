@@ -50,14 +50,3 @@ supported_vars:
     type: dictionary
     description: "Additional `SUBSCRIPTION_HISTORY` columns to include in `recharge__subscription_overview`"
     display_name: "Additional Subscription History Columns"
-
-  recharge_first_date:
-    type: string
-    description: "Start date for the window of data to transform in `recharge__customer_daily_rollup` and `recharge__monthly_recurring_revenue` (YYYY-MM-DD format)"
-    display_name: "Date Range Start"
-
-  recharge_last_date:
-    type: string
-    description: "End date for the window of data to transform in `recharge__customer_daily_rollup` and `recharge__monthly_recurring_revenue` (YYYY-MM-DD format)"
-    display_name: "Date Range End"
-

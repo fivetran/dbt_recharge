@@ -1,3 +1,10 @@
+# dbt_recharge v1.4.1
+
+[PR #46](https://github.com/fivetran/dbt_recharge/pull/46) includes the following updates:
+
+## Under the Hood
+- Removes the `recharge_first_date` and `recharge_last_date` variables from the `quickstart.yml`.
+
 # dbt_recharge v1.4.0
 
 [PR #44](https://github.com/fivetran/dbt_recharge/pull/44) includes the following updates:
