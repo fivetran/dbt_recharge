@@ -6,6 +6,9 @@ version: '1.4.1'
 profile: 'integration_tests' 
 
 models:
+  +persist_docs:
+    relation: true
+    columns: "{{ false if target.type in ('databricks') else true }}"
   +schema: "recharge_{{ var('directed_schema','dev') }}"  ## To be used for validation tests
 
 vars:
