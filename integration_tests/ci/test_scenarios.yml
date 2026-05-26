@@ -1,0 +1,31 @@
+# Only set if not using default adapter ranges
+# dbt_adapter_versions:
+#   snowflake: ">=1.3.0,<2.0.0"
+#   bigquery: ">=1.3.0,<2.0.0"
+#   postgres: ">=1.3.0,<2.0.0"
+#   redshift: ">=1.3.0,<2.0.0"
+#   databricks: ">=1.6.0,<2.0.0"
+
+schema_variable_name: "recharge_schema"
+
+include_databricks_sql: false
+include_sqlserver: false
+include_dbt_compile: true
+
+test_scenarios:
+  - name: "Default"
+    vars: {}
+    include_incremental: false
+
+  - name: "features disabled"
+    vars:
+      recharge__standardized_billing_model_enabled: false
+      recharge__using_orders: false
+      recharge__one_time_product_enabled: false
+      recharge__address_passthrough_columns: ["cart_attribute_id"]
+    include_incremental: false
+
+  - name: "order bool int data"
+    vars:
+      recharge_orders_identifier: "order_bool_int_data"
+    include_incremental: false
