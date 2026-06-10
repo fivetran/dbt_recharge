@@ -1,3 +1,3 @@
 charge_id,index,variant_title,title,quantity,grams,total_price,sku,external_product_id_ecommerce,vendor,_fivetran_synced,unit_price,tax_due,taxable,taxable_amount,unit_price_includes_tax,purchase_item_id,purchase_item_type,external_variant_id_ecommerce
-400000001,0,Variant Title 01,Title 01,1,100,11.95,SKU01,6800000000001,VendorName01,2022-09-08T03:54:53.419Z,11.95,1,true,1,false,1234,type1,91011
-400000002,1,Variant Title 02,Title 02,1,100,15,SKU02,6800000000002,VendorName02,2022-09-08T03:54:53.419Z,15,1,true,1,false,5678,type2,121314
+400000001,0,Variant Title 01,Title 01,1,100,11.95,SKU01,6800000000001,VendorName01,2022-09-08 03:54:53.419,11.95,1,true,1,false,1234,type1,91011
+400000002,1,Variant Title 02,Title 02,1,100,15,SKU02,6800000000002,VendorName02,2022-09-08 03:54:53.419,15,1,true,1,false,5678,type2,121314
