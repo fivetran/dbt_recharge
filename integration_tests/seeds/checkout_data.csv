@@ -1,2 +1,2 @@
-TOKEN,CHARGE_ID,BUYER_ACCEPTS_MARKETING,COMPLETED_AT,CREATED_AT,CURRENCY,DISCOUNT_CODE,EMAIL,EXTERNAL_CHECKOUT_ID,EXTERNAL_CHECKOUT_SOURCE,EXTERNAL_TRANSACTION_ID_PAYMENT_PROCESSOR,ORDER_ATTRIBUTES,PHONE,REQUIRES_SHIPPING,SUBTOTAL_PRICE,TAXES_INCLUDED,TOTAL_PRICE,TOTAL_TAX,UPDATED_AT
+token,charge_id,buyer_accepts_marketing,completed_at,created_at,currency,discount_code,email,external_checkout_id,external_checkout_source,external_transaction_id_payment_processor,order_attributes,phone,requires_shipping,subtotal_price,taxes_included,total_price,total_tax,updated_at
 abc,400000001,true,,,USD,,,,,,,,,,,,,
