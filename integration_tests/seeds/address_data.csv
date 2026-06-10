@@ -1,3 +1,3 @@
 id,customer_id,first_name,last_name,address_1,address_2,city,province,country_code,zip,company,phone,created_at,updated_at,_fivetran_deleted,_fivetran_synced
-300000001,2000000001,first01,last01,address line 1 01,address line 2 01,city01,,country01,zip01,,phone01,2022-09-07t14:25:49z,2022-09-07t14:26:02z,false,2022-09-08t03:56:04.798z
-300000002,2000000001,first02,last02,address line 1 02,,city02,,country02,zip02,,phone02,2022-09-07t12:25:55z,2022-09-07t12:25:55z,false,2022-09-08t03:56:04.797z
+300000001,2000000001,first01,last01,address line 1 01,address line 2 01,city01,,country01,zip01,,phone01,2022-09-07 14:25:49,2022-09-07 14:26:02,false,2022-09-08 03:56:04.798
+300000002,2000000001,first02,last02,address line 1 02,,city02,,country02,zip02,,phone02,2022-09-07 12:25:55,2022-09-07 12:25:55,false,2022-09-08 03:56:04.797
