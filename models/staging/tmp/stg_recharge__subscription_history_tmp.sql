@@ -1,5 +1,5 @@
 {{
-    recharge.recharge_union_connections(
+    fivetran_utils.union_connections(
         connection_dictionary='recharge_sources',
         single_source_name='recharge',
         single_table_name='subscription_history'

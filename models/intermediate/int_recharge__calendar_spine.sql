@@ -1,18 +1,18 @@
--- depends_on: {{ ref('stg_recharge__charge_tmp') }}
+-- depends_on: {{ ref('stg_recharge__charge') }}
 with spine as (
 
     {# Calculates first and last dates if at least one is not manually set #}
     {% if execute and flags.WHICH in ('run', 'build') and (not var('recharge_first_date', None) or not var('recharge_last_date', None)) %}
         {%- set first_date_query %}
             select 
-                cast(min(created_at) as date) as min_date
-            from {{ ref('stg_recharge__charge_tmp') }}
+                cast(min(charge_created_at) as date) as min_date
+            from {{ ref('stg_recharge__charge') }}
         {% endset -%}
         
         {%- set last_date_query %}
             select 
-                cast(max(created_at) as date) as max_date
-            from {{ ref('stg_recharge__charge_tmp') }}
+                cast(max(charge_created_at) as date) as max_date
+            from {{ ref('stg_recharge__charge') }}
         {% endset -%}
 
     {# If only compiling, creates range going back 1 year #}

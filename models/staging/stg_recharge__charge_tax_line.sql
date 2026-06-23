@@ -14,7 +14,7 @@ fields as (
                 staging_columns = get_charge_tax_line_columns()
             )
         }}
-        {{ recharge.apply_source_relation() }}
+        {{ fivetran_utils.apply_source_relation(package_name='recharge') }}
     from base
 ),
 

@@ -29,3 +29,9 @@ test_scenarios:
     vars:
       recharge_orders_identifier: "order_bool_int_data"
     include_incremental: false
+
+  - name: "MDLS"
+    vars:
+      fivetran_using_source_casing: true
+    include_incremental: false
+    include_dbt_seed: true

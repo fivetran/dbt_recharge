@@ -1,4 +1,3 @@
-
 with base as ( 
 
     select *
@@ -14,7 +13,7 @@ fields as (
                 staging_columns = get_subscription_history_columns()
             )
         }}
-        {{ recharge.apply_source_relation() }}
+        {{ fivetran_utils.apply_source_relation(package_name='recharge') }}
     from base
 ),
 
@@ -54,5 +53,5 @@ final as (
 
 select
     *,
-    row_number() over (partition by subscription_id {{ recharge.partition_by_source_relation() }} order by subscription_updated_at desc) = 1 as is_most_recent_record
+    row_number() over (partition by subscription_id {{ fivetran_utils.partition_by_source_relation(package_name='recharge') }} order by subscription_updated_at desc) = 1 as is_most_recent_record
 from final
