@@ -4,14 +4,20 @@ with spine as (
     {# Calculates first and last dates if at least one is not manually set #}
     {% if execute and flags.WHICH in ('run', 'build') and (not var('recharge_first_date', None) or not var('recharge_last_date', None)) %}
         {%- set first_date_query %}
-            select 
-                cast(min(charge_created_at) as date) as min_date
+            select
+                coalesce(
+                    min(cast(charge_created_at as date)),
+                    cast({{ dbt.dateadd("year", -1, dbt.current_timestamp() ) }} as date)
+                    ) as min_date
             from {{ ref('stg_recharge__charge') }}
         {% endset -%}
-        
+
         {%- set last_date_query %}
-            select 
-                cast(max(charge_created_at) as date) as max_date
+            select
+                coalesce(
+                    max(cast(charge_created_at as date)),
+                    cast(current_date as date)
+                    ) as max_date
             from {{ ref('stg_recharge__charge') }}
         {% endset -%}
 
