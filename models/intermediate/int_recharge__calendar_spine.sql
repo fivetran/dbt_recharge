@@ -16,7 +16,7 @@ with spine as (
             select
                 coalesce(
                     max(cast(charge_created_at as date)),
-                    cast(current_date as date)
+                    cast({{ dbt.current_timestamp() }} as date)
                     ) as max_date
             from {{ ref('stg_recharge__charge') }}
         {% endset -%}

@@ -3,7 +3,7 @@
 [PR #52](https://github.com/fivetran/dbt_recharge/pull/52) includes the following updates:
 
 ## Bug Fixes
-- Fixes a runtime error in `int_recharge__calendar_spine` when the charge table wasn't synced, falling back to a default one-year date range.
+- Fixes a runtime error in `int_recharge__calendar_spine` by falling back to a default one-year date range when the `CHARGE` table wasn't synced .
 - Fixes a compilation error caused by an invalid datatype reference for when the `_fivetran_synced` column was not synced.
 
 # dbt_recharge v1.5.0
