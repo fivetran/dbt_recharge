@@ -9,7 +9,7 @@ models:
   +persist_docs:
     relation: true
     columns: "{{ false if target.type in ('databricks') else true }}"
-  +schema: "recharge_{{ var('directed_schema','dev') }}"  ## To be used for validation tests
+  +schema: "recharge_{{ var('directed_schema','dev') }}"
 
 vars:
   # recharge__checkout_enabled: true # @docs-include
