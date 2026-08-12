@@ -1,10 +1,16 @@
-# dbt_recharge v1.5.1
+# dbt_recharge v1.5.2
 
 [PR #51](https://github.com/fivetran/dbt_recharge/pull/51) includes the following updates:
 
 ## Feature Updates
 - Adds DuckDB as a supported destination.
 
+# dbt_recharge v1.5.1
+[PR #52](https://github.com/fivetran/dbt_recharge/pull/52) includes the following updates:
+
+## Bug Fixes
+- Fixes a runtime error in `int_recharge__calendar_spine` by falling back to a default one-year date range when the `CHARGE` table wasn't synced .
+- Fixes a compilation error caused by an invalid datatype reference for when the `_fivetran_synced` column was not synced.
 
 # dbt_recharge v1.5.0
 
