@@ -1,5 +1,11 @@
-# dbt_recharge v1.5.1
+# dbt_recharge v1.5.2
 
+[PR #51](https://github.com/fivetran/dbt_recharge/pull/51) includes the following updates:
+
+## Feature Updates
+- Adds DuckDB as a supported destination.
+
+# dbt_recharge v1.5.1
 [PR #52](https://github.com/fivetran/dbt_recharge/pull/52) includes the following updates:
 
 ## Bug Fixes
