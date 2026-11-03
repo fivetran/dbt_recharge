@@ -69,7 +69,7 @@ with spine as (
 ), active_months as (
     select
         aggs_running.*,
-        round(cast({{ dbt.datediff("customers.first_charge_processed_at", "aggs_running.date_day", "day") }} / 30
+        round(cast({{ dbt.datediff("customers.first_charge_processed_at", "aggs_running.date_day", "day") }} / 30.0
             as {{ dbt.type_numeric() }}), 2)
             as active_months_to_date
     from aggs_running
