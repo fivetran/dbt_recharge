@@ -43,7 +43,7 @@ models:
       - name: payment_method
         description: "Method used for payment (e.g., credit card, PayPal)."
       - name: payment_method_id
-        description: "ID of the payment method."
+        description: "{{ doc('payment_method_id') }}"
       - name: payment_at
         description: "Date and time of the payment."
       - name: refund_amount

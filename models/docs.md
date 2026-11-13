@@ -57,3 +57,7 @@ The unique identifier of the discount.
 {% docs source_relation %}
 Identifies the record's source.
 {% enddocs %}
+
+{% docs payment_method_id %}
+The unique identifier of the payment method associated with the record.
+{% enddocs %}
