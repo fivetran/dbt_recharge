@@ -15,7 +15,7 @@ This dbt package transforms data from Fivetran's Recharge connector into analyti
   - [DAG](https://fivetran.github.io/dbt_recharge/#!/overview?g_v=1)
   - [Changelog](https://github.com/fivetran/dbt_recharge/blob/main/CHANGELOG.md)
 - dbt Core™ supported versions
-  - `>=1.3.0, <3.0.0`
+  - `>=1.10.0, <3.0.0`
 
 ## What does this dbt package do?
 This package enables you to better understand your Recharge data by summarizing customer, revenue, and subscription trends. It creates enriched models with metrics focused on billing history, customer details, and subscription analytics.
@@ -79,7 +79,7 @@ Include the following recharge package version in your `packages.yml` file.
 ```yaml
 packages:
   - package: fivetran/recharge
-    version: [">=1.5.0", "<1.6.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=1.6.0", "<1.7.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/recharge_source` in your `packages.yml` since this package has been deprecated.
 
