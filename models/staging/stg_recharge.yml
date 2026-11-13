@@ -31,10 +31,14 @@ models:
         description: The zip or post code associated with the customer.
       - name: country_code
         description: The country code associated with the address.
+      - name: country
+        description: The country name associated with the address.
       - name: company
         description: The company name associated with the customer.
       - name: phone
         description: The phone number associated with the customer.
+      - name: payment_method_id
+        description: "{{ doc('payment_method_id') }}"
       - name: source_relation
         description: "{{ doc('source_relation') }}"
 
