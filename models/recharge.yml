@@ -3,6 +3,12 @@ version: 2
 models:
   - name: recharge__billing_history
     description: Each record represents an order, enriched with metrics about related charges and line items.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - order_id
     columns:
       - name: order_id
         description: "{{ doc('order_id') }}"
@@ -99,6 +105,13 @@ models:
 
   - name: recharge__charge_line_item_history
     description: Each record represents a specific line item charge, refund, or other line item that accumulates into final charges.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
+              - charge_row_num
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -125,6 +138,13 @@ models:
 
   - name: recharge__customer_daily_rollup
     description: Each record provides totals and running totals for a customer's associated transaction for the specified day.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - customer_id
+              - date_day
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -207,6 +227,12 @@ models:
 
   - name: recharge__customer_details
     description: Each record represents a customer, enriched with metrics about their associated transactions.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - customer_id
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -307,6 +333,13 @@ models:
 
   - name: recharge__monthly_recurring_revenue
     description: Each record represents a customer, MRR, and non-MRR generated on a monthly basis.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - customer_id
+              - date_month
     columns:
       - name: date_month
         description: Month the metrics were calculated.
@@ -329,6 +362,12 @@ models:
 
   - name: recharge__subscription_overview
     description: Each record represents a subscription, enriched with customer and charge information.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - subscription_id
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"

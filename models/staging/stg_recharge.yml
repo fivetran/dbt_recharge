@@ -4,6 +4,12 @@ version: 2
 models:
   - name: stg_recharge__address
     description: Table of all addresses, an address represents a shipping address. Each customer can have multiple addresses, subscriptions are a child object of an address.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - address_id
     columns:
       - name: address_id
         description: "{{ doc('address_id') }}"
@@ -40,6 +46,13 @@ models:
 
   - name: stg_recharge__address_discounts
     description: Table of all addresses and corresponding associated shipping information.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - address_id
+              - index
     columns:
       - name: address_id
         description: "{{ doc('address_id') }}"
@@ -54,6 +67,13 @@ models:
 
   - name: stg_recharge__address_shipping_line
     description: Table of all addresses and corresponding associated shipping information.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - address_id
+              - index
     columns:
       - name: address_id
         description: "{{ doc('address_id') }}"
@@ -72,6 +92,12 @@ models:
 
   - name: stg_recharge__charge
     description: Table of all charges (financial transactions) linked to the purchase of an item. A charge is linked to a corresponding order, an order is created once the corresponding charge is successful.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -148,6 +174,13 @@ models:
 
   - name: stg_recharge__charge_discount
     description: Table of all charge discount codes.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
+              - index
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -168,6 +201,13 @@ models:
 
   - name: stg_recharge__charge_line_item
     description: Table of all charge line items, each containing information about a distinct purchase item.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
+              - index
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -212,6 +252,13 @@ models:
 
   - name: stg_recharge__charge_order_attribute
     description: Table of notes associated to their corresponding charges.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
+              - index
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -226,6 +273,13 @@ models:
 
   - name: stg_recharge__charge_shipping_line
     description: Table of all shipping information associated to their corresponding charges.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
+              - index
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -244,6 +298,13 @@ models:
 
   - name: stg_recharge__charge_tax_line
     description: Table of tax line information associated to their corresponding charges.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - charge_id
+              - index
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
@@ -262,6 +323,12 @@ models:
 
   - name: stg_recharge__checkout
     description: checkouts
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - checkout_id
     columns:
       - name: checkout_id
         description: Unique token for the Checkout
@@ -308,6 +375,12 @@ models:
 
   - name: stg_recharge__customer
     description: Table of all customer details holding account and billing information. Email is unique on the customer, no two customers for a store can have the same email.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - customer_id
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -356,6 +429,12 @@ models:
 
   - name: stg_recharge__discount
     description: Table of discounts that can be applied to a checkout, or that can be directly applied to an address.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - discount_id
     columns:
       - name: discount_id
         description: Unique numeric identifier for the discount in Recharge.
@@ -390,6 +469,12 @@ models:
 
   - name: stg_recharge__one_time_product
     description: Table of all one-times which represent non-recurring line items on a queued charges.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - one_time_product_id
     columns:
       - name: one_time_product_id
         description: The unique numeric identifier for the onetime purchase.
@@ -426,6 +511,12 @@ models:
 
   - name: stg_recharge__order
     description: Table of all orders after a charge is successfully processed.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - order_id
     columns:
       - name: order_id
         description: "{{ doc('charge_id') }}"
@@ -472,6 +563,13 @@ models:
 
   - name: stg_recharge__order_line_item
     description: Table of all order line items. Each line containing information about an item in the order.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - order_id
+              - index
     columns:
       - name: order_id
         description: "{{ doc('charge_id') }}"
@@ -514,6 +612,12 @@ models:
 
   - name: stg_recharge__subscription
     description: Table of all subscriptions for the merchant. Subscriptions are individual items a customer receives on a recurring basis.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - subscription_id
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
@@ -568,6 +672,13 @@ models:
 
   - name: stg_recharge__subscription_history
     description: History table that builds over time. Does not capture history prior to connecting Fivetran.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - subscription_id
+              - subscription_updated_at
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
