@@ -3,6 +3,9 @@ version: 2
 models:
   - name: int_recharge__calendar_spine
     description: A table of calendar dates for each customer, based on the date range of the charges.
+    columns:
+      - name: date_day
+        description: An individual day within the date range of the calendar spine.
 
   - name: int_recharge__customer_daily_rollup
     description: Intermediate model for recharge__customer_daily_rollup
