@@ -1,10 +1,7 @@
 version: 1.6.0
 pr_number: 56
 new_features:
-- description: Raises the minimum supported dbt version from v1.3.0 to v1.10.0.
+- description: Raises the minimum dbt version to 1.10.0.
+- description: Adds `dbt_utils.unique_combination_of_columns` tests to staging and end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_recharge/issues/new/choose).
 under_the_hood:
-- description: Adds `dbt_utils.unique_combination_of_columns` tests to the staging and end models. The tests use the `arguments` syntax introduced in dbt v1.10.0, the new minimum supported version.
-- description: Adds the missing column documentation for the `country` and `payment_method_id`
-    fields in the `stg_recharge__address` model and the `date_day` field in the `int_recharge__calendar_spine`
-    model. These fields are already in the model output and now appear in the package's
-    dbt docs.
+- description: Adds the missing column documentation for the `country` and `payment_method_id` fields in the `stg_recharge__address` model and the `date_day` field in the `int_recharge__calendar_spine` model. These fields are already in the model output and now appear in the package's dbt docs.
