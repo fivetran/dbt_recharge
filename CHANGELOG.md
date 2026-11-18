@@ -1,3 +1,14 @@
+# dbt_recharge v1.6.0
+
+[PR #56](https://github.com/fivetran/dbt_recharge/pull/56) includes the following updates:
+
+## Feature Update
+- Raises the minimum dbt version to 1.10.0.
+- Adds `dbt_utils.unique_combination_of_columns` tests to staging and end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_recharge/issues/new/choose).
+
+## Under the Hood
+- Adds the missing column documentation for the `country` and `payment_method_id` fields in the `stg_recharge__address` model and the `date_day` field in the `int_recharge__calendar_spine` model. These fields are already in the model output and now appear in the package's dbt docs.
+
 # dbt_recharge v1.5.2
 
 [PR #51](https://github.com/fivetran/dbt_recharge/pull/51) includes the following updates:
