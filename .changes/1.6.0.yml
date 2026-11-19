@@ -5,8 +5,7 @@ new_features:
 - description: Adds `dbt_utils.unique_combination_of_columns` tests to staging and
     end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_recharge/issues/new/choose).
 under_the_hood:
-- description: Adds the missing column documentation for the `country` and `payment_method_id`
+- description: Adds column documentation for the `country` and `payment_method_id`
     fields in the `stg_recharge__address` model and the `date_day` field in the `int_recharge__calendar_spine`
-    model. These fields are already in the model output and now appear in the package's
-    dbt docs.
+    model.
 date: '2026-11-18'
