@@ -12,7 +12,7 @@ models:
     columns:
       - name: order_id
         description: "{{ doc('order_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: external_order_id_ecommerce
         description: The ID for the order in your external ecommerce platform.
@@ -115,7 +115,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: charge_row_num
         description: Unique row number assigned to line items with the same `charge_id`.
@@ -236,7 +236,7 @@ models:
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_hash
         description: The unique string identifier used in a customer portal link.
@@ -371,7 +371,7 @@ models:
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"

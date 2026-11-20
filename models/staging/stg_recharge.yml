@@ -13,7 +13,7 @@ models:
     columns:
       - name: address_id
         description: "{{ doc('address_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -60,7 +60,7 @@ models:
     columns:
       - name: address_id
         description: "{{ doc('address_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent address_id.
@@ -81,7 +81,7 @@ models:
     columns:
       - name: address_id
         description: "{{ doc('address_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent address_id.
@@ -105,7 +105,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -188,7 +188,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent charge_id.
@@ -215,7 +215,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent charge_id.
@@ -266,7 +266,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent charge_id.
@@ -287,7 +287,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent charge_id.
@@ -312,7 +312,7 @@ models:
     columns:
       - name: charge_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent charge_id.
@@ -336,7 +336,7 @@ models:
     columns:
       - name: checkout_id
         description: Unique token for the Checkout
-        tests:
+        data_tests:
           - not_null
       - name: charge_id
         description: ID for the Charge resulting from processing the Checkout.
@@ -388,7 +388,7 @@ models:
     columns:
       - name: customer_id
         description: "{{ doc('customer_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_hash
         description: The unique string identifier used in a customer portal link.
@@ -442,7 +442,7 @@ models:
     columns:
       - name: discount_id
         description: Unique numeric identifier for the discount in Recharge.
-        tests:
+        data_tests:
           - not_null
       - name: discount_created_at
         description: The date and time when the discount was created.
@@ -482,7 +482,7 @@ models:
     columns:
       - name: one_time_product_id
         description: The unique numeric identifier for the onetime purchase.
-        tests:
+        data_tests:
           - not_null
       - name: address_id
         description: The unique identifier of the address. Cannot be used with `next_charge_scheduled_at`.
@@ -524,7 +524,7 @@ models:
     columns:
       - name: order_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: external_order_id_ecommerce
         description: Unique numeric identifier within your external ecommerce platform for the order.
@@ -577,7 +577,7 @@ models:
     columns:
       - name: order_id
         description: "{{ doc('charge_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: index
         description: A unique numeric row produced for every concurrent order_id.
@@ -625,7 +625,7 @@ models:
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
@@ -686,7 +686,7 @@ models:
     columns:
       - name: subscription_id
         description: "{{ doc('subscription_id') }}"
-        tests:
+        data_tests:
           - not_null
       - name: customer_id
         description: "{{ doc('customer_id') }}"
