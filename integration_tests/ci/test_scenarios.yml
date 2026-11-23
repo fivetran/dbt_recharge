@@ -20,7 +20,8 @@ include_dbt_compile: true
 
 test_scenarios:
   - name: "Default"
-    vars: {}
+    vars: 
+      recharge__checkout_enabled: true
     include_incremental: false
 
   - name: "features disabled"
